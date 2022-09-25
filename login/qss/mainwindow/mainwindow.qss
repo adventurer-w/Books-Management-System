@@ -1,0 +1,150 @@
+/**
+    该页面为粉红色皮肤
+*/
+
+
+/*背景*/
+#frame_background{
+border-image:url(:/res/pic/background-1.png);
+}
+
+/*登录背景*/
+#frame_login{background-color:#ffffff}
+
+/*右侧图片*/
+#frame_pic{
+    background-image:url(:/res/pic/1.png);
+
+}
+/*账户和密码框*/
+#frame_user_name,#frame_pwd{
+    border: 1px solid #696969;
+    border-radius: 5px;
+}
+
+QLineEdit{
+    border: none;
+}
+
+
+/*按钮-忘记密码*/
+#btn_forget{
+    border:none;
+    color:#e83737;
+}
+
+/*按钮-忘记密码-鼠标悬停*/
+#btn_forget:hover{
+    border:none;
+    color:#e83737;
+}
+
+/*按钮-登录*/
+#btn_login{
+    color:#ffffff;
+    border: none;
+    background-color:#fd6c92;
+    border-radius: 5px;
+}
+/*按钮-登录-鼠标悬停*/
+#btn_login:hover{
+    color:#ffffff;
+    border: none;
+    background-color:#fd4979;
+    border-radius: 5px;
+}
+/*按钮-登录-鼠标按下*/
+#btn_login:pressed{
+    color:#ffffff;
+    border: none;
+    background-color:#fd6c92;
+    border-radius: 5px;
+}
+/*label-login*/
+#label_login
+{
+    color:#e83737;
+
+}
+/*图标-账户*/
+#label_user_name
+{
+    border-image:url(:/res/pic/user_name.png);
+}
+/*图标-密码*/
+#label_pwd
+{
+    border-image:url(:/res/pic/pwd.png);
+
+}
+/*按钮-qq*/
+#btn_qq{
+    background-image:url(:/res/pic/qq.png);
+    background-position:center;
+    background-repeat:no-repeat;
+    border:none;
+}
+/*按钮-qq-鼠标悬停*/
+#btn_qq:hover{
+    background-image:url(:/res/pic/qq-hover.png);
+    background-position:center;
+    background-repeat:no-repeat;
+    border:none;
+}
+/*按钮-微信*/
+#btn_wx{
+    background-image:url(:/res/pic/wx.png);
+    background-position:center;
+    background-repeat:no-repeat;
+    border:none;
+}
+/*按钮-微信-鼠标悬停*/
+#btn_wx:hover{
+    background-image:url(:/res/pic/wx-hover.png);
+    background-position:center;
+    background-repeat:no-repeat;
+    border:none;
+}
+/*按钮-微博-*/
+#btn_wb{
+    background-image:url(:/res/pic/wb.png);
+    background-position:center;
+    background-repeat:no-repeat;
+    border:none;
+}
+/*按钮-微博-鼠标悬停*/
+#btn_wb:hover{
+    background-image:url(:/res/pic/wb-hover.png);
+    background-position:center;
+    background-repeat:no-repeat;
+    border:none;
+}
+
+/*按钮-粉红*/
+#btn_1{
+color:#e83737;
+background-color:#ffffff;
+border:none;
+border-radius: 10px;
+}
+/*按钮-黄绿*/
+#btn_2{
+color:#d7b105;
+background-color:#ffffff;
+border:none;
+border-radius: 10px;
+}
+/*按钮-浅紫*/
+#btn_3{
+color:#7185ff;
+background-color:#ffffff;
+border:none;
+border-radius: 10px;
+}
+/*按钮-青绿*/
+#btn_4{
+color:#7bb7a5;
+background-color:#ffffff;
+border:none;
+border-radius: 10px;
+}

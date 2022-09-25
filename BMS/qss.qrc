@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qss/login/style-1.qss</file>
+        <file>qss/login/style-2.qss</file>
+        <file>qss/login/style-3.qss</file>
+        <file>qss/login/style-4.qss</file>
+        <file>qss/mainwindow/mainwindow.qss</file>
+        <file>qss/base.qss</file>
+    </qresource>
+</RCC>

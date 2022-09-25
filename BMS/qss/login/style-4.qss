@@ -1,0 +1,114 @@
+/**
+    该页面为浅紫色皮肤
+*/
+#frame_background{
+border-image:url(:/image/pic/background-4.png);
+}
+
+#frame_login{background-color:#ffffff}
+
+#frame_pic{
+    background-image:url(:/image/pic/4.png);
+
+}
+
+#frame_user_name,#frame_pwd{
+    border: 1px solid #696969;
+    border-radius: 5px;
+}
+
+QLineEdit{
+    border: none;
+}
+
+
+#btn_forget{
+    border:none;
+    color:#7bb7a5;
+}
+
+
+#btn_forget:hover{
+    border:none;
+    color:#7bb7a5;
+}
+
+
+#btn_login{
+    color:#316f67;
+    border: none;
+    background-color:#74fae9;
+    border-radius: 5px;
+}
+
+#btn_login:hover{
+    color:#316f67;
+    border: none;
+    background-color:#4af8e2;
+    border-radius: 5px;
+}
+
+#btn_login:pressed{
+    color:#316f67;
+    border: none;
+    background-color:#74fae9;
+    border-radius: 5px;
+}
+
+#label_login
+{
+    color:#7bb7a5;
+
+}
+#label_user_name
+{
+    border-image:url(:/image/pic/user_name.png);
+}
+
+#label_pwd
+{
+    border-image:url(:/image/pic/pwd.png);
+
+}
+
+#btn_qq{
+    background-image:url(:/image/pic/qq.png);
+    background-position:center;
+    background-repeat:no-repeat;
+    border:none;
+}
+
+#btn_qq:hover{
+    background-image:url(:/image/pic/qq-hover.png);
+    background-position:center;
+    background-repeat:no-repeat;
+    border:none;
+}
+
+#btn_wx{
+    background-image:url(:/image/pic/wx.png);
+    background-position:center;
+    background-repeat:no-repeat;
+    border:none;
+}
+
+#btn_wx:hover{
+    background-image:url(:/image/pic/wx-hover.png);
+    background-position:center;
+    background-repeat:no-repeat;
+    border:none;
+}
+
+#btn_wb{
+    background-image:url(:/image/pic/wb.png);
+    background-position:center;
+    background-repeat:no-repeat;
+    border:none;
+}
+
+#btn_wb:hover{
+    background-image:url(:/image/pic/wb-hover.png);
+    background-position:center;
+    background-repeat:no-repeat;
+    border:none;
+}

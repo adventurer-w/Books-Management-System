@@ -1,0 +1,166 @@
+/**
+    该页面为粉红色皮肤
+*/
+
+
+
+
+#lb_currentborrow{
+    width:200px;
+    height:50px;
+    font-size: 18px;
+    color:black;
+    border-style: solid;
+}
+#btn_search{
+    width:100px;
+    height:30px;
+    color:#000000;
+    font-size:18px;
+    background-color: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+    stop:0 #19eba8,stop:1 #19dfeb);
+    border: 1px solid #696969;
+    border-radius: 5px;
+    margin-left:60px;
+
+}
+#le_search{
+    border: 1px solid #696969;
+    border-radius: 5px;
+    width:200px;
+    height:30px;
+    font-size:18px;
+    background-color:white;
+
+}
+#btn_enterLibary{
+    color:#000000;
+    font-size:18px;
+    background-color: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+    stop:0 #19eba8,stop:1 #19dfeb);
+    border: 1px solid #696969;
+    border-radius: 5px;
+    width:100px;
+    height:30px
+}
+#btn_enterLibary:hover{
+    color:#7bb7a5;
+    font-size:18px;
+    color:#80712d;
+    background-color:white;
+    border: 1px solid #696969;
+    border-radius: 5px;
+    width:100px;
+    height:30px
+}
+#btn_myReserve{
+
+    color:#000000;
+    font-size:18px;
+    border: 1px solid #696969;
+    background-color: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+    stop:0 #19eba8,stop:1 #19dfeb);
+
+    border-radius: 5px;
+    width:100px;
+    height:30px
+}
+#btn_myReserve:hover{
+
+    color:#7bb7a5;
+    font-size:18px;
+    border: 1px solid #696969;
+     background-color:white;
+    border-radius: 5px;
+    width:100px;
+    height:30px
+}
+
+QLabel{
+
+    color:#000000;
+    font-size:18px;
+
+}
+#lb_username{
+
+    width:100px;
+    height:50px;
+
+}
+#lb_username_img{
+
+    border-image:url(:/image/mainwindow/username.png);
+
+    width:50px;
+    height:50px;
+}
+#lb_username_txt{
+    margin-left:20px;
+    width:100px;
+    height:50px;
+}
+#lb_number{
+
+
+width:100px;
+height:50px;
+
+}
+#lb_number_img{
+
+    border-image:url(:/image/mainwindow/number.png);
+
+    width:50px;
+    height:50px;
+}
+#lb_number_txt{
+    margin-left:20px;
+
+    width:100px;
+    height:50px;
+}
+#lb_major{
+
+    width:100px;
+    height:50px;
+
+}
+#lb_major_img{
+
+   border-image:url(:/image/mainwindow/major.png);
+
+    width:50px;
+    height:50px;
+}
+
+#lb_major_txt{
+    margin-left:20px;
+
+    width:100px;
+    height:50px;
+}
+/* 信誉分 */
+#lb_credit{
+
+width:100px;
+height:50px;
+
+}
+#lb_credit_img{
+
+    border-image:url(:/image/mainwindow/credit.png);
+
+    width:50px;
+    height:50px;
+
+}
+#lb_credit_txt{
+
+    margin-left:20px;
+    width:100px;
+    height:50px;
+}
+
+
+
