@@ -24,11 +24,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+        backend/Utils.cpp \
+        backend/myFileDB.cpp \
         main.cpp \
         mainwindow.cpp \
         widget.cpp
 
 HEADERS += \
+        backend/Admin.h \
+        backend/Book.h \
+        backend/User.h \
+        backend/Utils.h \
+        backend/all_head.h \
+        backend/length.h \
+        backend/myFileDB.h \
         mainwindow.h \
         widget.h
 
