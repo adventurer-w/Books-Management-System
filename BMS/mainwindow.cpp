@@ -7,38 +7,38 @@
 #include <QTextStream>
 #include <QApplication>
 #include <QMessageBox>
+#include <QStackedWidget>
+#include "userprofilewidget.h"
+#include "mainwidget.h"
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
-      ui(new Ui::MainWindow)
+      ui(new Ui::MainWindow),
+      mw(new MainWidget)
 {
     ui->setupUi(this);
-    //设置固定大小
-    //this->setFixedSize(600,600);
-    //设置窗口名
     this->setWindowTitle("个人主页");
-    //可以设置窗口名旁边图标
-    //this->setWindowIcon(QIcon(":/res/"));
-    //退出按钮,转到登录页
-   Widget *login=new Widget;
-    connect(ui->action_quit,&QAction::triggered,[=](){
-               this->hide();
-              login->show();
-           });
+    this->resize(1600,900);
+    mw->resize(1300,900);
+    mw->move(this->x()+300,this->y());
+    mw->setParent(this);
 
-    //设置字体
+    /*默认导入 个人信息页面*/
+    UserProfileWidget *userProfileWidget = new UserProfileWidget;
+    userProfileWidget->resize(1300,900);
+    //userProfileWidget->setParent(this->mw);
 
-       //ft.setPointSize(20);
-       QFont ft ( "华为楷体",20);//设置字体，STKaiti是华文楷体
-       //字体大小
-       //  ft.setPointSize(20);
-       QPalette label_pe;
-      //字体颜色
-      //label_pe.setColor(QPalette::WindowText, Qt::white);
-      // ui->lb_username->setPalette(label_pe);
-       //ui->lb_username->setFont(ft);
-       //ui->lb_username->setText("username");
-       QString qssfilename =":/qss/mainwindow/mainwindow.qss";
-       this->loadQss(qssfilename);
+    mw->addWidget(userProfileWidget);
+
+
+
+//    QPixmap pixmap(":/image/mainwindow/username.png");
+//    QPixmap fitpixmap = pixmap.scaled(20, 20, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+//    ui->btn_userProfile->setIcon(QIcon(fitpixmap));
+//    ui->btn_userProfile->setIconSize(QSize(20, 20));
+//    ui->btn_userProfile->setFlat(true);
+
+    QString qssfilename =":/qss/mainwindow/mainwindow.qss";
+    this->loadQss(qssfilename);
 
 }
 //放背景图
@@ -47,19 +47,19 @@ void MainWindow::paintEvent(QPaintEvent *){
     QPainter painter(this);//初始化
     QPixmap pix;
     //背景图
-    pix.load(":/image/mainwindow/background2.png");
+    pix.load(":/image/mainwindow/background.jpg");
 
     painter.drawPixmap(0,0,this->width(),this->height(),pix);
     //画头像
     QPainterPath path;
-     path.addEllipse(100,60,120,120);//加入一个圆形   绘图是从左上角的（56，20）坐标开始绘制的  ，120，120是绘图的宽高
+     path.addEllipse(100,60,80,80);//加入一个圆形   绘图是从左上角的（56，20）坐标开始绘制的  ，120，120是绘图的宽高
      pix.load(":/image/pic/personal_homepage.jpg");
      painter.setClipPath(path);
      painter.drawPixmap(QRect(100,60,120,120),pix);
 }
 bool MainWindow::loadQss(const QString &StyleSheetFile){
 
-    QFile file(StyleSheetFile);/*QSS文件所在的路径*/
+        /*QSS文件所在的路径*/
     QFile ofile(StyleSheetFile);
         bool Ret = ofile.open(QFile::ReadOnly);
 

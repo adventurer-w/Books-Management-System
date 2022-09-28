@@ -6,5 +6,7 @@
         <file>qss/login/style-4.qss</file>
         <file>qss/mainwindow/mainwindow.qss</file>
         <file>qss/base.qss</file>
+        <file>qss/searchlineedit/le_btn.qss</file>
+        <file>qss/userprofilewidget/userprofile.qss</file>
     </qresource>
 </RCC>

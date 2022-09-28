@@ -49,5 +49,9 @@
         <file>image/mainwindow/number.png</file>
         <file>image/mainwindow/username.png</file>
         <file>image/mainwindow/background2.png</file>
+        <file>image/mainwindow/background.jpg</file>
+        <file>image/mainwindow/background_userProfile.jpg</file>
+        <file>image/UserProfile/background.jpg</file>
+        <file>image/SearchLineEdit/search.png</file>
     </qresource>
 </RCC>

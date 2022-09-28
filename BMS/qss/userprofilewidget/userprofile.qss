@@ -1,0 +1,7 @@
+QLabel{
+
+    color:#000000;
+    font-size:18px;
+    font-family:KaiTi;
+
+}

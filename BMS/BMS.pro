@@ -25,19 +25,38 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
+        mainwidget.cpp \
         mainwindow.cpp \
+        searchlineedit.cpp \
+        userprofilewidget.cpp \
         widget.cpp
 
 HEADERS += \
+        mainwidget.h \
         mainwindow.h \
+        searchlineedit.h \
+        userprofilewidget.h \
         widget.h
 
 FORMS += \
+    mainwidget.ui \
         mainwindow.ui \
-        widget.ui
+    searchlineedit.ui \
+    userprofilewidget.ui \
+        widget.ui \
 
 RESOURCES += \
     image.qrc \
     qss.qrc
+
+DISTFILES += \
+    qss/base.qss \
+    qss/login/style-1.qss \
+    qss/login/style-2.qss \
+    qss/login/style-3.qss \
+    qss/login/style-4.qss \
+    qss/mainwindow/mainwindow.qss \
+    qss/searchlineedit/le_btn.qss \
+    qss/userprofilewidget/userprofile.qss
 
 

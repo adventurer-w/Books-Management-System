@@ -3,7 +3,8 @@
 #include <widget.h>
 #include <QMainWindow>
 #include <QString>
-
+#include <QStackedWidget>
+#include <MainWidget.h>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -21,5 +22,6 @@ public:
     void paintEvent(QPaintEvent *);
 private:
     Ui::MainWindow *ui;
+    MainWidget *mw;
 };
 #endif // MAINWINDOW_H
