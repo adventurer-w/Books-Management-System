@@ -1,7 +1,7 @@
 #include "Utils.h"
 #include "all_head.h"
 #include "length.h"
-#include "myFileDB.h"
+#include "myfiledb.h"
 #include "MD5.h"
 
 using namespace std;

@@ -39,7 +39,6 @@ MainWindow::MainWindow(QWidget *parent)
        //ui->lb_username->setText("username");
        QString qssfilename =":/qss/mainwindow/mainwindow.qss";
        this->loadQss(qssfilename);
-
 }
 //放背景图
 void MainWindow::paintEvent(QPaintEvent *){

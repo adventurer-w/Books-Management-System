@@ -235,6 +235,7 @@ Makefile: ../BMS/BMS.pro ../../../qt/5.14.2/mingw73_64/mkspecs/win32-g++/qmake.c
 		../../../qt/5.14.2/mingw73_64/mkspecs/features/qt_config.prf \
 		../../../qt/5.14.2/mingw73_64/mkspecs/win32-g++/qmake.conf \
 		../../../qt/5.14.2/mingw73_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../../qt/5.14.2/mingw73_64/mkspecs/features/exclusive_builds.prf \
 		../../../qt/5.14.2/mingw73_64/mkspecs/features/toolchain.prf \
 		../../../qt/5.14.2/mingw73_64/mkspecs/features/default_pre.prf \
@@ -263,7 +264,6 @@ Makefile: ../BMS/BMS.pro ../../../qt/5.14.2/mingw73_64/mkspecs/win32-g++/qmake.c
 		../../../qt/5.14.2/mingw73_64/lib/Qt5Gui.prl \
 		../../../qt/5.14.2/mingw73_64/lib/Qt5Core.prl \
 		../../../qt/5.14.2/mingw73_64/lib/qtmain.prl \
-		.qmake.stash \
 		../../../qt/5.14.2/mingw73_64/mkspecs/features/build_pass.prf \
 		../BMS/image.qrc \
 		../BMS/qss.qrc
@@ -433,6 +433,7 @@ Makefile: ../BMS/BMS.pro ../../../qt/5.14.2/mingw73_64/mkspecs/win32-g++/qmake.c
 ../../../qt/5.14.2/mingw73_64/mkspecs/features/qt_config.prf:
 ../../../qt/5.14.2/mingw73_64/mkspecs/win32-g++/qmake.conf:
 ../../../qt/5.14.2/mingw73_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../../qt/5.14.2/mingw73_64/mkspecs/features/exclusive_builds.prf:
 ../../../qt/5.14.2/mingw73_64/mkspecs/features/toolchain.prf:
 ../../../qt/5.14.2/mingw73_64/mkspecs/features/default_pre.prf:
@@ -461,7 +462,6 @@ Makefile: ../BMS/BMS.pro ../../../qt/5.14.2/mingw73_64/mkspecs/win32-g++/qmake.c
 ../../../qt/5.14.2/mingw73_64/lib/Qt5Gui.prl:
 ../../../qt/5.14.2/mingw73_64/lib/Qt5Core.prl:
 ../../../qt/5.14.2/mingw73_64/lib/qtmain.prl:
-.qmake.stash:
 ../../../qt/5.14.2/mingw73_64/mkspecs/features/build_pass.prf:
 ../BMS/image.qrc:
 ../BMS/qss.qrc:

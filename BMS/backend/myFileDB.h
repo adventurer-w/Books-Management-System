@@ -111,7 +111,8 @@ int myFileDB::select(string DB_NAME, T &entity, vector<string> &VALUES, vector<T
             }
         }
         readFile.close();
-        return resultSet.size();
+        if(!resultSet.empty()) return resultSet.size();
+        else return -1;
     }
     catch (ios_base::failure &fail) {
         cout << fail.what() << endl;

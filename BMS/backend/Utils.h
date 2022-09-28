@@ -2,8 +2,14 @@
 #define UTILS_H
 #include "all_head.h"
 #include <vector>
+#include "myfiledb.h"
 
 class Utils {
+public:
+
+    myFileDB db;
+    Utils(string path) : db(path) {}
+
     //登录
     int Login(char* account, char* password); //参数1:账号，参数2:密码。返回值：0:账户不存在；1:登陆成功；2:密码错误
 
