@@ -2,17 +2,16 @@
 #define BOOK_H
 #include <iostream>
 #include "length.h"
-#include <string>
-
+using namespace std;
 class Book{
-private:
+public:
     int id;
     int left;//余量
     int allNum;//总数
     int historyNum;//历史借阅数
     int boyHistoryNum;//男生历史借阅数
     int girlHistoryNum;//女生历史借阅数
-    int flag;
+    int dirty;
     char bookName[BOOK_NAME_SIZE];//书名
     char author[AUTHOR_SIZE];//作者
     char publisher[PUBLISHER_SIZE];//出版社
@@ -23,13 +22,12 @@ private:
     char imgPath[IMAGE_PATH];//图片路径
     float point; //评分
 
-public:
     int getId() { return id; }
 
     void setId(int id) { this->id = id; }
 
-    int getFlag() { return flag; }
-    void setFlag(int flag) { this->flag = flag; }
+    int getDirty() { return dirty; }
+    void setDirty(int dirty) { this->dirty = dirty; }
 
     char* getBookName() {return this->bookName;}
     void setBookName(const char *bookName) {
@@ -117,7 +115,7 @@ public:
         else if (Elem == "boyHistoryNum")return typeid(boyHistoryNum).name();
         else if (Elem == "girlHistoryNum")return typeid(girlHistoryNum).name();
         else if (Elem == "point")return typeid(point).name();
-        else if (Elem == "flag")return typeid(flag).name();
+        else if (Elem == "dirty")return typeid(dirty).name();
         else {
             throw "Field  Not Found!";
         }
@@ -131,7 +129,7 @@ public:
         else if (Elem == "historyNum")return historyNum;
         else if (Elem == "boyHistoryNum")return boyHistoryNum;
         else if (Elem == "girlHistoryNum")return girlHistoryNum;
-        else if (Elem == "flag")return flag;
+        else if (Elem == "dirty")return dirty;
         else
         {
             throw "Field  Not Found!";

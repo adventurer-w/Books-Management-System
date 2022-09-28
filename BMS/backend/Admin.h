@@ -8,18 +8,18 @@
 using namespace std;
 
 class Admin {
-private:
+public:
     int id; //管理员编号
     char name[USER_NAME_SIZE];    //姓名
     char account[ACCOUNT_SIZE];   //账号
     char password[PASSWORD_SIZE];  //密码
-    int flag; //是否被删除
-public:
+    int dirty; //是否被删除
+
     int getId() { return id; }
     void setId(int id) { this->id = id; }
 
-    int getFlag() { return flag; }
-    void setFlag(int flag) { this->flag = flag; }
+    int getDirty() { return dirty; }
+    void setDirty(int dirty) { this->dirty = dirty; }
 
     char *getName() { return this->name; }
 
@@ -48,7 +48,7 @@ public:
         else if (Elem == "account")return typeid(account).name();
         else if (Elem == "password")return typeid(password).name();
         else if (Elem == "name")return typeid(name).name();
-        else if (Elem == "flag")return typeid(flag).name();
+        else if (Elem == "dirty")return typeid(dirty).name();
         else {
             throw "Field  Not Found!";
         }
@@ -57,7 +57,7 @@ public:
     int getIntElemByName(string Elem)
     {
         if (Elem == "id") return id;
-        if (Elem == "flag") return flag;
+        if (Elem == "dirty") return dirty;
         else
         {
             throw "Field  Not Found!";

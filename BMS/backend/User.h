@@ -6,7 +6,7 @@
 #include "length.h"
 
 class User {
-private:
+public:
     int id; //学生编号
     char name[USER_NAME_SIZE];    //昵称（姓名）
     char account[ACCOUNT_SIZE];   //账号（学号）
@@ -18,16 +18,15 @@ private:
     int num_borrowed;     //借书数目
     int num_appointed;   //预约数
     int debet;         //欠款数
-    int flag;
+    int dirty;
 
-public:
     int getId() { return id; }
 
     void setId(int id) { this->id = id; }
 
-    int getFlag() { return flag; }
+    int getDirty() { return dirty; }
 
-    void setFlag(int flag) { this->flag = flag; }
+    void setDirty(int dirty) { this->dirty = dirty; }
 
     char *getName() { return this->name; }
 
@@ -100,7 +99,7 @@ public:
         else if (Elem == "debet")return typeid(debet).name();
         else if (Elem == "security_question") return typeid(security_question).name();
         else if (Elem == "security_answer") return typeid(security_answer).name();
-        else if (Elem == "flag") return typeid(flag).name();
+        else if (Elem == "dirty") return typeid(dirty).name();
         else {
             throw "Field  Not Found!";
         }
@@ -111,7 +110,7 @@ public:
         else if (Elem == "sex") return sex;
         else if (Elem == "num_borrowed") return num_borrowed;
         else if (Elem == "debet")return debet;
-        else if (Elem == "flag")return flag;
+        else if (Elem == "dirty")return dirty;
         else if (Elem == "num_appointed")return num_appointed;
         else {
             throw "Field  Not Found!";
