@@ -27,20 +27,25 @@ SOURCES += \
         main.cpp \
         mainwidget.cpp \
         mainwindow.cpp \
+        querybookwidget.cpp \
         searchlineedit.cpp \
+        stditemmodel.cpp \
         userprofilewidget.cpp \
         widget.cpp
 
 HEADERS += \
         mainwidget.h \
         mainwindow.h \
+        querybookwidget.h \
         searchlineedit.h \
+        stditemmodel.h \
         userprofilewidget.h \
         widget.h
 
 FORMS += \
     mainwidget.ui \
         mainwindow.ui \
+    querybookwidget.ui \
     searchlineedit.ui \
     userprofilewidget.ui \
         widget.ui \

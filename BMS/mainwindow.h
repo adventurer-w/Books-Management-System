@@ -16,10 +16,17 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     bool loadQss(const QString &StyleSheetFile);
+    void loadMenuBar();
+    void loadPages();
     ~MainWindow();
     //重写paintEvent
    // Widget *login =NULL;
     void paintEvent(QPaintEvent *);
+private slots:
+    void on_btn_userProfile_clicked();
+    void on_btn_modifyInfo_clicked();
+    void on_btn_queryBook_clicked();
+
 private:
     Ui::MainWindow *ui;
     MainWidget *mw;

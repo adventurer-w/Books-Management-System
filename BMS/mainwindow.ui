@@ -46,7 +46,7 @@
      <string>修改信息</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="btn_querryBook">
+   <widget class="QPushButton" name="btn_queryBook">
     <property name="geometry">
      <rect>
       <x>30</x>

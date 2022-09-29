@@ -31,9 +31,9 @@
    <widget class="QLabel" name="lb_major_txt">
     <property name="geometry">
      <rect>
-      <x>80</x>
+      <x>100</x>
       <y>60</y>
-      <width>180</width>
+      <width>161</width>
       <height>30</height>
      </rect>
     </property>
@@ -51,7 +51,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>username</string>
+     <string>学号</string>
     </property>
    </widget>
    <widget class="QLabel" name="lb_username">
@@ -59,12 +59,12 @@
      <rect>
       <x>20</x>
       <y>20</y>
-      <width>130</width>
+      <width>81</width>
       <height>30</height>
      </rect>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string>姓名</string>
     </property>
    </widget>
    <widget class="QLabel" name="lb_credit">
@@ -77,7 +77,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>username</string>
+     <string>信誉分</string>
     </property>
    </widget>
    <widget class="QLabel" name="lb_sex_txt">
@@ -98,7 +98,7 @@
      <rect>
       <x>100</x>
       <y>100</y>
-      <width>170</width>
+      <width>151</width>
       <height>30</height>
      </rect>
     </property>
@@ -116,7 +116,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>major</string>
+     <string>专业</string>
     </property>
    </widget>
    <widget class="QLabel" name="lb_sex">
@@ -129,15 +129,28 @@
      </rect>
     </property>
     <property name="text">
-     <string>username</string>
+     <string>性别</string>
     </property>
    </widget>
    <widget class="QLabel" name="lb_credit_txt">
     <property name="geometry">
      <rect>
-      <x>350</x>
+      <x>370</x>
       <y>100</y>
       <width>80</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lb_username_txt">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>20</y>
+      <width>81</width>
       <height>30</height>
      </rect>
     </property>
@@ -149,7 +162,7 @@
   <widget class="QLabel" name="lb_currentborrow">
    <property name="geometry">
     <rect>
-     <x>140</x>
+     <x>120</x>
      <y>300</y>
      <width>230</width>
      <height>40</height>
@@ -159,86 +172,15 @@
     <string>当前借阅</string>
    </property>
   </widget>
-  <widget class="QFrame" name="fm_book">
+  <widget class="QTableView" name="tbv_borrow">
    <property name="geometry">
     <rect>
      <x>120</x>
      <y>370</y>
-     <width>970</width>
-     <height>80</height>
+     <width>1030</width>
+     <height>250</height>
     </rect>
    </property>
-   <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
-   </property>
-   <widget class="QLabel" name="lb_bookname">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>30</y>
-      <width>70</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>书名</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lb_author">
-    <property name="geometry">
-     <rect>
-      <x>210</x>
-      <y>30</y>
-      <width>70</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>作者</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lb_press">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>30</y>
-      <width>70</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>出版社</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lb_ISBN">
-    <property name="geometry">
-     <rect>
-      <x>550</x>
-      <y>30</y>
-      <width>70</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>ISBN</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lb_borrowtime">
-    <property name="geometry">
-     <rect>
-      <x>750</x>
-      <y>30</y>
-      <width>70</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>借阅时间</string>
-    </property>
-   </widget>
   </widget>
  </widget>
  <resources/>

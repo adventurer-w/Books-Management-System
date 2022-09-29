@@ -53,5 +53,12 @@
         <file>image/mainwindow/background_userProfile.jpg</file>
         <file>image/UserProfile/background.jpg</file>
         <file>image/SearchLineEdit/search.png</file>
+        <file>image/mainwindow/library.png</file>
+        <file>image/mainwindow/logout.png</file>
+        <file>image/mainwindow/lookup.png</file>
+        <file>image/mainwindow/modify.png</file>
+        <file>image/mainwindow/setting.png</file>
+        <file>image/mainwindow/user.png</file>
+        <file>image/mainwindow/userprofile.png</file>
     </qresource>
 </RCC>

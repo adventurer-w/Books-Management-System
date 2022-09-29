@@ -2,7 +2,6 @@
 QPushButton {
     background-color:transparent;
     padding-left:3px;
-    padding-top:3px;
     border: none;
 
 }
