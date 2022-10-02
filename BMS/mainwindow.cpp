@@ -7,6 +7,12 @@
 #include <QTextStream>
 #include <QApplication>
 #include <QMessageBox>
+
+
+
+
+
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow)
