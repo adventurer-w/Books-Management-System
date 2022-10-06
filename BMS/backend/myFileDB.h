@@ -86,7 +86,7 @@ int myFileDB::select(string DB_NAME, T &entity, vector<string> &VALUES, vector<T
         if (VALUES[0] == "all") {
             while (readFile.read(reinterpret_cast<char *>(&temp), TSize)) {
                 //去除无效数据
-                if (!temp.dirty)
+                if (temp.dirty!=1)
                     resultSet.push_back(temp);
             }
         }
@@ -260,7 +260,7 @@ int myFileDB::Delete(string DB_NAME, T &entity, vector<string> &VALUES) {
 
         for (int count = 0; readFile.read(reinterpret_cast<char *>(&temp), TSize); count++) {
             //去除无效数据
-            if (!temp.dirty) {
+            if (temp.dirty!=1) {
                 int flag = 1;
                 //遍历选择条件
                 for (int i = 1; i < VALUES.size(); i++) {
@@ -316,10 +316,8 @@ int myFileDB::update(string DB_NAME, T &Sentity, T &Uentity, vector<string> &VAL
             ios_base::failure fail("ERROR");
             throw fail;
         }
-
         if (VALUES[1] == "id") {
             Uentity.setId(Sentity.getId());
-
             Uentity.setDirty(0);
             writeFile.seekp(Sentity.getId() * sizeof(Sentity), ios::beg);
             writeFile.write((char *) &Uentity, sizeof(Uentity));
@@ -362,7 +360,7 @@ int myFileDB::update(string DB_NAME, T &Sentity, T &Uentity, vector<string> &VAL
 
         for (int count = 0; readFile.read(reinterpret_cast<char *>(&temp), sizeof(temp)); count++) {
 
-            if (!temp.dirty) {
+            if (temp.dirty!=1) {
                 int flag = 1;
                 //遍历选择条件
                 for (int i = 1; i < VALUES.size(); i++) {
@@ -385,7 +383,6 @@ int myFileDB::update(string DB_NAME, T &Sentity, T &Uentity, vector<string> &VAL
                 }
 
                 if (flag) {
-
                     Uentity.setId(temp.id);
                     Uentity.setDirty(0);
 
@@ -414,7 +411,7 @@ void myFileDB::selectInt(ifstream &readFile, string valueName, int value, vector
     T temp;
     int TSize = sizeof(T);
     while (readFile.read(reinterpret_cast<char *>(&temp), TSize)) {
-        if (!temp.dirty && temp.getIntElemByName(valueName) == value) {
+        if (temp.dirty!=1 && temp.getIntElemByName(valueName) == value) {
             resultSet.push_back(temp);
         }
     }
@@ -425,7 +422,7 @@ void myFileDB::selectChar(ifstream &readFile, string valueName, char *value, vec
     T temp;
     int TSize = sizeof(T);
     while (readFile.read(reinterpret_cast<char *>(&temp), TSize)) {
-        if (!temp.dirty && !strcmp(temp.getCharElemByName(valueName), value)) {
+        if (temp.dirty!=1 && !strcmp(temp.getCharElemByName(valueName), value)) {
             resultSet.push_back(temp);
         }
     }
@@ -436,7 +433,7 @@ void myFileDB::selectFloat(ifstream &readFile, string valueName, float value, ve
     T temp;
     int TSize = sizeof(T);
     while (readFile.read(reinterpret_cast<char *>(&temp), TSize)) {
-        if (!temp.dirty && temp.getFloatElemByName(valueName) == value) {
+        if (temp.dirty!=1 && temp.getFloatElemByName(valueName) == value) {
             resultSet.push_back(temp);
         }
     }
@@ -454,7 +451,6 @@ template<typename T>
 void myFileDB::selectMany(ifstream &readFile, T &entity, vector<string> &VALUES, vector<T> &resultSet) {
     T temp;
     int TSize = sizeof(T);
-
 
     vector<string> elemType;
     vector<int> elemIntValue;
@@ -484,7 +480,7 @@ void myFileDB::selectMany(ifstream &readFile, T &entity, vector<string> &VALUES,
     }
 
     while (readFile.read(reinterpret_cast<char *>(&temp), TSize)) {
-        if (!temp.dirty) {
+        if (temp.dirty!=1) {
             int flag = 1;
             //遍历选择条件
             for (int i = 1; i < VALUES.size(); i++) {
