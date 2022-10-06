@@ -51,7 +51,7 @@ bool MainWindow::loadQss(const QString &StyleSheetFile){
 
         if (!Ret)
         {
-             QMessageBox::information(this,"Tip",ofile.errorString());
+             QMessageBox::information(this,"Tip1",ofile.errorString());
              return false;
         }
 

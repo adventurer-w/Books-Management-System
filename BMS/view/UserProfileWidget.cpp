@@ -29,7 +29,7 @@ UserProfileWidget::UserProfileWidget(QWidget *parent) :
     sle->setParent(this);
     sle->move(650,300);
     sle->resize(470,40);
-    //加载本页面qss
+
 
     ui->lb_username->setText("姓名");
     ui->lb_username_txt->setText("袁钰林");
@@ -39,6 +39,7 @@ UserProfileWidget::UserProfileWidget(QWidget *parent) :
     ui->lb_credit_txt->setText("100");
     setShadow();
     showBorrow();
+    //加载本页面qss
     this->loadQss(":/qss/userprofilewidget/userprofile.qss");
 }
 
@@ -146,6 +147,7 @@ void UserProfileWidget::showBorrow(){
     //设置多选
     ui->tbv_borrow->setSelectionMode(QAbstractItemView::MultiSelection);
 
+
     //往表格中添加数据 连接后端把下面加入for循环
     int n=50;//借阅书数量
     for(int i=0;i<30;i++){
@@ -169,7 +171,7 @@ void UserProfileWidget::showBorrow(){
         ui->tbv_borrow->setIndexWidget(model->index(i,5),button);
         //ui->tbv_borrow->setIndexWidget(model->index(model->rowCount()-1,5),button);//rowCount()-1是最后行号，从0行开始
     }
-
+     ui->tbv_borrow->setShowGrid(false);
 }
 void UserProfileWidget::onTableBtnClicked()
 {
@@ -181,6 +183,7 @@ void UserProfileWidget::onTableBtnClicked()
     //删除数据再重新调用
     showBorrow();
 }
+
 //scollarea版本
 //输出后端借阅书，改settex函数的内容book[i]->setText("book");
 //void UserProfileWidget::showBorrow(){
@@ -217,7 +220,7 @@ bool UserProfileWidget::loadQss(const QString &StyleSheetFile){
 
         if (!Ret)
         {
-             QMessageBox::information(this,"Tip",ofile.errorString());
+             QMessageBox::information(this,"Tip_userprofile",ofile.errorString());
              return false;
         }
 

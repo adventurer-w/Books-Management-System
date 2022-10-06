@@ -11,7 +11,7 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     ui(new Ui::SearchLineEdit)
 {
     ui->setupUi(this);
-    QPushButton* btn=new QPushButton(this);
+    btn=new QPushButton(this);
     btn->setEnabled(true);
     QLabel *lb = new QLabel;
     lb->setText("Search");
@@ -44,6 +44,7 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     this->setAlignment((Qt::AlignVCenter));
 
 }
+
 bool SearchLineEdit::loadQss(const QString &StyleSheetFile){
 
         /*QSS文件所在的路径*/
@@ -52,7 +53,7 @@ bool SearchLineEdit::loadQss(const QString &StyleSheetFile){
 
         if (!Ret)
         {
-             QMessageBox::information(this,"Tip",ofile.errorString());
+             QMessageBox::information(this,"Tip_searchLineEdit",ofile.errorString());
              return false;
         }
 
@@ -63,4 +64,10 @@ bool SearchLineEdit::loadQss(const QString &StyleSheetFile){
 SearchLineEdit::~SearchLineEdit()
 {
     delete ui;
+}
+void SearchLineEdit::on_btn_clicked(){
+    QString text = this->text();
+
+    /**/
+
 }

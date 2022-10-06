@@ -8,5 +8,9 @@
         <file>qss/base.qss</file>
         <file>qss/searchlineedit/le_btn.qss</file>
         <file>qss/userprofilewidget/userprofile.qss</file>
+        <file>qss/querybookwidget/querybook.qss</file>
+        <file>qss/bookdetails/bookdetails.qss</file>
+        <file>qss/booklist/booklist.qss</file>
+        <file>qss/bookranking/bookranking.qss</file>
     </qresource>
 </RCC>

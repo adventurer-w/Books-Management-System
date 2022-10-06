@@ -1,6 +1,6 @@
 #ifndef WIDGET_H
 #define WIDGET_H
-#include <mainwindow.h>
+#include "mainwindow.h"
 #include <QWidget>
 
 namespace Ui {
@@ -20,10 +20,10 @@ public slots:
 
 private slots:
     void on_btn_login_clicked();
+    void on_btn_register_clicked();
 
 private:
     Ui::Widget *ui;
-     QString user_name,uer_pwd;
 };
 
 #endif // WIDGET_H

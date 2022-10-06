@@ -1,11 +1,19 @@
-#include "widget.h"
-#include "mainwindow.h"
+#include "view/widget.h"
+#include "view/mainwindow.h"
 #include <QApplication>
 #include <QFile>
 #include <QTextStream>
-
+#include "backend/User.h"
+#include "backend/Utils.h"
+#include <string>
+#include <QDir>
+#include <view/GlobalSetting.h>
+User now_user;
+Utils now_utils(baseDbPath);
+QString classify;//搜索图书按分类
 int main(int argc, char *argv[])
 {
+
     QApplication app(argc, argv);
 
     QFile file(":/qss/base.qss");/*baseQSS文件所在的路径*/

@@ -60,5 +60,9 @@
         <file>image/mainwindow/setting.png</file>
         <file>image/mainwindow/user.png</file>
         <file>image/mainwindow/userprofile.png</file>
+        <file>image/querybook/background.png</file>
+        <file>image/querybook/live.jpg</file>
+        <file>image/querybook/back.png</file>
+        <file>image/querybook/down_arrow.png</file>
     </qresource>
 </RCC>
