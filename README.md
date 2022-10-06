@@ -90,7 +90,7 @@ void Widget::on_btn_login_clicked()
 
 ##### 1.登录
 
-![image-20220929205702407](image-20220929205702407.png)
+![image-20221006163710466](https://yuan-1314071695.cos.ap-nanjing.myqcloud.com/img/image-20221006163710466.png)
 
 可以切换四种皮肤
 
@@ -98,12 +98,40 @@ void Widget::on_btn_login_clicked()
 
 点击login进入（因为无后端逻辑，不用密码）
 
-![image-20220929205759312](image-20220929205759312.png)
+![image-20221006163754174](https://yuan-1314071695.cos.ap-nanjing.myqcloud.com/img/image-20221006163754174.png)
 
-目前正在做图书查询界面，个人中心和图书查询的信号槽已经写好了，可以跳转方便调试。
+后端需要增加的逻辑：
 
-打算新增：图书查询（查看一些榜单，推荐等界面，可以查询图书），BookQuery，图书列表（按照关键字或者分类查询的图书列表），BookList；图书详情（点击一本图书进入的详情界面），BookDetail
-=======
+带\*为优先完成
+
+1.获取当前用户信息\*
+
+2.获取当前借阅书籍信息
+
+3.通过搜索框关键字跳转到图书列表界面（默认以关键字查询）\*
+
+HINT：通过获取到mw的指针，控制mw->setCurrentIndex方法来控制主界面跳转，目前个人信息界面为0，图书查询为1；到图书查询界面后，通过获取sub_sw指针，同样利用上面的方法完成子界面跳转，其中bookranking为0，booklist为1，bookdetails为2.
+
+
+
+#### 3.图书查询
+
+分为三个界面，为
+
+1.bookranking
+
+2.booklist
+
+3.bookdetails
+
+目前需要完成的逻辑有：
+
+1.通过搜索框和分类效果，获取到图书列表\*
+
+2.图书列表到图书详情的数据传递\*
+
+3.获取排行榜信息
+
 # 后端接口使用说明
 
 ##  9.28更新
@@ -154,7 +182,3 @@ utils.Register(user);  //注册
 
 utils.Login("test","password（MD5加密后）");  //登录
 ```
-
-
-
->>>>>>> origin/backend
