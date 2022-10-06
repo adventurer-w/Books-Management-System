@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 前端界面说明
 
 ## 10.6更新
@@ -11,7 +10,7 @@
 
 目前前端文件分为以下几个文件（cpp，h，ui）
 
-1**.widget**,主login界面
+1.**widget**,主login界面
 
 2.**mainwindow**，login后的主界面
 
@@ -96,7 +95,7 @@ void Widget::on_btn_login_clicked()
 
 ##### 2.个人信息
 
-点击login进入（因为无后端逻辑，不用密码）
+点击login进入（账号密码均为123）
 
 ![image-20221006163754174](https://yuan-1314071695.cos.ap-nanjing.myqcloud.com/img/image-20221006163754174.png)
 
@@ -116,7 +115,9 @@ HINT：通过获取到mw的指针，控制mw->setCurrentIndex方法来控制主�
 
 #### 3.图书查询
 
-分为三个界面，为
+分为1+3个界面，主界面为bookquerywidget，控制界面跳转需要通过该类的sub_mw进行。
+
+子界面为
 
 1.bookranking
 
@@ -159,7 +160,7 @@ string b= md5.read(a);
 
 这里面是对文件的读写操作，前端**不需要**使用该类
 
-
+view目录下的globalSetting中可以设置db的根目录
 
 ### Utils使用
 
