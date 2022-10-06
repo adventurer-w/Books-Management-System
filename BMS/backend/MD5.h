@@ -48,7 +48,10 @@ MD5::MD5()
     D = 0x10325476;
 }
 
-MD5::~MD5(){}
+MD5::~MD5()
+{
+
+}
 
 void output(int a,string &res)//小端规则
 {
