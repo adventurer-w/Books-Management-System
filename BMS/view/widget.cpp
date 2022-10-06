@@ -94,7 +94,7 @@ void Widget::on_btn_login_clicked()
         //登陆成功
         ui->label->setText("登陆成功");
         this->hide();
-        now_user=now_utils.GetUserByAccount(account2);
+        now_utils.GetUserByAccount(account2,now_user);
         MainWindow *personal_homepage = new MainWindow;
         personal_homepage->show();
     }

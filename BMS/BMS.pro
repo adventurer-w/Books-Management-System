@@ -24,6 +24,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    backend/MD5.cpp \
         backend/Utils.cpp \
     main.cpp \
         view/MainWidget.cpp \
