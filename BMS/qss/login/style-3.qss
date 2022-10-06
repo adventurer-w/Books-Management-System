@@ -54,7 +54,26 @@ QLineEdit{
     background-color:#8293fd;
     border-radius: 5px;
 }
+#btn_register{
+    color:#ffffff;
+    border: none;
+    background-color:#8293fd;
+    border-radius: 5px;
+}
 
+#btn_register:hover{
+    color:#ffffff;
+    border: none;
+    background-color:#4861fb;
+    border-radius: 5px;
+}
+
+#btn_register:pressed{
+    color:#ffffff;
+    border: none;
+    background-color:#8293fd;
+    border-radius: 5px;
+}
 #label_login
 {
     color:#7185ff;

@@ -46,6 +46,7 @@ QLineEdit{
     background-color:#fd6c92;
     border-radius: 5px;
 }
+
 /*按钮-登录-鼠标悬停*/
 #btn_login:hover{
     color:#ffffff;
@@ -55,6 +56,28 @@ QLineEdit{
 }
 /*按钮-登录-鼠标按下*/
 #btn_login:pressed{
+    color:#ffffff;
+    border: none;
+    background-color:#fd6c92;
+    border-radius: 5px;
+}
+/*按钮-登录*/
+#btn_register{
+    color:#ffffff;
+    border: none;
+    background-color:#fd6c92;
+    border-radius: 5px;
+}
+
+/*按钮-登录-鼠标悬停*/
+#btn_register:hover{
+    color:#ffffff;
+    border: none;
+    background-color:#fd4979;
+    border-radius: 5px;
+}
+/*按钮-登录-鼠标按下*/
+#btn_register:pressed{
     color:#ffffff;
     border: none;
     background-color:#fd6c92;
