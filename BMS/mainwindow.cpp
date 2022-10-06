@@ -7,11 +7,11 @@
 #include <QTextStream>
 #include <QApplication>
 #include <QMessageBox>
+#include "backend/MD5.h"
+#include<iostream>
 
 
-
-
-
+using namespace std;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
