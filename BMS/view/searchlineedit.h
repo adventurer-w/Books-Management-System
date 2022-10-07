@@ -17,8 +17,13 @@ public:
     bool loadQss(const QString &StyleSheetFile);
 
     ~SearchLineEdit();
-private slots:
-    void on_btn_clicked();
+private:
+public slots:
+    void sendKey();
+signals:
+    void keySignal(QString key);
+
+
 private:
     Ui::SearchLineEdit *ui;
     QPushButton* btn;

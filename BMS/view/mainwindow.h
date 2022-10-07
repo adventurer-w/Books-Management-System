@@ -17,7 +17,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     bool loadQss(const QString &StyleSheetFile);
     void loadMenuBar();
-    void loadPages();
+    void loadPages(int mode);
     ~MainWindow();
     //重写paintEvent
    // Widget *login =NULL;

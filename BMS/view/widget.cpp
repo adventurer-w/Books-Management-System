@@ -1,5 +1,6 @@
 #include "widget.h"
-#include "MainWindow.h"
+#include "register.h"
+#include "mainwindow.h"
 #include "ui_widget.h"
 #include <QFile>
 #include <QTextStream>
@@ -81,7 +82,6 @@ void Widget::on_btn_login_clicked()
     char* account2=const_cast<char*>(t.c_str());
     char* pwd2=const_cast<char*>(b.c_str());
 
-//登陆
     flag=now_utils.Login(account2,pwd2);
     if(flag==0){
         //账户不存在
@@ -104,40 +104,6 @@ void Widget::on_btn_login_clicked()
 
 void Widget::on_btn_register_clicked()
 {
-
-    QString account=ui->lineE_user_name->text();
-    QString pwd=ui->lineE_pwd->text();
-
-    MD5 md5;
-    string b= md5.read(pwd.toStdString());//加密
-
-    int flag;
-    string t=account.toStdString();
-    char* account2=const_cast<char*>(t.c_str());
-    char* pwd2=const_cast<char*>(b.c_str());
-
-    now_user.setAccount(account2);
-    now_user.setPassword(pwd2);
-
-    now_user.setSex(1);
-    string s="LiHua";
-    char* ss=const_cast<char*>(s.c_str());
-    now_user.setName(ss);
-    now_user.setDebet(10);
-    s="CS";
-    ss=const_cast<char*>(s.c_str());
-    now_user.setMajor(ss);
-
-    flag=now_utils.Register(now_user);
-    if(flag==0){
-        //账户已存在
-        ui->label->setText("账户已存在");
-    }else if(flag==-1){
-        //注册失败
-        ui->label->setText("注册错误");
-    }else if(flag==1){
-        //注册成功
-        ui->label->setText("注册成功");
-    }
-
+     Register *re = new Register();
+     re->show();
 }

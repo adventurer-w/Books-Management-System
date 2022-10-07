@@ -4,6 +4,8 @@
 #include <QTableView>
 #include <QWidget>
 #include "QPainter"
+#include <string>
+#include "MainWidget.h"
 namespace Ui {
 class UserProfileWidget;
 }
@@ -18,11 +20,17 @@ public:
     void setShadow();
     bool loadQss(const QString &StyleSheetFile);
     void showBorrow();
+
+
     ~UserProfileWidget();
-private slots:
+public slots:
     void onTableBtnClicked();
+    void searchBooks(QString key);
+public:
+    MainWidget *pmw;
 private:
     Ui::UserProfileWidget *ui;
+
 };
 
 #endif // USERPROFILEWIDGET_H

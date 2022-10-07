@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "MainWidget.h"
+#include "stditemmodel.h"
 namespace Ui {
 class BookList ;
 }
@@ -18,11 +19,13 @@ public:
     ~BookList();
     void on_TableBtn_clicked();
     void setStackWidget(MainWidget *p);
+    void loadBooks(int curPg);
     int nCurScroller = 0; //翻页时的当时滑动条位置
-    int pageValue = 3; // 一页显示条数
-    int n=29;//图书记录条数
+    int curPgNum=1;
+    int maxPgNum = 4; // 一页显示条数
     int maxpages;//最大页数
     QString pages;//显示当前页
+    StdItemModel *model;
 
 private slots:
     void on_btn_first_clicked();

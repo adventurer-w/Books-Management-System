@@ -13,6 +13,14 @@
 #include "MainWidget.h"
 #include "bookdetails.h"
 #include "querybookwidget.h"
+#include "backend/all_head.h"
+#include "backend/Utils.h"
+#include <QDebug>
+
+extern Utils now_utils;
+extern vector<Book> re;
+extern Book now_book;
+extern int now_i;
 
 //#include<Qpagi
 BookList::BookList(QWidget *parent) :
@@ -20,7 +28,7 @@ BookList::BookList(QWidget *parent) :
     ui(new Ui::BookList )
 {
     ui->setupUi(this);
-    StdItemModel *model = new StdItemModel();
+    model = new StdItemModel();
 
     model->setColumnCount(6); //设置有6列
     model->setHeaderData(0,Qt::Horizontal,"封面");  //设置第一列的表头为类型
@@ -59,26 +67,37 @@ BookList::BookList(QWidget *parent) :
     //设置多选
     ui->tb->setSelectionMode(QAbstractItemView::MultiSelection);
 
-    //往表格中添加数据 连接后端把下面加入for循环
-    n=29;//借阅书数量
-    for(int i=0;i<29;i++){
-        model->setItem(i, 1, new QStandardItem("三体：纪念版"));
-        model->setItem(i, 2, new QStandardItem("刘慈欣"));
-        model->setItem(i, 3, new QStandardItem("重庆出版社"));
-        model->setItem(i, 4, new QStandardItem("987-1-23455-2"));
+    qDebug()<<re.size();
+    loadBooks(0);
+    int n = re.size();
+    setIcons();
+    maxpages=n%maxPgNum==0? n/maxPgNum : n/maxPgNum+1;
+    pages="1/"+QString::number(maxpages,10);
+    ui->line->setText(pages);
+    ui->tb->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->tb->setShowGrid(false);
+    loadQss(":/qss/booklist/booklist.qss");
+}
+
+/*
+加载每个页面的图书列表项目
+*/
+
+void BookList::loadBooks(int curPg){
+    int curNum = curPg*maxPgNum;
+    int lastNum = re.size() < curNum+maxPgNum ? re.size():curNum+maxPgNum;
+
+    for(int i=curNum;i<lastNum;i++){
+
+        model->setItem(i, 1, new QStandardItem(re[i].getBookName()));
+        model->setItem(i, 2, new QStandardItem(re[i].getAuthor()));
+        model->setItem(i, 3, new QStandardItem(re[i].getId()));
+        model->setItem(i, 4, new QStandardItem(re[i].getIsbn()));
         ui->tb->setRowHeight(i,150);
         //往表格中添加按钮控件
         QPushButton *button = new QPushButton("详情");
-
-//        QTablev *btItem = new QTableWidgetItem();   //靶体
-//          btItem->setTextAlignment(Qt::AlignCenter);    //文字居中
-//          btItem->setIcon(QIcon(":/image/蓝旗.png"));
-//           btItem->setText("红旗飘飘");
-//           ui->tableWidget->setItem(0,5,btItem);
-
-
         QLabel *l1 = new QLabel();     //创建lable
-       // l1->resize(50,100);
+
         l1-> setFixedSize (120,150);
         QPixmap pixmap(":/image/querybook/live.jpg");
         QPixmap fitpixmap = pixmap.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
@@ -89,29 +108,14 @@ BookList::BookList(QWidget *parent) :
         l1->setAlignment(Qt::AlignCenter);      //设置居中
         ui->tb->setIndexWidget(model->index(i,0),l1);     //显示
 
-        //button->resize(30,30);
-        //button-> setFixedSize (100,30);
         //设置按钮的自定义属性
         button->setProperty("tb_ISBN",model->index(i,4,QModelIndex()).data().toString());
-    //    button->setProperty("S_Password",model->index(0,1,QModelIndex()).data().toInt());//还可以定义返回其他列
-        //为按钮点击信号绑定响应槽函数
-        //connect(button, SIGNAL(clicked(bool)), this, SLOT(on_TableBtn_clicked()));
          connect(button,&QPushButton::clicked,this,&BookList::on_TableBtn_clicked);
-       // connect(button1, SIGNAL(clicked(bool)), this, SLOT(onTableBtnClicked()));
         //将按钮加入表格中
         ui->tb->setIndexWidget(model->index(i,5),button);
-        //ui->tbv_borrow->setIndexWidget(model->index(model->rowCount()-1,5),button);//rowCount()-1是最后行号，从0行开始
         ui->tb->resizeRowsToContents();
 
     }
-
-    setIcons();
-    maxpages=n%pageValue==0? n/pageValue : n/pageValue+1;
-    pages="1/"+QString::number(maxpages,10);
-    ui->line->setText(pages);
-
-    ui->tb->setShowGrid(false);
-    loadQss(":/qss/booklist/booklist.qss");
 }
 /*
  * @author yuan
@@ -133,6 +137,7 @@ void BookList::on_TableBtn_clicked()
     QPushButton *button = (QPushButton*)sender();
     //提取按钮的自定义属性 数据类型须统一
     QString ISBN = button->property("tb_ISBN").toString();//根据ISBN删借阅信息
+    now_utils.GetBookByIsbn(const_cast<char*>(ISBN.toStdString().c_str()),now_book);
     BookDetails *bookDetails= new BookDetails();
     bookDetails->resize(1300,730);
     bookDetails->setStackWidget(psw);
@@ -166,10 +171,23 @@ void BookList::on_btn_la_clicked()
 
     int maxValue = ui->tb->verticalScrollBar()->maximum(); // 当前SCROLLER最大显示值
     nCurScroller = ui->tb->verticalScrollBar()->value(); //获得当前scroller值
-    int currentpage=   nCurScroller%pageValue==0?  nCurScroller/pageValue+1:nCurScroller/pageValue+2;
-    if(nCurScroller<maxValue)
+    int currentpage=   nCurScroller%maxPgNum==0?  nCurScroller/maxPgNum+1:nCurScroller/maxPgNum+2;
+    loadBooks(currentpage);
+//    if(nCurScroller<maxValue)
+//    {
+//        ui->tb->verticalScrollBar()->setSliderPosition(maxPgNum+nCurScroller);
+//        pages=QString::number(currentpage+1,10)+"/"+QString::number(maxpages,10);
+//        ui->line->setText(pages);
+//    }
+//    else
+//    {
+//        ui->tb->verticalScrollBar()->setSliderPosition(0);
+//        pages="1/"+QString::number(maxpages,10);
+//        ui->line->setText(pages);
+//    }
+    if(currentpage<maxpages)
     {
-        ui->tb->verticalScrollBar()->setSliderPosition(pageValue+nCurScroller);
+        ui->tb->verticalScrollBar()->setSliderPosition(maxPgNum+nCurScroller);
         pages=QString::number(currentpage+1,10)+"/"+QString::number(maxpages,10);
         ui->line->setText(pages);
     }
@@ -185,6 +203,7 @@ void BookList::on_btn_la_clicked()
 
 void BookList::on_btn_last_clicked()
 {
+
     int maxValue = ui->tb->verticalScrollBar()->maximum(); // 当前SCROLLER最大显示值
     ui->tb->verticalScrollBar()->setSliderPosition(maxValue);
     pages=QString::number(maxpages,10)+"/"+QString::number(maxpages,10);
@@ -195,9 +214,9 @@ void BookList::on_btn_fore_clicked()
 {
     int maxValue = ui->tb->verticalScrollBar()->maximum(); // 当前SCROLLER最大显示值
     nCurScroller = ui->tb->verticalScrollBar()->value();
-    int currentpage=   nCurScroller%pageValue==0?  nCurScroller/pageValue+1:nCurScroller/pageValue+2;
+    int currentpage=   nCurScroller%maxPgNum==0?  nCurScroller/maxPgNum+1:nCurScroller/maxPgNum+2;
         if(nCurScroller>0){
-            ui->tb->verticalScrollBar()->setSliderPosition(nCurScroller-pageValue);
+            ui->tb->verticalScrollBar()->setSliderPosition(nCurScroller-maxPgNum);
             pages=QString::number(currentpage-1,10)+"/"+QString::number(maxpages,10);
             ui->line->setText(pages);
         }
@@ -212,7 +231,7 @@ void BookList::on_btn_fore_clicked()
 void BookList::on_line_returnPressed()
 {
     nCurScroller = ui->tb->verticalScrollBar()->value();
-    int currentpage=   nCurScroller%pageValue==0?  nCurScroller/pageValue+1:nCurScroller/pageValue+2;
+    int currentpage=   nCurScroller%maxPgNum==0?  nCurScroller/maxPgNum+1:nCurScroller/maxPgNum+2;
     pages=ui->line->text();
     int page=pages.toInt();
     if(page>maxpages||page<1){
@@ -220,7 +239,7 @@ void BookList::on_line_returnPressed()
         ui->line->setText(pages);
     }
     else{
-        ui->tb->verticalScrollBar()->setSliderPosition((page-1)*pageValue);
+        ui->tb->verticalScrollBar()->setSliderPosition((page-1)*maxPgNum);
         pages=QString::number(page,10)+'/'+QString::number(maxpages,10);
         ui->line->setText(pages);
     }

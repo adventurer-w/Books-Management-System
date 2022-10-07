@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->setWindowTitle("个人主页");
     this->resize(1600,900);
     loadMenuBar();
-    loadPages();
+    loadPages(0);
 
     QString qssfilename =":/qss/mainwindow/mainwindow.qss";
     this->loadQss(qssfilename);
@@ -84,24 +84,34 @@ void MainWindow::loadMenuBar(){
 
 
 }
-void MainWindow::loadPages(){
+/*
+以某种模式加载界面，其中0为初始化mw和个人信息,1为只初始化个人信息，一次类推
+*/
+void MainWindow::loadPages(int mode){
+    if(mode == 0){
+        mw->resize(1300,900);
+        mw->move(this->x()+300,this->y());
+        mw->setParent(this);
+    }
 
-    mw->resize(1300,900);
-    mw->move(this->x()+300,this->y());
-    mw->setParent(this);
+    if(mode == 0 || mode ==1){
+        /*默认导入 个人信息页面*/
+        UserProfileWidget *userProfileWidget = new UserProfileWidget;
+        userProfileWidget->resize(1300,900);
+        //userProfileWidget->setParent(this->mw);
+        mw->insertWidget(0,userProfileWidget);
+        userProfileWidget->pmw = mw;
+    }
 
-    /*默认导入 个人信息页面*/
-    UserProfileWidget *userProfileWidget = new UserProfileWidget;
-    userProfileWidget->resize(1300,900);
-    //userProfileWidget->setParent(this->mw);
-    mw->insertWidget(0,userProfileWidget);
 
+    if(mode == 2){
+        /*默认导入 图书查询页面*/
+        QueryBookWidget *queryBookWidget = new  QueryBookWidget;
+        queryBookWidget->resize(1300,900);
+        //userProfileWidget->setParent(this->mw);
+        mw->insertWidget(1, queryBookWidget);
+    }
 
-    /*默认导入 图书查询页面*/
-    QueryBookWidget *queryBookWidget = new  QueryBookWidget;
-    queryBookWidget->resize(1300,900);
-    //userProfileWidget->setParent(this->mw);
-    mw->insertWidget(1, queryBookWidget);
 
 }
 MainWindow::~MainWindow()
@@ -111,6 +121,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_btn_userProfile_clicked()
 {
+    loadPages(1);
     mw->setCurrentIndex(0);
 
 }
@@ -121,6 +132,7 @@ void MainWindow::on_btn_modifyInfo_clicked()
 }
 void MainWindow::on_btn_queryBook_clicked()
 {
+    loadPages(2);
     mw->setCurrentIndex(1);
 
 }

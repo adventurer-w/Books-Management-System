@@ -21,6 +21,9 @@ public:
 private slots:
     void on_btn_back_clicked();
     void on_btn_back_doubleclicked();
+    void on_pushButton_clicked();
+    void on_pushButton_2_clicked();
+    void on_pushButton_3_clicked();
 
 private:
     Ui::BookDetails *ui;

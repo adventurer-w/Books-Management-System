@@ -27,7 +27,11 @@
 #include "ui_searchlineedit.h"
 #include "bookranking.h"
 #include <QListView>
+#include "backend/Utils.h"
 
+extern Utils now_utils;
+extern vector<Book> re;
+extern Book now_book;
 
 QueryBookWidget::QueryBookWidget(QWidget *parent) :
     QWidget(parent),
@@ -36,7 +40,7 @@ QueryBookWidget::QueryBookWidget(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->cbox_classify->addItems(QStringList()<<"全部"<<"文学"<<"艺术"<<"自然科学");
+    ui->cbox_classify->addItems(QStringList()<<"全部"<<"小说"<<"文学"<<"艺术"<<"自然科学");
     ui->cbox_classify->setCurrentIndex(0);//设置默认选项
     loadPages();
 
@@ -94,6 +98,7 @@ void QueryBookWidget::paintEvent(QPaintEvent *event)
     pix.load(":/image/querybook/background.png");
     painter.drawPixmap(0,0,this->width(),this->height(),pix);
 }
+
 void QueryBookWidget::loadPages(){
     sub_mw->resize(1300,730);
     sub_mw->move(this->x(),this->y()+170);
@@ -109,17 +114,63 @@ void QueryBookWidget::loadPages(){
 
 }
 
+int flag=0;//1书名，2作者，3isbn
+
+void QueryBookWidget::on_btn_bookname_clicked(){
+    flag=1;
+}
+
+void QueryBookWidget::on_btn_author_clicked(){
+    flag=2;
+}
+
+void QueryBookWidget::on_btn_ISBN_clicked(){
+    flag=3;
+}
+
+void QueryBookWidget::on_cbox_classify_clicked(){
+    flag=0;
+}
+/*
+通过类别和key来得到符合条件的书本数据
+
+*/
+void QueryBookWidget::getBookList(QString classification, QString key){
+    if (classification=="")classification="全部";
+    if(flag==0){
+        now_utils.GetBooksByClassification(const_cast<char*>(classification.toStdString().c_str()),re);
+    }else if(flag==1){
+        now_utils.GetBooksByBookName(const_cast<char*>(key.toStdString().c_str()),re);
+    }else if(flag==2){
+        now_utils.GetBooksByAuthor(const_cast<char*>(key.toStdString().c_str()),re);
+    }else{
+        now_utils.GetBookByIsbn(const_cast<char*>(key.toStdString().c_str()),now_book);
+        re.push_back(now_book);
+    }
+    if(re.size()!=0)
+        qDebug()<<"书名"<<re[0].getBookName();
+    BookList *bookList =new BookList();
+    bookList->resize(1300,730);
+    bookList->setStackWidget(sub_mw);
+    sub_mw->insertWidget(1,bookList);
+    sub_mw->setCurrentIndex(1);
+
+}
 void QueryBookWidget::on_btn_search_clicked()
 {
     /*write code here*/
 
 
     /*add BookList new constructor function or other functions to Pass Parameters*/
-    BookList *bookList =new BookList();
-    bookList->resize(1300,730);
-    bookList->setStackWidget(sub_mw);
-    sub_mw->insertWidget(1,bookList);
-    sub_mw->setCurrentIndex(1);
+
+    QString classification=ui->cbox_classify->currentText();
+    QString val=ui->lineEdit->text();
+
+    qDebug()<<"分类"<<classification;
+    qDebug()<<"搜索值"<<val;
+
+    re.clear();
+    getBookList(classification,val);
 
 }
 
@@ -134,6 +185,7 @@ void QueryBookWidget::on_lineEdit_returnPressed()
     sub_mw->insertWidget(1,bookList);
     sub_mw->setCurrentIndex(1);
 }
+
 bool QueryBookWidget::loadQss(const QString &StyleSheetFile){
 
         /*QSS文件所在的路径*/

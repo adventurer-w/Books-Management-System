@@ -26,6 +26,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     backend/MD5.cpp \
         backend/Utils.cpp \
+    backend/addUsers.cpp \
     main.cpp \
         view/MainWidget.cpp \
         view/UserProfileWidget.cpp \
@@ -35,6 +36,7 @@ SOURCES += \
         view/mainwindow.cpp \
         view/modifyinfowidget.cpp \
         view/querybookwidget.cpp \
+    view/register.cpp \
         view/searchlineedit.cpp \
         view/stditemmodel.cpp \
         view/widget.cpp \
@@ -47,6 +49,8 @@ HEADERS += \
         backend/Reserve.h \
         backend/User.h \
         backend/Utils.h \
+    backend/addBooks.h \
+    backend/addUsers.h \
         backend/all_head.h \
         backend/length.h \
         backend/myFileDB.h \
@@ -59,6 +63,7 @@ HEADERS += \
         view/mainwindow.h \
         view/modifyinfowidget.h \
         view/querybookwidget.h \
+    view/register.h \
         view/searchlineedit.h \
         view/stditemmodel.h \
         view/widget.h \
@@ -71,6 +76,7 @@ FORMS += \
     view/mainwindow.ui \
     view/modifyinfowidget.ui \
     view/querybookwidget.ui \
+    view/register.ui \
     view/searchlineedit.ui \
     view/userprofilewidget.ui \
     view/widget.ui \
@@ -81,6 +87,8 @@ RESOURCES += \
     qss.qrc \
 
 DISTFILES += \
+    backend/book.dat \
+    backend/record.dat \
     backend/user.dat \
     qss/base.qss \
     qss/bookranking/bookranking.qss \

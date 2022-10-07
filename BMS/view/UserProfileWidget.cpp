@@ -17,6 +17,14 @@
 #include"QFontDialog"
 #include "stditemmodel.h"
 #include "searchlineedit.h"
+#include "backend/User.h"
+#include "backend/Utils.h"
+#include "backend/all_head.h"
+#include "querybookwidget.h"
+#include <QString>
+extern User now_user;
+extern Utils now_utils;
+
 UserProfileWidget::UserProfileWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::UserProfileWidget)
@@ -29,17 +37,22 @@ UserProfileWidget::UserProfileWidget(QWidget *parent) :
     sle->setParent(this);
     sle->move(650,300);
     sle->resize(470,40);
-
+    //加载本页面qss
 
     ui->lb_username->setText("姓名");
-    ui->lb_username_txt->setText("袁钰林");
-    ui->lb_major_txt->setText("计算机科学与技术");
-    ui->lb_number_txt->setText("123456789");
-    ui->lb_sex_txt->setText("男");
-    ui->lb_credit_txt->setText("100");
+    ui->lb_username_txt->setText(QString::fromStdString(now_user.getName()));
+    ui->lb_major_txt->setText(QString::fromStdString(now_user.getMajor()));
+    ui->lb_number_txt->setText(QString::fromStdString(now_user.getAccount()));
+    if(now_user.getSex()==1)
+        ui->lb_sex_txt->setText("男");
+    else if(now_user.getSex()==2)
+        ui->lb_sex_txt->setText("女");
+    else
+        ui->lb_sex_txt->setText("未知");
+    ui->lb_credit_txt->setText(QString::number(now_user.getDebet()));
     setShadow();
     showBorrow();
-    //加载本页面qss
+    connect(sle,SIGNAL(keySignal(QString)),this,SLOT(searchBooks(QString)));
     this->loadQss(":/qss/userprofilewidget/userprofile.qss");
 }
 
@@ -102,7 +115,17 @@ void UserProfileWidget::setShadow(){
    //ui->scroll_borrow->setGraphicsEffect(shadow_effect2);
 
 }
+void UserProfileWidget::searchBooks(QString key){
+    qDebug() << "ok:" << key ;
 
+    QueryBookWidget *queryBookWidget = new QueryBookWidget;
+    pmw->insertWidget(1,queryBookWidget);
+    pmw->setCurrentIndex(1);
+    queryBookWidget->sub_mw->setCurrentIndex(1);
+
+    queryBookWidget->getBookList("全部",key);
+
+}
 void UserProfileWidget::showBorrow(){
 
 
@@ -149,13 +172,16 @@ void UserProfileWidget::showBorrow(){
 
 
     //往表格中添加数据 连接后端把下面加入for循环
-    int n=50;//借阅书数量
-    for(int i=0;i<30;i++){
-        model->setItem(i, 0, new QStandardItem("三体：纪念版"));
-        model->setItem(i, 1, new QStandardItem("刘慈欣"));
-        model->setItem(i, 2, new QStandardItem("重庆出版社"));
-        model->setItem(i, 3, new QStandardItem("987-1-23455-2"));
-        model->setItem(i, 4, new QStandardItem("2022-9-29"));
+    vector<Record> record;
+    now_utils.GetUserBorrowList(now_user.getAccount(),record);
+//    int n=50;//借阅书数量
+    qDebug()<<record.size();
+    for(int i=0;i<record.size();i++){
+        model->setItem(i, 0, new QStandardItem(record[i].getBookName()));
+        model->setItem(i, 1, new QStandardItem(record[i].getAuthor()));
+        model->setItem(i, 2, new QStandardItem(record[i].getPublisher()));
+        model->setItem(i, 3, new QStandardItem(record[i].getIsbn()));
+        model->setItem(i, 4, new QStandardItem(record[i].getDate()));
         ui->tbv_borrow->setRowHeight(i,50);
         //往表格中添加按钮控件
         QPushButton *button = new QPushButton("还书");
@@ -178,9 +204,12 @@ void UserProfileWidget::onTableBtnClicked()
     //先获取信号的发送者
     QPushButton *button = (QPushButton*)sender();
     //提取按钮的自定义属性 数据类型须统一
-    QString ISBN = button->property("S_Username").toString();//根据ISBN删借阅信息
+    QString ISBN = button->property("tb_ISBN").toString();//根据ISBN删借阅信息
+    now_utils.Return(now_user.getAccount(), const_cast<char*>(ISBN.toStdString().c_str()));
 //    int Password = button->property("S_Password").toInt();
     //删除数据再重新调用
+
+
     showBorrow();
 }
 

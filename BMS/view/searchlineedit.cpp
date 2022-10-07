@@ -6,6 +6,8 @@
 #include <QFile>
 #include <QMessageBox>
 #include <QLabel>
+#include <QDebug>
+#include <QObject>
 SearchLineEdit::SearchLineEdit(QWidget *parent) :
     QLineEdit(parent),
     ui(new Ui::SearchLineEdit)
@@ -42,7 +44,7 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     this->setMaxLength(20);
     loadQss(":/qss/searchlineedit/le_btn.qss");
     this->setAlignment((Qt::AlignVCenter));
-
+    QObject::connect(btn,SIGNAL(clicked()),this,SLOT(sendKey()));
 }
 
 bool SearchLineEdit::loadQss(const QString &StyleSheetFile){
@@ -65,9 +67,7 @@ SearchLineEdit::~SearchLineEdit()
 {
     delete ui;
 }
-void SearchLineEdit::on_btn_clicked(){
-    QString text = this->text();
 
-    /**/
-
+void SearchLineEdit::sendKey(){
+        emit this->keySignal(this->text());
 }

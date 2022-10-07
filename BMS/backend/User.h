@@ -15,10 +15,10 @@ public:
     char major[MAJOR_SIZE];   //专业
     char security_question[SECURITY_QUESTION_SIZE];  //密保问题
     char security_answer[SECURITY_ANSWER_SIZE];   //密保答案
+    int dirty;
     int num_borrowed;     //借书数目
     int num_appointed;   //预约数
     int debet;         //欠款数
-    int dirty;
 
     int getId() { return id; }
 

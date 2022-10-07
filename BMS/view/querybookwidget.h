@@ -16,6 +16,7 @@ class QueryBookWidget : public QWidget
 public:
     explicit QueryBookWidget(QWidget *parent = nullptr);
     ~QueryBookWidget();
+    void getBookList(QString classification,QString key);
     void paintEvent(QPaintEvent *);
     void setShadow();
     void showPopularBook();
@@ -26,7 +27,10 @@ public:
      MainWidget* sub_mw ;
 private slots:
     void on_btn_search_clicked();
-
+    void on_btn_author_clicked();
+    void on_btn_bookname_clicked();
+    void on_btn_ISBN_clicked();
+    void on_cbox_classify_clicked();
     void on_lineEdit_returnPressed();
 
 private:
