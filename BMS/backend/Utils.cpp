@@ -2,6 +2,7 @@
 #include "all_head.h"
 #include "length.h"
 #include "MD5.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -434,6 +435,15 @@ bool Utils::GetBookById(int id,Book &book0) {
 
 
 
+bool Utils::GetAllBooks(vector<Book>&result){
+    vector<string> value;
+    value.push_back("all");
+    Book book= Book();
+    db.select("book", book, value, result);
+    return true;
+}
+
+
 bool Utils::InsertRecord(Record record){
     if (!CheckRecordExist(record)){
         vector<Record> entity;
@@ -677,4 +687,123 @@ bool Utils::GetUserReserveList(char * account,vector<Reserve>&result){
 
     if(result.empty()) return false;
     return true;
+}
+
+
+bool Utils::GetNewBookList(vector<Book>&result){
+    Book book = Book();
+    if(db.getAtBeginOf("book",result)==-1) return false;
+    return true;
+}
+
+
+bool Utils::cmp_boy(Book a,Book b){
+    return a.getBoyHistoryNum() > b.getBoyHistoryNum();
+}
+
+
+bool Utils::cmp_girl(Book a,Book b){
+    return a.getGirlHistoryNum() > b.getGirlHistoryNum();
+}
+
+
+bool Utils::cmp_all(Book a,Book b){
+    return a.getHistoryNum() > b.getHistoryNum();
+}
+
+
+bool Utils::cmp_point(Book a,Book b){
+    return a.getPoint() > b.getPoint();
+}
+
+
+
+bool Utils::GetGirlRank(vector<Book>&result){
+    return GetAnyRank("girl_rank",result);
+}
+
+
+bool Utils::UpdateGirlRank(){
+    return UpdateAnyRank("girl_rank");
+}
+
+
+bool Utils::GetBoyRank(vector<Book>&result){
+    return GetAnyRank("boy_rank",result);
+}
+
+
+bool Utils::UpdateBoyRank(){
+    return UpdateAnyRank("boy_rank");
+}
+
+bool Utils::GetBookRank(vector<Book>&result){
+    return GetAnyRank("book_rank",result);
+}
+
+bool Utils::UpdateBookRank(){
+    return UpdateAnyRank("book_rank");
+}
+
+
+bool Utils::GetPointRank(vector<Book>&result){
+    return GetAnyRank("point_rank",result);
+}
+
+
+bool Utils::UpdatePointRank(){
+    return UpdateAnyRank("point_rank");
+}
+
+
+bool Utils::UpdateAnyRank(string DB_NAME){
+    vector<Book> result;
+    vector<string> value;
+    value.push_back("all");
+    Book book = Book();
+
+    if (db.select("book", book, value, result) != -1){
+        if(DB_NAME == "boy_rank") sort(result.begin(), result.end(), cmp_boy);
+        if(DB_NAME == "girl_rank") sort(result.begin(), result.end(), cmp_girl);
+        if(DB_NAME == "book_rank") sort(result.begin(), result.end(), cmp_all);
+        if(DB_NAME == "point_rank") sort(result.begin(), result.end(), cmp_point);
+
+        RankItem rank_t = RankItem();
+        if (db.Delete(DB_NAME, rank_t, value) != -1){
+            vector<RankItem> insert_list;
+            for (int i = 0 ; i < result.size() && i< 50; i ++) {
+                RankItem rank = RankItem();
+                rank.setIsbn(result.at(i).getIsbn());
+                insert_list.push_back(rank);
+            }
+            if (db.insert(DB_NAME, insert_list) != -1)
+                return true;
+            else
+                return false;
+        }else{
+            return false;
+        }
+    }
+
+    return false;
+}
+
+bool Utils::GetAnyRank(string DB_NAME,vector<Book>&result){
+    RankItem rank_t;
+    vector<string> value;
+    value.push_back("all");
+    vector<RankItem> result_rank;
+
+    int pos = db.select(DB_NAME, rank_t, value, result_rank);
+    if (pos != -1){
+        Book book = Book();
+        for (int i = 0; i < result_rank.size(); i ++ )
+        {
+            GetBookByIsbn(result_rank.at(i).getIsbn(),book);
+            result.push_back(book);
+        }
+        return true;
+    }
+    else
+        return false;
 }

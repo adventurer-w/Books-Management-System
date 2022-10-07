@@ -34,6 +34,7 @@ HEADERS += \
         backend/Admin.h \
         backend/Book.h \
         backend/MD5.h \
+        backend/RankItem.h \
         backend/Record.h \
         backend/Reserve.h \
         backend/User.h \
