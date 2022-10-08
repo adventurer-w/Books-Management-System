@@ -25,39 +25,16 @@
    <property name="text">
     <string>书名</string>
    </property>
-  </widget>
-  <widget class="QPushButton" name="btn_author">
-   <property name="geometry">
-    <rect>
-     <x>280</x>
-     <y>80</y>
-     <width>70</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>作者</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btn_ISBN">
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>80</y>
-     <width>70</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>ISBN</string>
+   <property name="checkable">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QLineEdit" name="lineEdit">
    <property name="geometry">
     <rect>
-     <x>470</x>
+     <x>519</x>
      <y>80</y>
-     <width>730</width>
+     <width>681</width>
      <height>41</height>
     </rect>
    </property>
@@ -83,6 +60,38 @@
    </property>
    <property name="text">
     <string>搜索</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_author">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>80</y>
+     <width>70</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>作者</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_ISBN">
+   <property name="geometry">
+    <rect>
+     <x>390</x>
+     <y>80</y>
+     <width>70</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>ISBN</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>
