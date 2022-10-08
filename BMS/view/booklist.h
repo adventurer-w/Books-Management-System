@@ -19,11 +19,13 @@ public:
     ~BookList();
     void on_TableBtn_clicked();
     void setStackWidget(MainWidget *p);
-    void loadBooks(int curPg);
+    void loadBooks();
+    void loadIntialBooks();
     int nCurScroller = 0; //翻页时的当时滑动条位置
     int curPgNum=1;
     int maxPgNum = 4; // 一页显示条数
-    int maxpages;//最大页数
+    int maxPgs;//最大页数
+    int curRecord=0;//已经插入的记录
     QString pages;//显示当前页
     StdItemModel *model;
 

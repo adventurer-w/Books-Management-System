@@ -68,40 +68,47 @@ BookList::BookList(QWidget *parent) :
     ui->tb->setSelectionMode(QAbstractItemView::MultiSelection);
 
     qDebug()<<re.size();
-    loadBooks(0);
-    int n = re.size();
+    loadIntialBooks();
+    int n = re.size();//有
     setIcons();
-    maxpages=n%maxPgNum==0? n/maxPgNum : n/maxPgNum+1;
-    pages="1/"+QString::number(maxpages,10);
+    maxPgs=n%maxPgNum==0? n/maxPgNum : n/maxPgNum+1;
+    pages="1/"+QString::number(maxPgs,10);
     ui->line->setText(pages);
     ui->tb->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->tb->setShowGrid(false);
+    ui->tb->resizeRowsToContents();
     loadQss(":/qss/booklist/booklist.qss");
+
+   // connect(ui->tb->verticalScrollBar(), SIGNAL(valueChanged(int)), pSpinBox, SLOT(setValue(int)));
+    //connect(ui->tb->verticalScrollBar(),&QScrollBar::sliderReleased,this,&BookList::loadBooks);
+    //connect(ui->tb->verticalScrollBar(),&QScrollBar::sliderPressed,this,&BookList::loadBooks);
+    connect(ui->tb->verticalScrollBar(),&QScrollBar:: valueChanged,this,&BookList::loadBooks);
+
 }
 
 /*
 加载每个页面的图书列表项目
 */
+//line输入跳转时
+void BookList::loadIntialBooks(){
+    nCurScroller = ui->tb->verticalScrollBar()->value();
 
-void BookList::loadBooks(int curPg){
-    int curNum = curPg*maxPgNum;
-    int lastNum = re.size() < curNum+maxPgNum ? re.size():curNum+maxPgNum;
+    int curNum = curRecord;
+    int maxLoadNum = 200;
+    curRecord = re.size() <= curNum+maxLoadNum ? re.size():curNum+maxLoadNum;
 
-    for(int i=curNum;i<lastNum;i++){
+    for(int i=curNum;i<curRecord;i++){
 
         model->setItem(i, 1, new QStandardItem(re[i].getBookName()));
         model->setItem(i, 2, new QStandardItem(re[i].getAuthor()));
-        model->setItem(i, 3, new QStandardItem(re[i].getId()));
+        model->setItem(i, 3, new QStandardItem(re[i].getPublisher()));
         model->setItem(i, 4, new QStandardItem(re[i].getIsbn()));
         ui->tb->setRowHeight(i,150);
         //往表格中添加按钮控件
         QPushButton *button = new QPushButton("详情");
         QLabel *l1 = new QLabel();     //创建lable
-
-        l1-> setFixedSize (120,150);
         QPixmap pixmap(":/image/querybook/live.jpg");
         QPixmap fitpixmap = pixmap.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-
 
         l1->setPixmap(fitpixmap);    //加载图片
         l1->setScaledContents(true);
@@ -113,7 +120,53 @@ void BookList::loadBooks(int curPg){
          connect(button,&QPushButton::clicked,this,&BookList::on_TableBtn_clicked);
         //将按钮加入表格中
         ui->tb->setIndexWidget(model->index(i,5),button);
-        ui->tb->resizeRowsToContents();
+
+
+    }
+}
+/*
+滚动条监听函数，如果当前滚动条到了最大滚动条的一半，则执行函数继续加载maxLoadNum条；否认返回
+*/
+void BookList::loadBooks(){
+
+    nCurScroller = ui->tb->verticalScrollBar()->value();
+    int curPg=   nCurScroller%maxPgNum==0?  nCurScroller/maxPgNum+1:nCurScroller/maxPgNum+2;//当前所在页数
+    int curSumPg =  curRecord%maxPgNum==0 ? curRecord/maxPgNum:curRecord/maxPgNum+1;//滚动条总的页数
+
+    pages=QString::number(curPg,10)+"/"+QString::number(maxPgs,10);
+    ui->line->setText(pages);
+    if(curRecord==re.size()||curPg<curSumPg/2) return;
+
+    int maxLoadNum = 100;
+    int curNum = curRecord;
+    int sum = re.size();
+    curRecord = sum <= (unsigned int)curNum+ maxLoadNum ? sum:curNum+ maxLoadNum;
+
+    for(int i=curNum;i<curRecord;i++){
+
+        model->setItem(i, 1, new QStandardItem(re[i].getBookName()));
+        model->setItem(i, 2, new QStandardItem(re[i].getAuthor()));
+        model->setItem(i, 3, new QStandardItem(re[i].getPublisher()));
+        model->setItem(i, 4, new QStandardItem(re[i].getIsbn()));
+        ui->tb->setRowHeight(i,150);
+        //往表格中添加按钮控件
+        QPushButton *button = new QPushButton("详情");
+        QLabel *l1 = new QLabel();     //创建label
+        QPixmap pixmap(":/image/querybook/live.jpg");
+        QPixmap fitpixmap = pixmap.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+
+        l1->setPixmap(fitpixmap);    //加载图片
+        l1->setScaledContents(true);
+        l1->setAlignment(Qt::AlignCenter);      //设置居中
+        ui->tb->setIndexWidget(model->index(i,0),l1);     //显示
+
+        //设置按钮的自定义属性
+        button->setProperty("tb_ISBN",model->index(i,4,QModelIndex()).data().toString());
+        connect(button,&QPushButton::clicked,this,&BookList::on_TableBtn_clicked);
+        //将按钮加入表格中
+        ui->tb->setIndexWidget(model->index(i,5),button);
+
 
     }
 }
@@ -162,7 +215,7 @@ BookList::~BookList()
 void BookList::on_btn_first_clicked()
 {
     ui->tb->verticalScrollBar()->setSliderPosition(0);
-    pages="1/"+QString::number(maxpages,10);
+    pages="1/"+QString::number(maxPgs,10);
     ui->line->setText(pages);
 }
 
@@ -171,30 +224,30 @@ void BookList::on_btn_la_clicked()
 
     int maxValue = ui->tb->verticalScrollBar()->maximum(); // 当前SCROLLER最大显示值
     nCurScroller = ui->tb->verticalScrollBar()->value(); //获得当前scroller值
-    int currentpage=   nCurScroller%maxPgNum==0?  nCurScroller/maxPgNum+1:nCurScroller/maxPgNum+2;
-    loadBooks(currentpage);
+    int curPg=   nCurScroller%maxPgNum==0?  nCurScroller/maxPgNum+1:nCurScroller/maxPgNum+2;
+    loadBooks();
 //    if(nCurScroller<maxValue)
 //    {
 //        ui->tb->verticalScrollBar()->setSliderPosition(maxPgNum+nCurScroller);
-//        pages=QString::number(currentpage+1,10)+"/"+QString::number(maxpages,10);
+//        pages=QString::number(curPg+1,10)+"/"+QString::number(maxPgs,10);
 //        ui->line->setText(pages);
 //    }
 //    else
 //    {
 //        ui->tb->verticalScrollBar()->setSliderPosition(0);
-//        pages="1/"+QString::number(maxpages,10);
+//        pages="1/"+QString::number(maxPgs,10);
 //        ui->line->setText(pages);
 //    }
-    if(currentpage<maxpages)
+    if(curPg<maxPgs)
     {
         ui->tb->verticalScrollBar()->setSliderPosition(maxPgNum+nCurScroller);
-        pages=QString::number(currentpage+1,10)+"/"+QString::number(maxpages,10);
+        pages=QString::number(curPg+1,10)+"/"+QString::number(maxPgs,10);
         ui->line->setText(pages);
     }
     else
     {
         ui->tb->verticalScrollBar()->setSliderPosition(0);
-        pages="1/"+QString::number(maxpages,10);
+        pages="1/"+QString::number(maxPgs,10);
         ui->line->setText(pages);
     }
 }
@@ -203,10 +256,15 @@ void BookList::on_btn_la_clicked()
 
 void BookList::on_btn_last_clicked()
 {
+     int curSumPg =  curRecord%maxPgNum==0 ? curRecord/maxPgNum:curRecord/maxPgNum+1;//滚动条总的页数
+    while(curSumPg<maxPgs){
+        loadIntialBooks();
+         curSumPg =  curRecord%maxPgNum==0 ? curRecord/maxPgNum:curRecord/maxPgNum+1;//滚动条总的页数
+    }
 
     int maxValue = ui->tb->verticalScrollBar()->maximum(); // 当前SCROLLER最大显示值
     ui->tb->verticalScrollBar()->setSliderPosition(maxValue);
-    pages=QString::number(maxpages,10)+"/"+QString::number(maxpages,10);
+    pages=QString::number(maxPgs,10)+"/"+QString::number(maxPgs,10);
     ui->line->setText(pages);
 }
 
@@ -214,15 +272,15 @@ void BookList::on_btn_fore_clicked()
 {
     int maxValue = ui->tb->verticalScrollBar()->maximum(); // 当前SCROLLER最大显示值
     nCurScroller = ui->tb->verticalScrollBar()->value();
-    int currentpage=   nCurScroller%maxPgNum==0?  nCurScroller/maxPgNum+1:nCurScroller/maxPgNum+2;
+    int curPg=   nCurScroller%maxPgNum==0?  nCurScroller/maxPgNum+1:nCurScroller/maxPgNum+2;
         if(nCurScroller>0){
             ui->tb->verticalScrollBar()->setSliderPosition(nCurScroller-maxPgNum);
-            pages=QString::number(currentpage-1,10)+"/"+QString::number(maxpages,10);
+            pages=QString::number(curPg-1,10)+"/"+QString::number(maxPgs,10);
             ui->line->setText(pages);
         }
         else{
             ui->tb->verticalScrollBar()->setSliderPosition(maxValue);
-            pages=QString::number(maxpages,10)+"/"+QString::number(maxpages,10);
+            pages=QString::number(maxPgs,10)+"/"+QString::number(maxPgs,10);
             ui->line->setText(pages);
         }
 
@@ -230,17 +288,22 @@ void BookList::on_btn_fore_clicked()
 
 void BookList::on_line_returnPressed()
 {
+     int curSumPg =  curRecord%maxPgNum==0 ? curRecord/maxPgNum:curRecord/maxPgNum+1;//滚动条总的页数
     nCurScroller = ui->tb->verticalScrollBar()->value();
-    int currentpage=   nCurScroller%maxPgNum==0?  nCurScroller/maxPgNum+1:nCurScroller/maxPgNum+2;
+    int curPg=   nCurScroller%maxPgNum==0?  nCurScroller/maxPgNum+1:nCurScroller/maxPgNum+2;
     pages=ui->line->text();
     int page=pages.toInt();
-    if(page>maxpages||page<1){
-        pages=QString::number(currentpage,10)+'/'+QString::number(maxpages,10);
+    while(curSumPg<page){
+        loadIntialBooks();
+         curSumPg =  curRecord%maxPgNum==0 ? curRecord/maxPgNum:curRecord/maxPgNum+1;//滚动条总的页数
+    }
+    if(page>maxPgs||page<1){
+        pages=QString::number(curPg,10)+'/'+QString::number(maxPgs,10);
         ui->line->setText(pages);
     }
     else{
         ui->tb->verticalScrollBar()->setSliderPosition((page-1)*maxPgNum);
-        pages=QString::number(page,10)+'/'+QString::number(maxpages,10);
+        pages=QString::number(page,10)+'/'+QString::number(maxPgs,10);
         ui->line->setText(pages);
     }
 }

@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
       mw(new MainWidget)
 {
     ui->setupUi(this);
-    this->setWindowTitle("个人主页");
+    this->setWindowTitle("图书系统");
     this->resize(1600,900);
     loadMenuBar();
     loadPages(0);

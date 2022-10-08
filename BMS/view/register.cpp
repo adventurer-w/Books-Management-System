@@ -10,6 +10,7 @@ Register::Register(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->box_sex->addItems(QStringList()<<"男"<<"女");
+    this->setWindowTitle("注册");
 //    getinfo();
 }
 

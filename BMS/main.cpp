@@ -19,20 +19,7 @@ QString classify;//搜索图书按分类
 
 int main(int argc, char *argv[])
 {
-//    for(int i=0;i<1;i++){
-//        insert();
-//    }
-//    Record re;
-//    for(int i=0;i<1;i++){
-//        re.setId(i);
-//        re.setDate("20220327");
-//        re.setIsbn("3211");
-//        re.setAccount("123");
-//        re.setBookName("羊了个羊");
-//        re.setAuthor("余华");
-//        re.setPublisher("清华大学出版社");
-//        now_utils.InsertRecord(re);
-//    }
+
 
 
     QApplication app(argc, argv);
