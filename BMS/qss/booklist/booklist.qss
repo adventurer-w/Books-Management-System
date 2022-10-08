@@ -1,8 +1,15 @@
 
 
 #btn_back{
-
+    padding:4px;
 }
+QPushButton{
+   color:rgb(0,0,0);
+   font-family:KaiTi;
+   font-size:18px;
+   font-weight:normal;
+   padding:4px;
+    }
 QScrollBar:vertical{
     width:25px;
     background-color:rgba(203,94,239, 50);/*垂直滚动条 背景 颜色*/
@@ -30,7 +37,7 @@ QScrollBar::add-line:vertical{
 QScrollBar::handle:vertical{
     width:16px;
 
-    background:rgba(230,230,239, 100);/*垂直滚动条 滚轮 颜色*/
+    background:rgba(203,94,239, 250);/*垂直滚动条 滚轮 颜色*/
 }
 QScrollBar::handle:vertical:hover{
     width:16px;

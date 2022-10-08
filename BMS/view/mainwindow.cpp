@@ -12,14 +12,20 @@
 #include "userprofilewidget.h"
 #include "querybookwidget.h"
 #include "mainwidget.h"
+#include "backend/User.h"
+extern User now_user;
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
       mw(new MainWidget)
 {
+
     ui->setupUi(this);
     this->setWindowTitle("图书系统");
     this->resize(1600,900);
+    ui->lb_username->setText(QString::fromStdString(now_user.getName()));
+
+    ui->lb_number->setText(QString::fromStdString(now_user.getAccount()));
     loadMenuBar();
     loadPages(0);
 
@@ -38,10 +44,10 @@ void MainWindow::paintEvent(QPaintEvent *){
     painter.drawPixmap(0,0,this->width(),this->height(),pix);
     //画头像
     QPainterPath path;
-     path.addEllipse(100,60,80,80);//加入一个圆形   绘图是从左上角的（56，20）坐标开始绘制的  ，120，120是绘图的宽高
+     path.addEllipse(60,60,80,80);//加入一个圆形   绘图是从左上角的（56，20）坐标开始绘制的  ，120，120是绘图的宽高
      pix.load(":/image/pic/personal_homepage.jpg");
      painter.setClipPath(path);
-     painter.drawPixmap(QRect(100,60,120,120),pix);
+     painter.drawPixmap(QRect(60,60,80,80),pix);
 }
 bool MainWindow::loadQss(const QString &StyleSheetFile){
 

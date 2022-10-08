@@ -72,6 +72,32 @@
      <string>个人中心</string>
     </property>
    </widget>
+   <widget class="QLabel" name="lb_username">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>70</y>
+      <width>100</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>丁杰</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lb_number">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>100</y>
+      <width>100</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>20040032005</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action_quit">

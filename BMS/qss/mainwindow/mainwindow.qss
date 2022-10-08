@@ -10,6 +10,20 @@ QLabel{
     font-family:KaiTi;
 
 }
+#lb_username{
+
+    color:#ffffff;
+    font-size:18px;
+    font-family:KaiTi;
+
+}
+#lb_number{
+
+color:#ffffff;
+font-size:18px;
+font-family:KaiTi;
+
+}
 QPushButton{
 
     background-image:none;

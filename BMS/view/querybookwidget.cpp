@@ -125,13 +125,13 @@ void QueryBookWidget::on_btn_bookname_clicked(){
     if((ctrl>>8) % 2 == 1){
         ui->btn_bookname->setDown(false);
         ctrl &= 0x011;
-        //qDebug() << "clear bookname " << ctrl ;
+        qDebug() << "clear bookname " << ctrl ;
     }
     else {
 
         ui->btn_bookname->setDown(true);
         ctrl |= 0x100;
-        //qDebug() << "add bookname " << ctrl ;
+        qDebug() << "add bookname " << ctrl ;
     };
 
     flag=1;
@@ -142,12 +142,12 @@ void QueryBookWidget::on_btn_author_clicked(){
     if((ctrl>>4) % 2 == 1){
         ui->btn_author->setDown(false);
         ctrl &= 0x101;
-        //qDebug() << "clear author name " << ctrl ;
+        qDebug() << "clear author name " << ctrl ;
     }
     else {
         ui->btn_author->setDown(true);
         ctrl |= 0x010;
-        //qDebug() << "add author name " << ctrl ;
+        qDebug() << "add author name " << ctrl ;
     };
 
     flag=2;
@@ -157,12 +157,12 @@ void QueryBookWidget::on_btn_ISBN_clicked(){
     if((ctrl) % 2 == 1){
         ui->btn_ISBN->setDown(false);
         ctrl &= 0x110;
-        //qDebug() << "clear ISBNname " << ctrl ;
+        qDebug() << "clear ISBNname " << ctrl ;
     }
     else {
         ui->btn_ISBN->setDown(true);
         ctrl |= 0x001;
-        //qDebug() << "add ISBNname " << ctrl ;
+        qDebug() << "add ISBNname " << ctrl ;
     };
 
     flag=3;
