@@ -16,7 +16,7 @@
 #include "backend/all_head.h"
 #include "backend/Utils.h"
 #include <QDebug>
-
+#include "GlobalSetting.h"
 extern Utils now_utils;
 extern vector<Book> re;
 extern Book now_book;
@@ -110,11 +110,22 @@ void BookList::loadIntialBooks(){
 
         string t1(re[i].getImgPath());
         string t2(re[i].getIsbn());
-        string pic=":/image/cover/"+t1+"/"+t2+".jpg";
-//        qDebug()<<QString::fromStdString(pic);
-        QPixmap pixmap(pic.c_str());
+        string pic;
+        if(t2.size()==13)
+                   pic=pictureDbPath+t1+"/"+t2+".jpg";
+               else
+                   pic=pictureDbPath+"moren.jpg";
 
-        QPixmap fitpixmap = pixmap.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        QPixmap pixmap(pic.c_str());
+               QPixmap fitpixmap;
+               if(pixmap.isNull()){
+                   qDebug()<<"1空";
+                   QPixmap pixmap2((pictureDbPath+"moren.jpg").c_str());
+                   fitpixmap = pixmap2.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+               }else{
+                   fitpixmap = pixmap.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+               }
+
 
         l1->setPixmap(fitpixmap);    //加载图片
         l1->setScaledContents(true);
@@ -141,9 +152,9 @@ void BookList::loadBooks(){
 
     pages=QString::number(curPg,10)+"/"+QString::number(maxPgs,10);
     ui->line->setText(pages);
-    if(curRecord==re.size()||curPg<curSumPg/2) return;
+    if(curRecord==re.size()) return;
 
-    int maxLoadNum = 20;
+    int maxLoadNum = 200;
     int curNum = curRecord;
     int sum = re.size();
     curRecord = sum <= (unsigned int)curNum+ maxLoadNum ? sum:curNum+ maxLoadNum;
@@ -162,22 +173,21 @@ void BookList::loadBooks(){
         string t2(re[i].getIsbn());
         string pic;
         if(t2.size()==13)
-            pic=":/image/cover/"+t1+"/"+t2+".jpg";
-        else
-            pic=":/image/cover/moren.jpg";
+                   pic=pictureDbPath+t1+"/"+t2+".jpg";
+               else
+                   pic=pictureDbPath+"moren.jpg";
 
         QPixmap pixmap(pic.c_str());
-        QPixmap fitpixmap;
-//        if(pixmap.isNull()){
-//            qDebug()<<"1空";
-//            QPixmap pixmap2(":/image/cover1008/moren.jpg");
-//            if(pixmap2.isNull()){
-//                qDebug()<<"2空";
-//            }
-//            fitpixmap = pixmap2.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-//        }
+               QPixmap fitpixmap;
+               if(pixmap.isNull()){
+                   qDebug()<<"1空";
+                   QPixmap pixmap2((pictureDbPath+"moren.jpg").c_str());
+                   fitpixmap = pixmap2.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+               }else{
+                   fitpixmap = pixmap.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+               }
 
-        fitpixmap = pixmap.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
 
 //        if(fitpixmap.isNull()){
 //                    qDebug()<<"1空";

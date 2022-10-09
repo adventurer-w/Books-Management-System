@@ -119,11 +119,14 @@ void UserProfileWidget::searchBooks(QString key){
     qDebug() << "ok:" << key ;
 
     QueryBookWidget *queryBookWidget = new QueryBookWidget;
+
     pmw->insertWidget(1,queryBookWidget);
     pmw->setCurrentIndex(1);
+    queryBookWidget->loadPages();
+    queryBookWidget->getBookList("全部",key);
     queryBookWidget->sub_mw->setCurrentIndex(1);
 
-    queryBookWidget->getBookList("小说",key);
+
 
 }
 void UserProfileWidget::showBorrow(){

@@ -30,7 +30,7 @@ private slots:
     void on_btn_author_clicked();
     void on_btn_bookname_clicked();
     void on_btn_ISBN_clicked();
-    void on_cbox_classify_clicked();
+    void on_cbox_classify_currentIndexChanged(int);
     void on_lineEdit_returnPressed();
 
 private:

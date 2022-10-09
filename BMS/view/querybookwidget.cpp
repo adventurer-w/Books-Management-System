@@ -127,15 +127,24 @@ void QueryBookWidget::on_btn_bookname_clicked(){
         ui->btn_bookname->setDown(false);
         ctrl &= 0x011;
         qDebug() << "clear bookname " << ctrl ;
+        flag =0;
+        ui->btn_bookname->setStyleSheet("color:rgb(0,0,0);\
+                                        font-family:KaiTi;\
+                                        font-size:18px;\
+                                        font-weight:normal;\
+                                        padding:4px;");
     }
     else {
 
         ui->btn_bookname->setDown(true);
         ctrl |= 0x100;
         qDebug() << "add bookname " << ctrl ;
+        flag=1;
+        ui->btn_bookname->setStyleSheet("color:rgb(255,255,255);\
+                                        background-color:rgb(121,109,111);");
     };
 
-    flag=1;
+
 
 }
 
@@ -144,14 +153,23 @@ void QueryBookWidget::on_btn_author_clicked(){
         ui->btn_author->setDown(false);
         ctrl &= 0x101;
         qDebug() << "clear author name " << ctrl ;
+        flag =0;
+        ui->btn_author->setStyleSheet("color:rgb(0,0,0);\
+                                        font-family:KaiTi;\
+                                        font-size:18px;\
+                                        font-weight:normal;\
+                                        padding:4px;");
     }
     else {
         ui->btn_author->setDown(true);
         ctrl |= 0x010;
         qDebug() << "add author name " << ctrl ;
+        flag=2;
+        ui->btn_author->setStyleSheet("color:rgb(255,255,255);\
+                                        background-color:rgb(121,109,111);");
     };
 
-    flag=2;
+
 }
 
 void QueryBookWidget::on_btn_ISBN_clicked(){
@@ -159,17 +177,27 @@ void QueryBookWidget::on_btn_ISBN_clicked(){
         ui->btn_ISBN->setDown(false);
         ctrl &= 0x110;
         qDebug() << "clear ISBNname " << ctrl ;
+        flag =0;
+        ui->btn_ISBN->setStyleSheet("color:rgb(0,0,0);\
+                                        font-family:KaiTi;\
+                                        font-size:18px;\
+                                        font-weight:normal;\
+                                        padding:4px;");
     }
+
     else {
         ui->btn_ISBN->setDown(true);
         ctrl |= 0x001;
         qDebug() << "add ISBNname " << ctrl ;
+        flag=3;
+        ui->btn_ISBN->setStyleSheet("color:rgb(255,255,255);\
+                                        background-color:rgb(121,109,111);");
     };
 
-    flag=3;
+
 }
 
-void QueryBookWidget::on_cbox_classify_clicked(){
+void QueryBookWidget::on_cbox_classify_currentIndexChanged(int){
     flag=0;
 }
 /*
@@ -177,7 +205,9 @@ void QueryBookWidget::on_cbox_classify_clicked(){
 
 */
 void QueryBookWidget::getBookList(QString classification, QString key){
-    if (classification=="")classification="全部";
+    re.clear();
+    if (classification=="全部")flag=1;
+    qDebug() << classification << "  "<< flag;
     if(flag==0){
         now_utils.GetBooksByClassification(const_cast<char*>(classification.toStdString().c_str()),re);
     }else if(flag==1){
@@ -188,13 +218,14 @@ void QueryBookWidget::getBookList(QString classification, QString key){
         now_utils.GetBookByIsbn(const_cast<char*>(key.toStdString().c_str()),now_book);
         re.push_back(now_book);
     }
-    if(re.size()!=0)
-        qDebug()<<"书名"<<re[0].getBookName();
+//    if(re.size()!=0)
+//        qDebug()<<"书名"<<re[0].getBookName();
     BookList *bookList =new BookList();
     bookList->resize(1300,730);
     bookList->setStackWidget(sub_mw);
     sub_mw->insertWidget(1,bookList);
     sub_mw->setCurrentIndex(1);
+
 
 }
 void QueryBookWidget::on_btn_search_clicked()
@@ -210,7 +241,7 @@ void QueryBookWidget::on_btn_search_clicked()
     qDebug()<<"分类"<<classification;
     qDebug()<<"搜索值"<<val;
 
-    re.clear();
+
     getBookList(classification,val);
 
 }
