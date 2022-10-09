@@ -152,7 +152,7 @@ void BookList::loadBooks(){
 
     pages=QString::number(curPg,10)+"/"+QString::number(maxPgs,10);
     ui->line->setText(pages);
-    if(curRecord==re.size()) return;
+    if(curRecord==re.size() || curPg<curSumPg/2) return;
 
     int maxLoadNum = 200;
     int curNum = curRecord;

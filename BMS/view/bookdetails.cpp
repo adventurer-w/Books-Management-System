@@ -6,7 +6,7 @@
 #include <backend/Utils.h>
 #include <backend/User.h>
 #include <QDebug>
-
+#include "GlobalSetting.h"
 extern Utils now_utils;
 extern User now_user;
 extern vector<Book> re;
@@ -32,6 +32,7 @@ void BookDetails::loadBookDetail(){
     ui->lb_author_2->setText(now_book.getAuthor());
     ui->lb_ISBN_2->setText(now_book.getIsbn());
     ui->lb_bookname2->setText(now_book.getBookName());
+    ui->lb_bookname1->setText(now_book.getBookName());
     ui->lb_publish_2->setText(now_book.getPublisher());
     ui->lb_grade_txt->setText(QString::number(now_book.getPoint()));
     ui->lb_intro_txt->setText(now_book.getIntroduction());
@@ -51,22 +52,21 @@ void BookDetails::loadBookDetail(){
 
     string t1(now_book.getImgPath());
     string t2(now_book.getIsbn());
-    string pic=":/image/cover/"+t1+"/"+t2+".jpg";
-
+    string pic;
     if(t2.size()==13)
-        pic=":/image/cover/"+t1+"/"+t2+".jpg";
-    else
-        pic=":/image/cover/moren.jpg";
+               pic=pictureDbPath+t1+"/"+t2+".jpg";
+           else
+               pic=pictureDbPath+"moren.jpg";
 
     QPixmap pixmap(pic.c_str());
-    QPixmap fitpixmap;
-    if(pixmap.isNull()){
-        QPixmap pixmap2(":/image/cover/moren.jpg");
-        fitpixmap = pixmap.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    }
-
-    fitpixmap = pixmap.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-
+           QPixmap fitpixmap;
+           if(pixmap.isNull()){
+               qDebug()<<"1空";
+               QPixmap pixmap2((pictureDbPath+"moren.jpg").c_str());
+               fitpixmap = pixmap2.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+           }else{
+               fitpixmap = pixmap.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+           }
     ui->lb_bookphoto->setPixmap(fitpixmap);    //加载图片
 
     ui->lb_bookphoto->setScaledContents(true);
