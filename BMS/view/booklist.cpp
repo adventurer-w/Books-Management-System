@@ -94,7 +94,7 @@ void BookList::loadIntialBooks(){
     nCurScroller = ui->tb->verticalScrollBar()->value();
 
     int curNum = curRecord;
-    int maxLoadNum = 20;
+    int maxLoadNum = 60;
     curRecord = re.size() <= curNum+maxLoadNum ? re.size():curNum+maxLoadNum;
 
     for(int i=curNum;i<curRecord;i++){
@@ -154,7 +154,7 @@ void BookList::loadBooks(){
     ui->line->setText(pages);
     if(curRecord==re.size() || curPg<curSumPg/2) return;
 
-    int maxLoadNum = 200;
+    int maxLoadNum = 20;
     int curNum = curRecord;
     int sum = re.size();
     curRecord = sum <= (unsigned int)curNum+ maxLoadNum ? sum:curNum+ maxLoadNum;
@@ -180,7 +180,6 @@ void BookList::loadBooks(){
         QPixmap pixmap(pic.c_str());
                QPixmap fitpixmap;
                if(pixmap.isNull()){
-                   qDebug()<<"1空";
                    QPixmap pixmap2((pictureDbPath+"moren.jpg").c_str());
                    fitpixmap = pixmap2.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
                }else{
@@ -188,10 +187,6 @@ void BookList::loadBooks(){
                }
 
 
-
-//        if(fitpixmap.isNull()){
-//                    qDebug()<<"1空";
-//        }
         l1->setPixmap(fitpixmap);    //加载图片
         l1->setScaledContents(true);
         l1->setAlignment(Qt::AlignCenter);      //设置居中
