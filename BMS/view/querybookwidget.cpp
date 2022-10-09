@@ -44,7 +44,8 @@ QueryBookWidget::QueryBookWidget(QWidget *parent) :
     ui->btn_bookname->setAutoExclusive(false);
     ui->btn_ISBN->setAutoExclusive(false);
     ui->btn_author->setAutoExclusive(false);
-    ui->cbox_classify->addItems(QStringList()<<"全部"<<"小说"<<"文学"<<"艺术"<<"自然科学");
+
+    ui->cbox_classify->addItems(QStringList()<<"全部"<<"历史"<<"散文"<<"科幻"<<"互联网"<<"传记"<<"推理");
     ui->cbox_classify->setCurrentIndex(0);//设置默认选项
     loadPages();
 

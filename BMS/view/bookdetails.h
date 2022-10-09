@@ -13,6 +13,7 @@ class BookDetails : public QWidget
 
 public:
     explicit BookDetails(QWidget *parent = nullptr);
+    void loadBookDetail();
     void setStackWidget(MainWidget *p);
     void setIcons();
     bool loadQss(const QString &StyleSheetFile);
@@ -20,10 +21,9 @@ public:
 
 private slots:
     void on_btn_back_clicked();
-    void on_btn_back_doubleclicked();
-    void on_pushButton_clicked();
-    void on_pushButton_2_clicked();
-    void on_pushButton_3_clicked();
+    void on_btn_star_clicked();
+    void on_btn_borrow_clicked();
+    void on_btn_reserve_clicked();
 
 private:
     Ui::BookDetails *ui;

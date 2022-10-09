@@ -5,7 +5,7 @@
 #include "MainWidget.h"
 #include "stditemmodel.h"
 namespace Ui {
-class BookList ;
+class BookList;
 }
 
 class BookList : public QWidget

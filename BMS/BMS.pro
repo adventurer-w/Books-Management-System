@@ -24,19 +24,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-    backend/MD5.cpp \
+        backend/MD5.cpp \
         backend/Utils.cpp \
-    backend/addUsers.cpp \
-    main.cpp \
+        backend/addUsers.cpp \
+        view/booklist.cpp \
+        main.cpp \
         view/MainWidget.cpp \
         view/UserProfileWidget.cpp \
         view/bookdetails.cpp \
-        view/booklist.cpp \
         view/bookranking.cpp \
         view/mainwindow.cpp \
         view/modifyinfowidget.cpp \
         view/querybookwidget.cpp \
-    view/register.cpp \
+        view/register.cpp \
         view/searchlineedit.cpp \
         view/stditemmodel.cpp \
         view/widget.cpp \
@@ -49,28 +49,28 @@ HEADERS += \
         backend/Reserve.h \
         backend/User.h \
         backend/Utils.h \
-    backend/addBooks.h \
-    backend/addUsers.h \
+        backend/addBooks.h \
+        backend/addUsers.h \
         backend/all_head.h \
         backend/length.h \
         backend/myFileDB.h \
+        view/booklist.h \
         view/GlobalSetting.h \
         view/MainWidget.h \
         view/UserProfileWidget.h \
         view/bookdetails.h \
-        view/booklist.h \
         view/bookranking.h \
         view/mainwindow.h \
         view/modifyinfowidget.h \
         view/querybookwidget.h \
-    view/register.h \
+        view/register.h \
         view/searchlineedit.h \
         view/stditemmodel.h \
         view/widget.h \
 
 FORMS += \
-    view/bookdetails.ui \
     view/booklist.ui \
+    view/bookdetails.ui \
     view/bookranking.ui \
     view/mainwidget.ui \
     view/mainwindow.ui \
@@ -101,5 +101,7 @@ DISTFILES += \
     qss/searchlineedit/le_btn.qss \
     qss/userprofilewidget/userprofile.qss \
     user.dat
+
+CONFIG += resources_big
 
 

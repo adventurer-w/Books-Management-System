@@ -123,7 +123,7 @@ void UserProfileWidget::searchBooks(QString key){
     pmw->setCurrentIndex(1);
     queryBookWidget->sub_mw->setCurrentIndex(1);
 
-    queryBookWidget->getBookList("全部",key);
+    queryBookWidget->getBookList("小说",key);
 
 }
 void UserProfileWidget::showBorrow(){
@@ -208,7 +208,7 @@ void UserProfileWidget::onTableBtnClicked()
     now_utils.Return(now_user.getAccount(), const_cast<char*>(ISBN.toStdString().c_str()));
 //    int Password = button->property("S_Password").toInt();
     //删除数据再重新调用
-
+    QMessageBox::information(this,"还书信息","恭喜你，还书成功！");
 
     showBorrow();
 }

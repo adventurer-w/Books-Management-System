@@ -13,7 +13,14 @@ class ModifyInfoWidget : public QWidget
 
 public:
     explicit ModifyInfoWidget(QWidget *parent = nullptr);
+    bool loadQss(const QString &StyleSheetFile);
+    void paintEvent(QPaintEvent *event);
     ~ModifyInfoWidget();
+signals:
+    void modifySignal();
+private slots:
+    void on_btn_modifyInfo_clicked();
+    void on_btn_modifyPassword_clicked();
 
 private:
     Ui::ModifyInfoWidget *ui;

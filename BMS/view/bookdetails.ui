@@ -351,7 +351,7 @@
     <string>TextLabel</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="btn_star">
    <property name="geometry">
     <rect>
      <x>990</x>
@@ -364,7 +364,7 @@
     <string>收藏+</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="btn_borrow">
    <property name="geometry">
     <rect>
      <x>990</x>
@@ -377,7 +377,7 @@
     <string>借阅+</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_3">
+  <widget class="QPushButton" name="btn_reserve">
    <property name="geometry">
     <rect>
      <x>990</x>

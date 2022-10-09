@@ -12,5 +12,6 @@
         <file>qss/bookdetails/bookdetails.qss</file>
         <file>qss/booklist/booklist.qss</file>
         <file>qss/bookranking/bookranking.qss</file>
+        <file>qss/modifyinfowidget/modifyinfo.qss</file>
     </qresource>
 </RCC>

@@ -26,6 +26,9 @@ private slots:
     void on_btn_userProfile_clicked();
     void on_btn_modifyInfo_clicked();
     void on_btn_queryBook_clicked();
+    void on_btn_logout_clicked();
+    void loadUserInfo();
+
 
 private:
     Ui::MainWindow *ui;

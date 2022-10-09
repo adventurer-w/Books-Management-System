@@ -13,6 +13,7 @@
 #include "querybookwidget.h"
 #include "mainwidget.h"
 #include "backend/User.h"
+#include "modifyinfowidget.h"
 extern User now_user;
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -23,14 +24,20 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     this->setWindowTitle("图书系统");
     this->resize(1600,900);
-    ui->lb_username->setText(QString::fromStdString(now_user.getName()));
-
-    ui->lb_number->setText(QString::fromStdString(now_user.getAccount()));
+    loadUserInfo();
     loadMenuBar();
     loadPages(0);
 
+
     QString qssfilename =":/qss/mainwindow/mainwindow.qss";
     this->loadQss(qssfilename);
+
+}
+void MainWindow::loadUserInfo(){
+    ui->lb_username->setText(QString::fromStdString(now_user.getName()));
+
+    ui->lb_number->setText(QString::fromStdString(now_user.getAccount()));
+    qDebug() << "oh";
 
 }
 //放背景图
@@ -110,12 +117,21 @@ void MainWindow::loadPages(int mode){
     }
 
 
-    if(mode == 2){
+    if(mode >= 2){
         /*默认导入 图书查询页面*/
         QueryBookWidget *queryBookWidget = new  QueryBookWidget;
         queryBookWidget->resize(1300,900);
         //userProfileWidget->setParent(this->mw);
         mw->insertWidget(1, queryBookWidget);
+    }
+
+    if(mode >= 3){
+        /*导入 信息修改页面*/
+        ModifyInfoWidget *modifyInfoWidget = new  ModifyInfoWidget;
+        modifyInfoWidget->resize(1300,900);
+        connect(modifyInfoWidget,SIGNAL(modifySignal()),this,SLOT(loadUserInfo()));
+        //userProfileWidget->setParent(this->mw);
+        mw->insertWidget(2, modifyInfoWidget);
     }
 
 
@@ -134,11 +150,18 @@ void MainWindow::on_btn_userProfile_clicked()
 
 void MainWindow::on_btn_modifyInfo_clicked()
 {
-
+    loadPages(3);
+    mw->setCurrentIndex(2);
 }
 void MainWindow::on_btn_queryBook_clicked()
 {
     loadPages(2);
     mw->setCurrentIndex(1);
 
+}
+void MainWindow::on_btn_logout_clicked()
+{
+    Widget *login = new Widget;
+    this->hide();
+    login->show();
 }
