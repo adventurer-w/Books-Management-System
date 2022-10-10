@@ -39,7 +39,7 @@ UserProfileWidget::UserProfileWidget(QWidget *parent) :
     sle->resize(470,40);
     //加载本页面qss
 
-    ui->lb_username->setText("姓名");
+    //ui->lb_username->setText("姓名");
     ui->lb_username_txt->setText(QString::fromStdString(now_user.getName()));
     ui->lb_major_txt->setText(QString::fromStdString(now_user.getMajor()));
     ui->lb_number_txt->setText(QString::fromStdString(now_user.getAccount()));
@@ -53,7 +53,10 @@ UserProfileWidget::UserProfileWidget(QWidget *parent) :
     setShadow();
     showBorrow();
     connect(sle,SIGNAL(keySignal(QString)),this,SLOT(searchBooks(QString)));
-    this->loadQss(":/qss/userprofilewidget/userprofile.qss");
+    loadQss(":/qss/userprofilewidget/userprofile.qss");
+    this->setStyleSheet("background-color: rgb(255, 255, 255);");
+
+
 }
 
 UserProfileWidget::~UserProfileWidget()
@@ -83,9 +86,10 @@ void UserProfileWidget::paintEvent(QPaintEvent *){
 }
 void UserProfileWidget::setShadow(){
     //设置阴影
-    this->setStyleSheet("background-color: rgb(255, 255, 255);");
-   ui->fm_personal_infor->setStyleSheet("background-color: rgb(0, 0, 0);");
+   //this->setStyleSheet("background-color: rgb(255, 255, 255);");
+   ui->fm_personal_infor->setStyleSheet("background-color: rgb(0,0, 0);");
    ui->fm_personal_infor->setStyleSheet("border-radius:8px;");
+
    ui->tbv_borrow->setStyleSheet("background-color: rgb(0, 0, 0);");
    ui->tbv_borrow->setStyleSheet("border-radius:8px;");
    //设置具体阴影
@@ -95,6 +99,10 @@ void UserProfileWidget::setShadow(){
    shadow_effect->setColor(QColor(38, 78, 119, 127));
    //阴影半径
    shadow_effect->setBlurRadius(22);
+
+
+   ui->fm_personal_infor->setGraphicsEffect(shadow_effect);
+
    //设置具体阴影
    QGraphicsDropShadowEffect *shadow_effect1 = new QGraphicsDropShadowEffect(this);
    shadow_effect1->setOffset(0, 0);
@@ -103,14 +111,6 @@ void UserProfileWidget::setShadow(){
    //阴影半径
    shadow_effect1->setBlurRadius(22);
 
-   QGraphicsDropShadowEffect *shadow_effect2 = new QGraphicsDropShadowEffect(this);
-   shadow_effect2->setOffset(0, 0);
-   //阴影颜色
-   shadow_effect2->setColor(QColor(38, 78, 119, 127));
-   //阴影半径
-   shadow_effect2->setBlurRadius(22);
-
-   ui->fm_personal_infor->setGraphicsEffect(shadow_effect);
    ui->tbv_borrow->setGraphicsEffect(shadow_effect1);
    //ui->scroll_borrow->setGraphicsEffect(shadow_effect2);
 
@@ -188,7 +188,10 @@ void UserProfileWidget::showBorrow(){
         ui->tbv_borrow->setRowHeight(i,50);
         //往表格中添加按钮控件
         QPushButton *button = new QPushButton("还书");
-
+        button->setStyleSheet("color:#000000;\
+                              font-size:18px;\
+                              font-family:KaiTi;\
+                              font-weight:normal;");
          //QPushButton *button1 = new QPushButton("还书");
         //设置按钮的自定义属性
         button->setProperty("tb_ISBN",model->index(i,3,QModelIndex()).data().toString());

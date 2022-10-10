@@ -10,14 +10,14 @@ QLabel{
     font-family:KaiTi;
 
 }
-#lb_username{
+#lb_username_main{
 
     color:#ffffff;
     font-size:18px;
     font-family:KaiTi;
 
 }
-#lb_number{
+#lb_number_main{
 
 color:#ffffff;
 font-size:18px;
@@ -66,9 +66,7 @@ QPushButton:press{
     border-radius:10px;
 
 }
-#btn_userProfile{
 
-}
 
 
 

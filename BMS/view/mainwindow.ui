@@ -72,7 +72,7 @@
      <string>个人中心</string>
     </property>
    </widget>
-   <widget class="QLabel" name="lb_username">
+   <widget class="QLabel" name="lb_username_main">
     <property name="geometry">
      <rect>
       <x>170</x>
@@ -85,7 +85,7 @@
      <string>丁杰</string>
     </property>
    </widget>
-   <widget class="QLabel" name="lb_number">
+   <widget class="QLabel" name="lb_number_main">
     <property name="geometry">
      <rect>
       <x>170</x>

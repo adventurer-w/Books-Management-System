@@ -1,8 +1,16 @@
+
+background-color: rgb(255, 255, 255);
+
 QLabel{
 
     color:#000000;
     font-size:18px;
     font-family:KaiTi;
+
+
+}
+#fm_personal_infor{
+
 
 }
 
