@@ -76,8 +76,12 @@
     border-radius:10px;
 }
 QLabel {
-
     font-size:18px;
+    font-family:KaiTi;
+
+}
+#lb_bookname1{
+    font-size:30px;
     font-family:KaiTi;
 
 }

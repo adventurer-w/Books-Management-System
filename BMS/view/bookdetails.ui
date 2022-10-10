@@ -17,15 +17,15 @@
    <property name="geometry">
     <rect>
      <x>50</x>
-     <y>40</y>
-     <width>171</width>
-     <height>40</height>
+     <y>29</y>
+     <width>500</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Arial</family>
-     <pointsize>14</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="text">

@@ -30,13 +30,14 @@ BookList::BookList(QWidget *parent) :
     ui->setupUi(this);
     model = new StdItemModel();
 
-    model->setColumnCount(6); //设置有6列
+    model->setColumnCount(7); //设置有7列
     model->setHeaderData(0,Qt::Horizontal,"封面");  //设置第一列的表头为类型
     model->setHeaderData(1,Qt::Horizontal,"书名");  //设置第一列的表头为名称
     model->setHeaderData(2,Qt::Horizontal,"作者");
     model->setHeaderData(3,Qt::Horizontal,"出版社");
     model->setHeaderData(4,Qt::Horizontal,"ISBN");
-    model->setHeaderData(5,Qt::Horizontal,"详情");
+    model->setHeaderData(5,Qt::Horizontal,"有无库存");
+    model->setHeaderData(6,Qt::Horizontal,"详情");
 
     ui->tb->setModel(model);
     /*后续这里根据数量来动态设置列表框的高*/
@@ -48,11 +49,12 @@ BookList::BookList(QWidget *parent) :
 
     //设置列宽
     ui->tb->setColumnWidth(0,120);			//参数：列号，宽度
-    ui->tb->setColumnWidth(1,220);
-    ui->tb->setColumnWidth(2,220);
-    ui->tb->setColumnWidth(3,220);
-    ui->tb->setColumnWidth(4,250);
-    ui->tb->setColumnWidth(5,220);
+    ui->tb->setColumnWidth(1,180);
+    ui->tb->setColumnWidth(2,180);
+    ui->tb->setColumnWidth(3,180);
+    ui->tb->setColumnWidth(4,220);
+    ui->tb->setColumnWidth(5,180);
+    ui->tb->setColumnWidth(6,180);
     //设置行高
   //  ui->tb->verticalHeader()->setDefaultSectionSize(250);
 
@@ -67,7 +69,7 @@ BookList::BookList(QWidget *parent) :
     //设置多选
     ui->tb->setSelectionMode(QAbstractItemView::MultiSelection);
 
-    qDebug()<<re.size();
+    //qDebug()<<re.size();
     loadIntialBooks();
     int n = re.size();//有
     setIcons();
@@ -103,6 +105,8 @@ void BookList::loadIntialBooks(){
         model->setItem(i, 2, new QStandardItem(re[i].getAuthor()));
         model->setItem(i, 3, new QStandardItem(re[i].getPublisher()));
         model->setItem(i, 4, new QStandardItem(re[i].getIsbn()));
+        model->setItem(i, 5, new QStandardItem(re[i].getLeft()>0 ? "有":"无"));
+
         ui->tb->setRowHeight(i,150);
         //往表格中添加按钮控件
         QPushButton *button = new QPushButton("详情");
@@ -136,7 +140,7 @@ void BookList::loadIntialBooks(){
         button->setProperty("tb_ISBN",model->index(i,4,QModelIndex()).data().toString());
          connect(button,&QPushButton::clicked,this,&BookList::on_TableBtn_clicked);
         //将按钮加入表格中
-        ui->tb->setIndexWidget(model->index(i,5),button);
+        ui->tb->setIndexWidget(model->index(i,6),button);
 
 
     }
@@ -165,6 +169,8 @@ void BookList::loadBooks(){
         model->setItem(i, 2, new QStandardItem(re[i].getAuthor()));
         model->setItem(i, 3, new QStandardItem(re[i].getPublisher()));
         model->setItem(i, 4, new QStandardItem(re[i].getIsbn()));
+        model->setItem(i, 5, new QStandardItem(re[i].getLeft()>0 ? "有":"无"));
+
         ui->tb->setRowHeight(i,150);
         //往表格中添加按钮控件
         QPushButton *button = new QPushButton("详情");
@@ -196,7 +202,7 @@ void BookList::loadBooks(){
         button->setProperty("tb_ISBN",model->index(i,4,QModelIndex()).data().toString());
         connect(button,&QPushButton::clicked,this,&BookList::on_TableBtn_clicked);
         //将按钮加入表格中
-        ui->tb->setIndexWidget(model->index(i,5),button);
+        ui->tb->setIndexWidget(model->index(i,6),button);
 
 
     }
