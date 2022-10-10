@@ -9,8 +9,6 @@
 using namespace std;
 
 class myFileDB {
-private:
-
 public:
     string rootPath;
 
@@ -37,7 +35,6 @@ public:
     /*
      在DB_NAME.dat文件中选择对应表单  entity选择条件 value选择字段 resultSet结果
      成功则返回查询结果个数，失败返回-1
-
      选择所有：value[0]=="all"
      根据单项属性值选择：value[0]!="all"，并且value[1]置为对应查询的属性 如id
      根据多项属性值选择：如：value[1] value[2] 分别表示id、name等多个匹配
@@ -69,6 +66,12 @@ public:
     //操作成功，返回受影响的行数，操作失败，返回-1
     template<typename T>
     int update(string DB_NAME, T &Sentity, T &Uentity, vector<string> &VALUES);
+
+    template<typename T>
+    int getMaxId(string DB_NAME, T &entity);
+
+    template<typename T>
+    int getAtBeginOf(string DB_NAME,vector<T> &resultSet);
 };
 
 template<typename T>
@@ -507,5 +510,76 @@ void myFileDB::selectMany(ifstream &readFile, T &entity, vector<string> &VALUES,
         }
     }
 }
+
+template<typename T>
+int myFileDB::getMaxId(string DB_NAME, T &entity){
+    int id;
+    ifstream readFile;
+
+    T tem;
+    int tsize = sizeof(tem);
+    try {
+        string Filepath = rootPath + DB_NAME + ".dat";
+        readFile.open(Filepath.c_str(), ios::in | ios::out | ios::binary);
+
+        if (!readFile) {
+            ios_base::failure fail("ERROR");
+            throw fail;
+        }
+        readFile.seekg(0, ios::end);
+
+        long long l = readFile.tellg();
+
+        readFile.seekg(0, ios::end);
+        long long r = readFile.tellg();
+        id = (r - l) / sizeof(tem);
+
+        return id;
+    } catch (ios_base::failure &fail) {
+        cout << fail.what() << endl;
+        return -1;
+    }
+}
+
+template<typename T>
+int myFileDB::getAtBeginOf(string DB_NAME,vector<T> &resultSet){
+    int cnt;
+    ifstream readFile;
+
+    T temp;
+    int TSize = sizeof(temp);
+    try {
+        string Filepath = rootPath + DB_NAME + ".dat";
+        readFile.open(Filepath.c_str(), ios::in | ios::out | ios::binary);
+
+        if (!readFile) {
+            ios_base::failure fail("ERROR");
+            throw fail;
+        }
+        readFile.seekg(0, ios::end);
+        long long l = readFile.tellg();
+
+        readFile.seekg(0, ios::end);
+        long long r = readFile.tellg();
+        cnt = (r - l) / sizeof(temp);
+
+        for(int i=0;cnt >= 0 && i<=50;){
+            readFile.seekg(cnt*TSize);
+            readFile.read(reinterpret_cast<char *>(&temp), TSize);
+
+            if (temp.dirty!=1) {
+                resultSet.push_back(temp);
+                i++;
+            }
+            cnt--;
+        }
+        return 1;
+    } catch (ios_base::failure &fail) {
+        cout << fail.what() << endl;
+        return -1;
+    }
+
+}
+
 
 #endif //MYFILEDB_H

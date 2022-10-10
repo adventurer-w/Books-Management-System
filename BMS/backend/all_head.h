@@ -5,5 +5,6 @@
 #include "User.h"
 #include "Record.h"
 #include "Reserve.h"
+#include "RankItem.h"
 
 #endif //ALL_HEAD_H

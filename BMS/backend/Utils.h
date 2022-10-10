@@ -94,7 +94,8 @@ public:
     //由id筛选书,速度最快建议首选
     bool GetBookById(int id,Book &book0); //参数为图书id，返回该id对应的图书对象
 
-
+    //获取所有数
+    bool GetAllBooks(vector<Book>&result);
 
 
 
@@ -120,9 +121,51 @@ public:
     //修改借书信息
     bool UpdateRecord(Record before, Record after);//参数1为需要修改的Record对象，参数2为修改后的Record对象，返回修改操作是否成功
 
+    //获取新书列表（返回最多50本）
+    bool GetNewBookList(vector<Book>&result);
+
+    //获取总排行榜（前50）
+    bool GetBookRank(vector<Book>&result);
+
+    //更新总排行榜
+    bool UpdateBookRank();
+
+    //获取男生排行榜（前50）
+    bool GetBoyRank(vector<Book>&result);
+
+    //更新男生排行榜
+    bool UpdateBoyRank();
+
+    //获取女生排行榜（前50）
+    bool GetGirlRank(vector<Book>&result);
+
+    //更新女生排行榜
+    bool UpdateGirlRank();
+
+    //获取高分榜（前50）
+    bool GetPointRank(vector<Book>&result);
+
+    //更新高分榜
+    bool UpdatePointRank();
 
 
+    //前端不要调用！ 更新某个排行榜
+    bool UpdateAnyRank(string DB_NAME);
 
+    //前端不要调用！ 获得某个排行榜
+    bool GetAnyRank(string DB_NAME,vector<Book>&result);
+
+    //前端不要调用！
+    bool static cmp_boy(Book a,Book b);
+
+    //前端不要调用！
+    bool static cmp_girl(Book a,Book b);
+
+    //前端不要调用！
+    bool static cmp_all(Book a,Book b);
+
+    //前端不要调用！
+    bool static cmp_point(Book a,Book b);
 
 
 
@@ -150,13 +193,12 @@ public:
 
 
 
+
+
+
+
     //获取推荐列表
     bool GetRecommendList(User user, vector<Book>&result); //参数1为User对象,参数2为存结果列表，返回值为该用户的推荐书目列表
-
-    //获取借书列表
-    bool GetRecordList(User user, vector<Book>&result); //参数1为User对象，参数2为存结果列表，返回该用户的正在借书列表
-
-
 
 
 

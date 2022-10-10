@@ -90,7 +90,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>收藏榜</string>
+     <string>高分榜</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>

@@ -23,6 +23,14 @@
 #include "MainWidget.h"
 #include"QFontDialog"
 #include "searchlineedit.h"
+#include"backend/all_head.h"
+#include"backend/Utils.h"
+#include"GlobalSetting.h"
+extern Utils now_utils;
+extern vector<Book> result;
+extern vector<Book> result_boy;
+extern vector<Book> result_girl;
+extern vector<Book> result_point;
 BookRanking::BookRanking(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::BookRanking)
@@ -81,24 +89,83 @@ void BookRanking::setShadow(){
    ui->fm_newbook->setGraphicsEffect(shadow_effect3);
 }
 
+QPixmap p(string t1,string t2){
+    string pic;
+    if(t2.size()==13)
+        pic=pictureDbPath+t1+"/"+t2+".jpg";
+    else
+        pic=pictureDbPath+"moren.jpg";
+    QPixmap pixmap(pic.c_str());
+    return pixmap;
+
+}
+
+
 
 void BookRanking::showPopularBook(){
-     QPixmap pix;
-     pix.load(":/image/querybook/live.jpg");
-    ui->lb_book1->setPixmap(pix);//label 加载图片imgpath
+
+
+//    if(now_utils.UpdateBookRank())
+//        qDebug()<<"总借阅榜单update成功！";
+
+    QPixmap pix[7];//展示本书，后期可更改
+    for(int i=0;i<7;i++){
+        pix[i]=p(result[i].getImgPath(),result[i].getIsbn());
+    }
+    ui->lb_book1->setPixmap(pix[0]);//label 加载图片imgpath
     ui->lb_book1->setScaledContents(true);    //根据label大小缩放图片
-     ui->lb_bookname1->setText("活着");
-    // 根据label宽度等比例缩放图片
-    //ui->lb_book1->setPixmap(pix.scaledToWidth(ui->lb_book1->width()));
+    ui->lb_bookname1->setText(result[0].getBookName());
 
-    // 根据label高度等比例缩放图片
-    //ui->lb_book1->setPixmap(pix.scaledToHeight(ui->lb_book1->height()));
+    ui->lb_book2->setPixmap(pix[1]);//label 加载图片imgpath
+    ui->lb_book2->setScaledContents(true);    //根据label大小缩放图片
+    ui->lb_bookname2->setText(result[1].getBookName());
 
-//    QImage *image=new QImage;
-//    image->load(":/image/querybook/live.jpg");
-//    ui->lb_book1->setPixmap(QPixmap::fromImage(*image));
-//    ui->lb_book1->resize(image->width(),image->height());
-//    ui->lb_bookname1->setText("活着");
+    ui->lb_book3->setPixmap(pix[2]);//label 加载图片imgpath
+    ui->lb_book3->setScaledContents(true);    //根据label大小缩放图片
+    ui->lb_bookname3->setText(result[2].getBookName());
+
+    ui->lb_book4->setPixmap(pix[3]);//label 加载图片imgpath
+    ui->lb_book4->setScaledContents(true);    //根据label大小缩放图片
+    ui->lb_bookname4->setText(result[3].getBookName());
+
+    ui->lb_book5->setPixmap(pix[4]);//label 加载图片imgpath
+    ui->lb_book5->setScaledContents(true);    //根据label大小缩放图片
+    ui->lb_bookname5->setText(result[4].getBookName());
+
+    ui->lb_book6->setPixmap(pix[5]);//label 加载图片imgpath
+    ui->lb_book6->setScaledContents(true);    //根据label大小缩放图片
+    ui->lb_bookname6->setText(result[5].getBookName());
+
+    ui->lb_book7->setPixmap(pix[6]);//label 加载图片imgpath
+    ui->lb_book7->setScaledContents(true);    //根据label大小缩放图片
+    ui->lb_bookname7->setText(result[6].getBookName());
+
+
+//    if(now_utils.UpdateBoyRank())
+//        qDebug()<<"男生借阅排行榜update成功！";
+
+
+    ui->lb_man1->setText(result_boy[0].getBookName());
+    ui->lb_man2->setText(result_boy[1].getBookName());
+    ui->lb_man3->setText(result_boy[2].getBookName());
+
+//    if(now_utils.UpdateGirlRank())
+//        qDebug()<<"女生借阅排行榜update成功！";
+
+
+    ui->lb_woman1->setText(result_girl[0].getBookName());
+    ui->lb_woman2->setText(result_girl[1].getBookName());
+    ui->lb_woman3->setText(result_girl[2].getBookName());
+
+//    if(now_utils.UpdatePointRank())
+//        qDebug()<<"高分借阅排行榜update成功！";
+
+
+    ui->lb_collect1->setText(result_point[0].getBookName());
+    ui->lb_collect2->setText(result_point[1].getBookName());
+    ui->lb_collect3->setText(result_point[2].getBookName());
+
+
 }
 bool BookRanking::loadQss(const QString &StyleSheetFile){
 

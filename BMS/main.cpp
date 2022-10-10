@@ -16,7 +16,10 @@ Utils now_utils(baseDbPath);
 Book now_book;
 vector<Book> re;
 QString classify;//搜索图书按分类
-
+vector<Book> result;
+vector<Book> result_boy;
+vector<Book> result_girl;
+vector<Book> result_point;
 int main(int argc, char *argv[])
 {
 
@@ -39,6 +42,11 @@ int main(int argc, char *argv[])
     QString stylesheet2 = filetext2.readAll();
     app.setStyleSheet(stylesheet2);
     file2.close();
+
+    now_utils.GetBookRank(result);
+    now_utils.GetBoyRank(result_boy);
+    now_utils.GetGirlRank(result_girl);
+    now_utils.GetPointRank(result_point);
     Widget w;
     w.show();
   //  QApplication a(argc, argv);

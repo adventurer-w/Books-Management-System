@@ -15,6 +15,7 @@ public:
     explicit BookRanking(QWidget *parent = nullptr);
     void setShadow();
     void showPopularBook();
+    void loadRankBooks();
     bool loadQss(const QString &StyleSheetFile);
     ~BookRanking();
 

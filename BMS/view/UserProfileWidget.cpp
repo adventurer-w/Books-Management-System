@@ -116,7 +116,7 @@ void UserProfileWidget::setShadow(){
 
 }
 void UserProfileWidget::searchBooks(QString key){
-    qDebug() << "ok:" << key ;
+    //qDebug() << "ok:" << key ;
 
     QueryBookWidget *queryBookWidget = new QueryBookWidget;
 
