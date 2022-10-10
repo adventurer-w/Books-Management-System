@@ -127,7 +127,7 @@ void QueryBookWidget::on_btn_bookname_clicked(){
         ui->btn_bookname->setDown(false);
         ctrl &= 0x011;
         qDebug() << "clear bookname " << ctrl ;
-        flag =0;
+
         ui->btn_bookname->setStyleSheet("color:rgb(0,0,0);\
                                         font-family:KaiTi;\
                                         font-size:18px;\
@@ -153,7 +153,7 @@ void QueryBookWidget::on_btn_author_clicked(){
         ui->btn_author->setDown(false);
         ctrl &= 0x101;
         qDebug() << "clear author name " << ctrl ;
-        flag =0;
+
         ui->btn_author->setStyleSheet("color:rgb(0,0,0);\
                                         font-family:KaiTi;\
                                         font-size:18px;\
@@ -177,7 +177,7 @@ void QueryBookWidget::on_btn_ISBN_clicked(){
         ui->btn_ISBN->setDown(false);
         ctrl &= 0x110;
         qDebug() << "clear ISBNname " << ctrl ;
-        flag =0;
+
         ui->btn_ISBN->setStyleSheet("color:rgb(0,0,0);\
                                         font-family:KaiTi;\
                                         font-size:18px;\
@@ -206,7 +206,7 @@ void QueryBookWidget::on_cbox_classify_currentIndexChanged(int){
 */
 void QueryBookWidget::getBookList(QString classification, QString key){
     re.clear();
-    if (classification=="全部")flag=1;
+    if (classification=="全部" && ctrl == 0)flag=1;
     qDebug() << classification << "  "<< flag;
     if(flag==0){
         now_utils.GetBooksByClassification(const_cast<char*>(classification.toStdString().c_str()),re);
