@@ -114,7 +114,7 @@ void BookDetails::on_btn_borrow_clicked(){//借阅
     Record record;
     if(now_book.getLeft()>0){
         record.setIsbn(now_book.getIsbn());
-        record.setDate("2022-10-7");//后期增加自动获取时间
+        record.setDate("2022-10-11");//后期增加自动获取时间
         record.setAuthor(now_book.getAuthor());
         record.setAccount(now_user.getAccount());
         record.setBookName(now_book.getBookName());

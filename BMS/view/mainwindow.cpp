@@ -37,7 +37,6 @@ void MainWindow::loadUserInfo(){
     ui->lb_username_main->setText(QString::fromStdString(now_user.getName()));
 
     ui->lb_number_main->setText(QString::fromStdString(now_user.getAccount()));
-    qDebug() << "oh";
 
 }
 //放背景图
