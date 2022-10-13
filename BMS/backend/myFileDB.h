@@ -201,12 +201,12 @@ int myFileDB::Delete(string DB_NAME, T &entity, vector<string> &VALUES) {
     //删除所有
     try {
         if (VALUES[0] == "all") {
-            writeFile.open(rootPath + DB_NAME + ".dat", ios::in | ios::out | ios::binary);
+//            writeFile.open(rootPath + DB_NAME + ".dat", ios::in | ios::out | ios::binary);
+            writeFile.open(rootPath + DB_NAME + ".dat", ios::trunc);
             if (!writeFile) {
                 ios_base::failure fail("ERROR");
                 throw fail;
             }
-            writeFile.open(rootPath + DB_NAME + ".dat", ios::trunc);
             writeFile.close();
             return 1;
         }

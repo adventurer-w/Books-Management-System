@@ -5,6 +5,7 @@
 #include "User.h"
 #include "Record.h"
 #include "Reserve.h"
-#include "RankItem.h"
+#include "Department.h"
+#include "SingleBook.h"
 
 #endif //ALL_HEAD_H

@@ -2,6 +2,7 @@
 #define UTILS_H
 #include "all_head.h"
 #include "myFileDB.h"
+#include <regex>
 
 class Utils {
 public:
@@ -9,11 +10,17 @@ public:
     myFileDB db;
     Utils(string path) : db(path) {}
 
+    //用正则表达式判断是否合法
+    bool CheckAccount(char *account);
+    bool CheckPassword(char *password);
+    bool CheckEmail(char *email);
+
+
 
     int Login(char* account, char* password); //参数1:账号，参数2:密码。   返回值：0:账户不存在； 2:登陆成功；1:密码错误
 
     //注册
-    int Register(User user); //参数：用户对象。    返回值：0:账号已存在，1:注册成功, -1：注册失败
+    int Register(User user); //参数：用户对象。    返回值：0:账号已存在，1:注册成功, -1：注册失败,-2用户名不合法，-3密码不合法，-4邮箱不合法
 
     //修改信息
     bool UpdateUser(User before, User after); //参数1为需要修改的User对象（只需要有学号），参数2为修改后的User对象，返回修改操作是否成功
@@ -28,7 +35,7 @@ public:
     bool GetUserById(int id,User& user0);
 
     //由专业筛选用户
-    bool GetUserByMajor(char* major, vector<User>&result);
+    bool GetUserByDepartmentNo(int departmentNo, vector<User>&result);
 
     //删除学生
     bool DeleteUser(User user); //参数：User对象，返回是操作是否成功
@@ -39,8 +46,17 @@ public:
     //添加学生
     bool InsertUser(User user); //参数：User对象，进行插入操作，返回是操作是否成功
 
+    //添加院系
+    bool InsertDepartment(Department department);
 
+    //删除院系(依据名称检索)
+    bool DeleteDepartment(Department department);
 
+    //用departmentNo获取Department对象（只有一个，对象中有院系名）
+    bool GetDepartmentByNo(int departmentNo,vector<Department> &result);
+
+    //用院系名获取Department对象（只有一个,对象中有departmentNo）
+    bool GetDepartmentByName(char *name,vector<Department> &result);
 
 
 
@@ -97,7 +113,17 @@ public:
     //获取所有数
     bool GetAllBooks(vector<Book>&result);
 
+    //插入单本书
+    bool InsertSingleBooks(vector<SingleBook> entity);
 
+    //删除单本书
+    bool DeleteSingleBook(SingleBook singleBook);
+
+    //借走单本书
+    bool BorrowSingleBook(SingleBook singleBook);
+
+    //归还单本书
+    bool ReturnSingleBook(SingleBook singleBook);
 
 
     //添加借书关系
@@ -196,7 +222,6 @@ public:
 
 
 
-
     //获取推荐列表
     bool GetRecommendList(User user, vector<Book>&result); //参数1为User对象,参数2为存结果列表，返回值为该用户的推荐书目列表
 
@@ -212,7 +237,23 @@ public:
     bool CheckRecordExist(Record record);//该对象只需要有学号和ISBN号
 
     bool CheckReserveExist(Reserve reserve); //该对象只需要有学号和ISBN号
+
+    bool CheckDepartmentExistByNo(int departmentNO); //查看该departmentNO的记录是否存在
+
+    bool CheckDepartmentExistByName(char *name); //查看该name的记录是否存在
 };
 
 
 #endif //UTILS_H
+
+//int select(string DB_NAME, T &entity, vector<string> &VALUES, vector<T> &resultSet);
+//int selectLike(string DB_NAME, string valueName, char *value, vector<T> &resultSet);
+//int insert(string DB_NAME, vector<T> &entity);
+//int Delete(string DB_NAME, T &entity, vector<string> &VALUES);
+//int update(string DB_NAME, T &Sentity, T &Uentity, vector<string> &VALUES);
+
+
+//！！！！密码用MD5储存！！！！
+// 前端在传输数据之前需要使用MD5加密！
+
+
