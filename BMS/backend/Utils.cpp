@@ -11,23 +11,28 @@ using namespace std;
 
 
 int Utils::Login(char *account, char *password) { //密码需传入md5加密后的
-    User user = User();
-    GetUserByAccount(account,user);
 
-    if (CheckUserExist(user))
-    {
-        if (strcmp(password, user.getPassword()))
-            return 1;
-        else
-            return 2;
+    if(account[0]=='0'&&account[1]=='0'){
+        return AdminLogin(account,password)+3;
     }else{
-        return 0;
+        User user = User();
+        GetUserByAccount(account,user);
+
+        if (CheckUserExist(user))
+        {
+            if (strcmp(password, user.getPassword()))
+                return 1;
+            else
+                return 2;
+        }else{
+            return 0;
+        }
     }
 }
 
 int Utils::Register(User user) {
     if(!CheckAccount(user.getAccount())) return -2;
-    if(!CheckPassword(user.getPassword())) return -3;
+    if(user.getAccount()[0]=='0'&&user.getAccount()[1]=='0') return -2;
     if(!CheckEmail(user.getEmail())) return -4;
 
     if (CheckUserExist(user))
@@ -159,7 +164,7 @@ bool Utils::GetUserByAccount(char *account,User& user0) {
         value.push_back("not-all");
         value.push_back("account");
         vector<User> result;
-        int pos = db.select("user", user, value, result);
+        db.select("user", user, value, result);
         if(result.empty()){
             return false;
         }else{
@@ -236,7 +241,7 @@ Admin Utils::GetAdminByAccount(char *account) {
         value.push_back("not-all");
         value.push_back("account");
         vector<Admin> result;
-        int pos = db.select("user", admin, value, result);
+        db.select("user", admin, value, result);
         return result.at(0);
     }
     else{
@@ -287,6 +292,7 @@ int Utils::AdminRegister(Admin admin) {
 
 bool Utils::InsertAdmin(Admin admin){
     if (!CheckAdminExist(admin)){
+    if(admin.getAccount()[0]!='0'||admin.getAccount()[1]!='0') return false;
         vector<Admin> vec;
         vec.push_back(admin);
         if (db.insert("admin", vec) != -1)
@@ -813,12 +819,12 @@ bool Utils::GetAnyRank(string DB_NAME,vector<Book>&result){
         return false;
 }
 
-bool Utils::CheckDepartmentExistByNo(int departmentNO){
+bool Utils::CheckDepartmentExistByNo(int departmentNo){
     vector<string> value;
     value.push_back("not-all");
-    value.push_back("departmentNO");
+    value.push_back("departmentNo");
     Department department = Department();
-    department.setDepartmentNo(departmentNO);
+    department.setDepartmentNo(departmentNo);
 
     vector<Department> result;
     if (db.select("department", department, value, result) == -1)
@@ -923,6 +929,7 @@ bool Utils::BorrowSingleBook(SingleBook singleBook){
         else
             return false;
     }
+    return true;
 }
 
 bool Utils::ReturnSingleBook(SingleBook singleBook){
@@ -935,6 +942,7 @@ bool Utils::ReturnSingleBook(SingleBook singleBook){
         else
             return false;
     }
+    return true;
 }
 
 

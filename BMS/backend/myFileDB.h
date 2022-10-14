@@ -100,15 +100,14 @@ int myFileDB::select(string DB_NAME, T &entity, vector<string> &VALUES, vector<T
                 if (VALUES[1] == "id") {
                     selectId(readFile, entity.getId(), resultSet);
                 } else {
-                    if (temp.getElemType(VALUES[1]) == "int")
+                    if (temp.getElemType(VALUES[1]) == "i" || temp.getElemType(VALUES[1]) == "int")
                         selectInt(readFile, VALUES[1], entity.getIntElemByName(VALUES[1]), resultSet);
-                    else if (temp.getElemType(VALUES[1]) == "float")
+                    else if (temp.getElemType(VALUES[1]) == "f" || temp.getElemType(VALUES[1]) == "float")
                         selectFloat(readFile, VALUES[1], entity.getFloatElemByName(VALUES[1]), resultSet);
                     else
                         selectChar(readFile, VALUES[1], entity.getCharElemByName(VALUES[1]), resultSet);
                 }
             }
-
                 //多个查询
             else {
                 selectMany(readFile, entity, VALUES, resultSet);
@@ -247,11 +246,11 @@ int myFileDB::Delete(string DB_NAME, T &entity, vector<string> &VALUES) {
             elemType.push_back(entity.getElemType(VALUES[i]));
         }
         for (int i = 1; i < VALUES.size(); i++) {
-            if (elemType[i] == "int") {
+            if (elemType[i] == "int"||elemType[i] == "i") {
                 elemIntValue.push_back(entity.getIntElemByName(VALUES[i]));
                 elemFloatValue.push_back(0);
                 elemCharValue.push_back("");
-            } else if (elemType[i] == "float") {
+            } else if (elemType[i] == "float"||elemType[i] == "f") {
                 elemFloatValue.push_back(entity.getFloatElemByName(VALUES[i]));
                 elemIntValue.push_back(0);
                 elemCharValue.push_back("");
@@ -268,12 +267,12 @@ int myFileDB::Delete(string DB_NAME, T &entity, vector<string> &VALUES) {
                 int flag = 1;
                 //遍历选择条件
                 for (int i = 1; i < VALUES.size(); i++) {
-                    if (elemType[i] == "int") {
+                    if (elemType[i] == "int"||elemType[i] == "i") {
                         if (temp.getIntElemByName(VALUES[i]) != elemIntValue[i]) {
                             flag = 0;
                             break;
                         }
-                    } else if (elemType[i] == "float") {
+                    } else if (elemType[i] == "float"||elemType[i] == "f") {
                         if (temp.getFloatElemByName(VALUES[i]) != elemFloatValue[i]) {
                             flag = 0;
                             break;
@@ -347,11 +346,11 @@ int myFileDB::update(string DB_NAME, T &Sentity, T &Uentity, vector<string> &VAL
             elemType.push_back(Sentity.getElemType(VALUES[i]));
         }
         for (int i = 1; i < VALUES.size(); i++) {
-            if (elemType[i] == "int") {
+            if (elemType[i] == "int"||elemType[i] == "i") {
                 elemIntValue.push_back(Sentity.getIntElemByName(VALUES[i]));
                 elemFloatValue.push_back(0);
                 elemCharValue.push_back("");
-            } else if (elemType[i] == "float") {
+            } else if (elemType[i] == "float" || elemType[i] == "f") {
                 elemFloatValue.push_back(Sentity.getFloatElemByName(VALUES[i]));
                 elemIntValue.push_back(0);
                 elemCharValue.push_back("");
@@ -368,12 +367,12 @@ int myFileDB::update(string DB_NAME, T &Sentity, T &Uentity, vector<string> &VAL
                 int flag = 1;
                 //遍历选择条件
                 for (int i = 1; i < VALUES.size(); i++) {
-                    if (elemType[i] == "int") {
+                    if (elemType[i] == "int"||elemType[i] == "i") {
                         if (temp.getIntElemByName(VALUES[i]) != elemIntValue[i]) {
                             flag = 0;
                             break;
                         }
-                    } else if (elemType[i] == "float") {
+                    } else if (elemType[i] == "float"||elemType[i] == "f") {
                         if (temp.getFloatElemByName(VALUES[i]) != elemFloatValue[i]) {
                             flag = 0;
                             break;
@@ -468,11 +467,11 @@ void myFileDB::selectMany(ifstream &readFile, T &entity, vector<string> &VALUES,
         elemType.push_back(entity.getElemType(VALUES[i]));
     }
     for (int i = 1; i < VALUES.size(); i++) {
-        if (elemType[i] == "int") {
+        if (elemType[i] == "i"||elemType[i] == "int") {
             elemIntValue.push_back(entity.getIntElemByName(VALUES[i]));
             elemFloatValue.push_back(0);
             elemCharValue.push_back("");
-        } else if (elemType[i] == "float") {
+        } else if (elemType[i] == "f"||elemType[i] == "float") {
             elemFloatValue.push_back(entity.getFloatElemByName(VALUES[i]));
             elemIntValue.push_back(0);
             elemCharValue.push_back("");
@@ -488,12 +487,12 @@ void myFileDB::selectMany(ifstream &readFile, T &entity, vector<string> &VALUES,
             int flag = 1;
             //遍历选择条件
             for (int i = 1; i < VALUES.size(); i++) {
-                if (elemType[i] == "int") {
+                if (elemType[i] == "i"||elemType[i] == "int") {
                     if (temp.getIntElemByName(VALUES[i]) != elemIntValue[i]) {
                         flag = 0;
                         break;
                     }
-                } else if (elemType[i] == "float") {
+                } else if (elemType[i] == "f"||elemType[i] == "float") {
                     if (temp.getFloatElemByName(VALUES[i]) != elemFloatValue[i]) {
                         flag = 0;
                         break;
