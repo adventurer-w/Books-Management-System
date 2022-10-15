@@ -33,6 +33,6 @@ private:
     MainWidget *mw;
     QPushButton *btn;
     QList<QPushButton*> btnList;//动态创建按钮的列表
-    int userType;
+    int userType;//0为管理员，1为 普通用户
 };
 #endif // MAINWINDOW_H

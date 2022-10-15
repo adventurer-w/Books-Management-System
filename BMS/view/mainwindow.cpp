@@ -27,7 +27,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     this->setWindowTitle("图书系统");
     this->resize(1600,900);
+    /* judge admin 0 or user 1 here*/
+    /* start */
     userType = 1;
+    /* end */
     loadUserInfo();
     loadMenuBar();
     loadPages(0);
@@ -113,7 +116,7 @@ void MainWindow::loadMenuBar(){
 
 }
 /*
-以某种模式加载界面，其中0为初始化mw和个人信息,1为只初始化个人信息，一次类推；4为导入管理员个人信息，以此类推
+以某种模式加载界面，其中0为初始化mw和个人信息,1为只初始化个人信息，一次类推；
 */
 void MainWindow::loadPages(int mode){
     if(mode == 0){
