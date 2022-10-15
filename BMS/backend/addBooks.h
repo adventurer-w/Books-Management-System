@@ -1,13 +1,8 @@
 #ifndef ADDBOOKS_H
 #define ADDBOOKS_H
-#include <iostream>
-#include <fstream>
-#include <QTextStream>
+#include "all_head.h"
+#include "myFileDB.h"
 
-void addBooks()
-{
-    ofstream out("C:\\Users\\chp\\Desktop\\bookByPython\\novel.txt");
-
-}
+void addBooks(string origin,string cla);
 
 #endif // ADDBOOKS_H

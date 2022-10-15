@@ -1,3 +1,4 @@
+#include "backend/addUsers.h"
 #include<fstream>
 #include<iostream>
 #include<cstring>
@@ -48,8 +49,7 @@ void insert()
     for(i=0;i<ACCOUNT_SIZE-1;i++)
         t+=to_string(rand()%10);
     strcpy(u.account,t.data());
-    qDebug()<<QString::fromStdString(t)<<" ";
-    string ta=t;
+//    qDebug()<<QString::fromStdString(t)<<" ";
     t.clear();
 
 
@@ -65,12 +65,11 @@ void insert()
             t+=char(rand()%26+97);
         }
     }
-    qDebug()<<QString::fromStdString(t);
+//    qDebug()<<QString::fromStdString(t);
     MD5 md5;
-    string t1="sdgvsdv";
-    const char* tt=md5.read(t1);
+    const char* tt=md5.read(t);
     char* pwd2=const_cast<char*>(tt);
-    qDebug()<<QString::fromStdString(tt)<<"\n";
+//    qDebug()<<QString::fromStdString(tt)<<"\n";
     u.setPassword(pwd2);
     t.clear();
 
@@ -78,8 +77,8 @@ void insert()
     u.sex=rand()%2+1;//1男 2女
 
     //专业
-    t=major[rand()%20];
-    strcpy(u.major,t.data());
+//    t=major[rand()%20];
+//    strcpy(u.major,t.data());
 
     //密保问题
     t=question[rand()%5];

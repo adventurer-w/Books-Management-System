@@ -9,6 +9,7 @@ class RankItem{
 public:
     int id;
     char isbn[ISBN_SIZE];
+
     int dirty;
 
     int getId()

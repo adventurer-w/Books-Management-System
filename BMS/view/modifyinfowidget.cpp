@@ -18,8 +18,11 @@ ModifyInfoWidget::ModifyInfoWidget(QWidget *parent) :
     ui->box_sex->addItems(QStringList()<<"男"<<"女");
 
     ui->line_name->setText(now_user.getName());
-    ui->line_major->setText(now_user.getMajor());
+    vector<Department> major_result;
+    now_utils.GetDepartmentByNo(now_user.getDepartmentNo(),major_result);
+    ui->line_major->setText(QString::fromStdString(major_result[0].getName()));
     ui->line_number->setText(now_user.getAccount());
+    ui->line_major_2->setText(now_user.getEmail());
    // ui->line_major_2->setText(now_user.getemail);//后期可以考虑增加邮箱
 //    if(now_user.getSex()==1)
 //        ui->box_sex->setItemText("男");
@@ -45,16 +48,17 @@ void ModifyInfoWidget::on_btn_modifyInfo_clicked(){
 
     now_user.setAccount(const_cast<char*>(account.toStdString().c_str()));
     now_user.setName(const_cast<char*>(name.toStdString().c_str()));
-    now_user.setMajor(const_cast<char*>(major.toStdString().c_str()));
-    //now_user.setAccount(const_cast<char*>(account.toStdString().c_str()));
-    //now_user.setAccount(const_cast<char*>(account.toStdString().c_str()));
+    vector<Department> major_result;
+    now_utils.GetDepartmentByName(const_cast<char*>(major.toStdString().c_str()),major_result);
+    now_user.setDepartmentNo(major_result[0].getDepartmentNo());
+    now_user.setEmail(email.toStdString().c_str());
     if(sex=="男")
         now_user.setSex(1);
     else
         now_user.setSex(2);
-    now_user.setNumBorrowed(0);//借书数目
-    now_user.setNumAppointed(0);//预约数
-    now_user.setDebet(0);//欠款数
+    now_user.setNumBorrowed(now_user.getNumBorrowed());//借书数目
+    now_user.setNumAppointed(now_user.getNumAppointed());//预约数
+    now_user.setDebet(now_user.getDebet());//欠款数
 
 
 

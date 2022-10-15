@@ -20,58 +20,6 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="btn_logout">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>400</y>
-      <width>200</width>
-      <height>50</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>退出登录</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btn_modifyInfo">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>300</y>
-      <width>200</width>
-      <height>50</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>修改信息</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btn_queryBook">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>350</y>
-      <width>200</width>
-      <height>50</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>图书查询</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btn_userProfile">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>250</y>
-      <width>200</width>
-      <height>50</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>个人中心</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="lb_username_main">
     <property name="geometry">
      <rect>

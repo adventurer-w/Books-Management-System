@@ -7,6 +7,8 @@ static const int USER_NAME_SIZE = 50 + 1;         //昵称长度
 static const int MAJOR_SIZE = 50 + 1;             //专业名长度
 static const int SECURITY_ANSWER_SIZE = 200 + 1;             //密保问题
 static const int SECURITY_QUESTION_SIZE = 200 + 1;             //密保答案
+static const int EMAIL_SIZE =  100 + 1;//邮箱长度
+
 
 static const int ISBN_SIZE = 20 + 1;             //ISBN号长度
 static const int BOOK_NAME_SIZE = 100 + 1;       //书名

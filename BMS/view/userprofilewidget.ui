@@ -73,14 +73,14 @@
    <widget class="QLabel" name="lb_credit">
     <property name="geometry">
      <rect>
-      <x>270</x>
+      <x>260</x>
       <y>100</y>
       <width>70</width>
       <height>30</height>
      </rect>
     </property>
     <property name="text">
-     <string>信誉分</string>
+     <string> 欠款</string>
     </property>
    </widget>
    <widget class="QLabel" name="lb_sex_txt">
@@ -183,6 +183,19 @@
      <width>1030</width>
      <height>250</height>
     </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>230</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>借阅须知</string>
    </property>
   </widget>
  </widget>

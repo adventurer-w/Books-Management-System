@@ -5,6 +5,7 @@
 #include <QString>
 #include <QStackedWidget>
 #include "MainWidget.h"
+#include <QPushButton>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -23,15 +24,15 @@ public:
    // Widget *login =NULL;
     void paintEvent(QPaintEvent *);
 private slots:
-    void on_btn_userProfile_clicked();
-    void on_btn_modifyInfo_clicked();
-    void on_btn_queryBook_clicked();
-    void on_btn_logout_clicked();
+    void menuBarBtnClicked();
     void loadUserInfo();
 
 
 private:
     Ui::MainWindow *ui;
     MainWidget *mw;
+    QPushButton *btn;
+    QList<QPushButton*> btnList;//动态创建按钮的列表
+    int userType;
 };
 #endif // MAINWINDOW_H

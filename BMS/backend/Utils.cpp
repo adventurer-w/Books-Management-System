@@ -6,33 +6,38 @@
 
 using namespace std;
 
-//int select(string DB_NAME, T &entity, vector<string> &VALUES, vector<T> &resultSet);
-//int selectLike(string DB_NAME, string valueName, char *value, vector<T> &resultSet);
-//int insert(string DB_NAME, vector<T> &entity);
-//int Delete(string DB_NAME, T &entity, vector<string> &VALUES);
-//int update(string DB_NAME, T &Sentity, T &Uentity, vector<string> &VALUES);
-
-
 //！！！！密码用MD5储存！！！！
 // 前端在传输数据之前需要使用MD5加密！
 
+//string getGuidelines(){
+
+//}
 
 int Utils::Login(char *account, char *password) { //密码需传入md5加密后的
-    User user = User();
-    GetUserByAccount(account,user);
 
-    if (CheckUserExist(user))
-    {
-        if (strcmp(password, user.getPassword()))
-            return 1;
-        else
-            return 2;
+    if(account[0]=='0'&&account[1]=='0'){
+        return AdminLogin(account,password)+3;
     }else{
-        return 0;
+        User user = User();
+        GetUserByAccount(account,user);
+
+        if (CheckUserExist(user))
+        {
+            if (strcmp(password, user.getPassword()))
+                return 1;
+            else
+                return 2;
+        }else{
+            return 0;
+        }
     }
 }
 
 int Utils::Register(User user) {
+    if(!CheckAccount(user.getAccount())) return -2;
+    if(user.getAccount()[0]=='0'&&user.getAccount()[1]=='0') return -2;
+    if(!CheckEmail(user.getEmail())) return -4;
+
     if (CheckUserExist(user))
         return 0;
     else{
@@ -162,7 +167,7 @@ bool Utils::GetUserByAccount(char *account,User& user0) {
         value.push_back("not-all");
         value.push_back("account");
         vector<User> result;
-        int pos = db.select("user", user, value, result);
+        db.select("user", user, value, result);
         if(result.empty()){
             return false;
         }else{
@@ -217,9 +222,9 @@ bool Utils::GetUserById(int id,User& user0) {
 
 
 
-bool Utils::GetUserByMajor(char *major, vector<User> &result){
+bool Utils::GetUserByDepartmentNo(int departmentNo, vector<User> &result){
     User user = User();
-    user.setMajor(major);
+    user.setDepartmentNo(departmentNo);
     vector<string> val;
     val.push_back("not-all");
     val.push_back("major");
@@ -239,7 +244,7 @@ Admin Utils::GetAdminByAccount(char *account) {
         value.push_back("not-all");
         value.push_back("account");
         vector<Admin> result;
-        int pos = db.select("user", admin, value, result);
+        db.select("user", admin, value, result);
         return result.at(0);
     }
     else{
@@ -290,6 +295,7 @@ int Utils::AdminRegister(Admin admin) {
 
 bool Utils::InsertAdmin(Admin admin){
     if (!CheckAdminExist(admin)){
+    if(admin.getAccount()[0]!='0'||admin.getAccount()[1]!='0') return false;
         vector<Admin> vec;
         vec.push_back(admin);
         if (db.insert("admin", vec) != -1)
@@ -307,6 +313,15 @@ bool Utils::InsertBook(Book book)
         vector<Book> entity;
         entity.push_back(book);
         if (db.insert("book", entity) != -1){
+            vector<SingleBook> books;
+            SingleBook x = SingleBook();
+            x.setIsbn(book.getIsbn());
+
+            for(int i=0;i<=50&&i<book.getLeft();i++){
+                books.push_back(x);
+            }
+            InsertSingleBooks(books);
+
             return true;
         }else {
             return false;
@@ -768,12 +783,11 @@ bool Utils::UpdateAnyRank(string DB_NAME){
         if(DB_NAME == "book_rank") sort(result.begin(), result.end(), cmp_all);
         if(DB_NAME == "point_rank") sort(result.begin(), result.end(), cmp_point);
 
-        RankItem rank_t = RankItem();
+        Book rank_t = Book();
         if (db.Delete(DB_NAME, rank_t, value) != -1){
-            vector<RankItem> insert_list;
-            for (int i = 0 ; i < result.size() && i< 50; i ++) {
-                RankItem rank = RankItem();
-                rank.setIsbn(result.at(i).getIsbn());
+            vector<Book> insert_list;
+            for (int i = 0 ; i < result.size() && i< 10; i ++) {
+                Book rank = result.at(i);
                 insert_list.push_back(rank);
             }
             if (db.insert(DB_NAME, insert_list) != -1)
@@ -789,15 +803,15 @@ bool Utils::UpdateAnyRank(string DB_NAME){
 }
 
 bool Utils::GetAnyRank(string DB_NAME,vector<Book>&result){
-    RankItem rank_t;
+    Book rank_t;
     vector<string> value;
     value.push_back("all");
-    vector<RankItem> result_rank;
-    int maxItems = 7;//规定一次返回的数量
+    vector<Book> result_rank;
+
     int pos = db.select(DB_NAME, rank_t, value, result_rank);
     if (pos != -1){
         Book book = Book();
-        for (int i = 0; i < maxItems; i ++ )
+        for (int i = 0; i < result_rank.size(); i ++ )
         {
             GetBookByIsbn(result_rank.at(i).getIsbn(),book);
             result.push_back(book);
@@ -806,4 +820,144 @@ bool Utils::GetAnyRank(string DB_NAME,vector<Book>&result){
     }
     else
         return false;
+}
+
+bool Utils::CheckDepartmentExistByNo(int departmentNo){
+    vector<string> value;
+    value.push_back("not-all");
+    value.push_back("departmentNo");
+    Department department = Department();
+    department.setDepartmentNo(departmentNo);
+
+    vector<Department> result;
+    if (db.select("department", department, value, result) == -1)
+        return false;
+    return true;
+}
+
+bool Utils::CheckDepartmentExistByName(char *name){
+    vector<string> value;
+    value.push_back("not-all");
+    value.push_back("name");
+    Department department = Department();
+    department.setName(name);
+
+    vector<Department> result;
+    if (db.select("department", department, value, result) == -1)
+        return false;
+    return true;
+}
+
+
+bool Utils::InsertDepartment(Department department){
+    if (!CheckDepartmentExistByName(department.getName()) && !CheckDepartmentExistByNo(department.getDepartmentNo())){
+        vector<Department> vec;
+        vec.push_back(department);
+        if (db.insert("department", vec) != -1)
+            return true;
+        else
+            return false;
+    }else{
+        return false;
+    }
+}
+
+bool Utils::DeleteDepartment(Department department){
+    if (CheckDepartmentExistByName(department.getName())){
+        vector<string> vec;
+        vec.push_back("not-all");
+        vec.push_back("name");
+        if (db.Delete("department", department, vec) != -1)
+            return true;
+        else
+            return false;
+    }else {
+        return false;
+    }
+}
+
+bool Utils::GetDepartmentByNo(int departmentNo,vector<Department> &result){
+    Department department = Department();
+    department.setDepartmentNo(departmentNo);
+
+    vector<string> val;
+    val.push_back("not-all");
+    val.push_back("departmentNo");
+    if (db.select("department", department, val, result) != -1)
+        return true;
+    else
+        return false;
+}
+
+bool Utils::GetDepartmentByName(char* name,vector<Department> &result){
+    Department department = Department();
+    department.setName(name);
+
+    vector<string> val;
+    val.push_back("not-all");
+    val.push_back("name");
+    if (db.select("department", department, val, result) != -1)
+        return true;
+    else
+        return false;
+}
+
+
+bool Utils::InsertSingleBooks(vector<SingleBook> entity){
+    if (db.insert("singleBook", entity) != -1){
+        return true;
+    }else {
+        return false;
+    }
+}
+
+
+bool Utils::DeleteSingleBook(SingleBook singleBook){
+    vector<string> vec;
+    vec.push_back("not-all");
+    vec.push_back("id");
+    if (db.Delete("singleBook", singleBook, vec) != -1)
+        return true;
+    else
+        return false;
+}
+
+bool Utils::BorrowSingleBook(SingleBook singleBook){
+    if(singleBook.dirty==2){
+        vector<string> vec;
+        vec.push_back("not-all");
+        vec.push_back("id");
+        if (db.Delete("singleBook", singleBook, vec) != -1)
+            return true;
+        else
+            return false;
+    }
+    return true;
+}
+
+bool Utils::ReturnSingleBook(SingleBook singleBook){
+    if(singleBook.dirty==2){
+        vector<string> vec;
+        vec.push_back("not-all");
+        vec.push_back("id");
+        if (db.Delete("singleBook", singleBook, vec) != -1)
+            return true;
+        else
+            return false;
+    }
+    return true;
+}
+
+
+bool Utils::CheckAccount(char *account){
+    regex reg("^[0-9]{6,11}$");
+    return regex_match(account, reg);
+}
+bool Utils::CheckPassword(char *password){
+    regex reg("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[^]{6,30}$");
+    return regex_match(password, reg);
+}
+bool Utils::CheckEmail(char *email){
+    regex reg("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$");
+    return regex_match(email, reg);
 }
