@@ -25,6 +25,7 @@ public:
     ~UserProfileWidget();
 public slots:
     void onTableBtnClicked();
+    void reserveBtnClicked();
     void searchBooks(QString key);
 public:
     MainWidget *pmw;

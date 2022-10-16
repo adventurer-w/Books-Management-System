@@ -92,9 +92,9 @@ void BookRanking::setShadow(){
 QPixmap p(string t1,string t2){
     string pic;
     if(t2.size()==13)
-        pic=pictureDbPath+t1+"/"+t2+".jpg";
+        pic=t1+"/"+t2+".jpg";
     else
-        pic=pictureDbPath+"moren.jpg";
+        pic=":/image/cover/moren.jpg";
     QPixmap pixmap(pic.c_str());
     return pixmap;
 
@@ -107,6 +107,12 @@ void BookRanking::showPopularBook(){
 
 //    if(now_utils.UpdateBookRank())
 //        qDebug()<<"总借阅榜单update成功！";
+//    if(now_utils.UpdateBoyRank())
+//        qDebug()<<"男生借阅排行榜update成功！";
+//    if(now_utils.UpdateGirlRank())
+//        qDebug()<<"女生借阅排行榜update成功！";
+//    if(now_utils.UpdatePointRank())
+//        qDebug()<<"高分借阅排行榜update成功！";
 
     QPixmap pix[7];//展示本书，后期可更改
     for(int i=0;i<7;i++){
@@ -140,26 +146,13 @@ void BookRanking::showPopularBook(){
     ui->lb_book7->setScaledContents(true);    //根据label大小缩放图片
     ui->lb_bookname7->setText(result[6].getBookName());
 
-
-//    if(now_utils.UpdateBoyRank())
-//        qDebug()<<"男生借阅排行榜update成功！";
-
-
     ui->lb_man1->setText(result_boy[0].getBookName());
     ui->lb_man2->setText(result_boy[1].getBookName());
     ui->lb_man3->setText(result_boy[2].getBookName());
 
-//    if(now_utils.UpdateGirlRank())
-//        qDebug()<<"女生借阅排行榜update成功！";
-
-
     ui->lb_woman1->setText(result_girl[0].getBookName());
     ui->lb_woman2->setText(result_girl[1].getBookName());
     ui->lb_woman3->setText(result_girl[2].getBookName());
-
-//    if(now_utils.UpdatePointRank())
-//        qDebug()<<"高分借阅排行榜update成功！";
-
 
     ui->lb_collect1->setText(result_point[0].getBookName());
     ui->lb_collect2->setText(result_point[1].getBookName());

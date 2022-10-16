@@ -263,18 +263,7 @@ void BookList::on_btn_la_clicked()
     nCurScroller = ui->tb->verticalScrollBar()->value(); //获得当前scroller值
     int curPg=   nCurScroller%maxPgNum==0?  nCurScroller/maxPgNum+1:nCurScroller/maxPgNum+2;
     loadBooks();
-//    if(nCurScroller<maxValue)
-//    {
-//        ui->tb->verticalScrollBar()->setSliderPosition(maxPgNum+nCurScroller);
-//        pages=QString::number(curPg+1,10)+"/"+QString::number(maxPgs,10);
-//        ui->line->setText(pages);
-//    }
-//    else
-//    {
-//        ui->tb->verticalScrollBar()->setSliderPosition(0);
-//        pages="1/"+QString::number(maxPgs,10);
-//        ui->line->setText(pages);
-//    }
+
     if(curPg<maxPgs)
     {
         ui->tb->verticalScrollBar()->setSliderPosition(maxPgNum+nCurScroller);
@@ -330,19 +319,19 @@ void BookList::on_line_returnPressed()
     int curPg=   nCurScroller%maxPgNum==0?  nCurScroller/maxPgNum+1:nCurScroller/maxPgNum+2;
     pages=ui->line->text();
     int page=pages.toInt();
+    if(page>maxPgs||page<1){
+        pages=QString::number(curPg,10)+'/'+QString::number(maxPgs,10);
+        ui->line->setText(pages);
+        return ;
+    }
     while(curSumPg<page){
         loadIntialBooks();
          curSumPg =  curRecord%maxPgNum==0 ? curRecord/maxPgNum:curRecord/maxPgNum+1;//滚动条总的页数
     }
-    if(page>maxPgs||page<1){
-        pages=QString::number(curPg,10)+'/'+QString::number(maxPgs,10);
-        ui->line->setText(pages);
-    }
-    else{
         ui->tb->verticalScrollBar()->setSliderPosition((page-1)*maxPgNum);
         pages=QString::number(page,10)+'/'+QString::number(maxPgs,10);
         ui->line->setText(pages);
-    }
+
 }
 bool BookList::loadQss(const QString &StyleSheetFile){
 

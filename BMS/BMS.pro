@@ -22,11 +22,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-
+LIBS += -lWs2_32
 SOURCES += \
         backend/MD5.cpp \
         backend/Utils.cpp \
+    backend/addBooks.cpp \
         backend/addUsers.cpp \
+    view/adminbookmanagement.cpp \
+    view/admininfo.cpp \
         view/booklist.cpp \
         main.cpp \
         view/MainWidget.cpp \
@@ -38,16 +41,19 @@ SOURCES += \
         view/querybookwidget.cpp \
         view/register.cpp \
         view/searchlineedit.cpp \
+        view/smtp.cpp \
         view/stditemmodel.cpp \
         view/widget.cpp \
 
 HEADERS += \
         backend/Admin.h \
         backend/Book.h \
+    backend/Department.h \
         backend/MD5.h \
     backend/RankItem.h \
         backend/Record.h \
         backend/Reserve.h \
+    backend/SingleBook.h \
         backend/User.h \
         backend/Utils.h \
         backend/addBooks.h \
@@ -55,6 +61,8 @@ HEADERS += \
         backend/all_head.h \
         backend/length.h \
         backend/myFileDB.h \
+    view/adminbookmanagement.h \
+    view/admininfo.h \
         view/booklist.h \
         view/GlobalSetting.h \
         view/MainWidget.h \
@@ -66,10 +74,13 @@ HEADERS += \
         view/querybookwidget.h \
         view/register.h \
         view/searchlineedit.h \
+        view/smtp.h \
         view/stditemmodel.h \
         view/widget.h \
 
 FORMS += \
+    view/adminbookmanagement.ui \
+    view/admininfo.ui \
     view/booklist.ui \
     view/bookdetails.ui \
     view/bookranking.ui \
@@ -89,6 +100,10 @@ RESOURCES += \
 
 DISTFILES += \
     backend/book.dat \
+    backend/book_rank.dat \
+    backend/boy_rank.dat \
+    backend/girl_rank.dat \
+    backend/point_rank.dat \
     backend/record.dat \
     backend/user.dat \
     image/SearchLineEdit/search.png \

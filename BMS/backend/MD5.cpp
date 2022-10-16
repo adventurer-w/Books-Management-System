@@ -1,4 +1,4 @@
-#include "backend/MD5.h"
+#include "MD5.h"
 #include <bitset>
 #include <cmath>
 
@@ -30,7 +30,7 @@ MD5::~MD5()
 
 }
 
-void output(int a,string &res)//灏忕瑙勫垯
+void output(int a,string &res)//小端规则
 {
     for (int i = 0; i < 4; i++)
     {
