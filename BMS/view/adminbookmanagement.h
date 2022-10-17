@@ -5,7 +5,7 @@
 #include "MainWidget.h"
 #include "stditemmodel.h"
 #include "backend/Utils.h"
-
+#include "modifybookcategory.h"
 namespace Ui
 {
     class AdminBookManagement;
@@ -42,21 +42,26 @@ public:
 
     void on_TableBtn_clicked();
 
-    int nCurScroller = 0; //翻页时的当时滑动条位置
+    void on_btn_modify_clicked();
+
+    void on_btn_delete_clicked();
+    int nCurScroller = 0; //
     int curPgNum = 1;
-    int maxPgNum = 4; // 一页显示条数
-    int maxPgs;//最大页数
-    int curRecord = 0;//已经插入的记录
-    QString pages;//显示当前页
+    int maxPgNum = 4; //
+    int maxPgs;//
+    int curRecord = 0;//
+    QString pages;//
     StdItemModel *model;
 
 
 public:
     MainWidget *sub_mw;
-    
+
 private
     slots:
-            void on_btn_search_clicked();
+    void on_btn_addclassify_clicked();
+
+    void on_btn_search_clicked();
 
     void on_btn_author_clicked();
 
@@ -70,20 +75,20 @@ private
 
     void on_btn_first_3_clicked();
 
-    void on_btn_la_3_clicked();
+    void on_btn_la_clicked();
 
-    void on_btn_last_3_clicked();
+    void on_btn_last_clicked();
 
-    void on_btn_fore_3_clicked();
+    void on_btn_fore_clicked();
 
-    void on_line_3_returnPressed();
+    void on_line_returnPressed();
 
     void on_btn_addbook_clicked();
 
 private:
     Ui::AdminBookManagement *ui;
-    QString classify;//当前选择的分类
-    MainWidget *psw;//底层stackwidget对象的指针，便于返回
+    QString classify;//
+    MainWidget *psw;//
 };
 
 #endif // ADMINBOOKLIST_H

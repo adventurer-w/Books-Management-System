@@ -13,6 +13,10 @@ using namespace std;
 
 //}
 
+string Utils::getGuidelines(){
+    return db.getGuidelines();
+}
+
 int Utils::Login(char *account, char *password) { //密码需传入md5加密后的
 
     if(account[0]=='0'&&account[1]=='0'){

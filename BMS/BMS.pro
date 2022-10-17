@@ -21,22 +21,27 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
-
+UI_DIR=./UI
 LIBS += -lWs2_32
 SOURCES += \
         backend/MD5.cpp \
         backend/Utils.cpp \
     backend/addBooks.cpp \
         backend/addUsers.cpp \
+    backend/myFileDB.cpp \
     view/adminbookmanagement.cpp \
     view/admininfo.cpp \
+    view/adminmodifybookdetail.cpp \
         view/booklist.cpp \
         main.cpp \
         view/MainWidget.cpp \
         view/UserProfileWidget.cpp \
         view/bookdetails.cpp \
         view/bookranking.cpp \
+    view/borrowinstruction.cpp \
+    view/borrowrecord.cpp \
         view/mainwindow.cpp \
+    view/modifybookcategory.cpp \
         view/modifyinfowidget.cpp \
         view/querybookwidget.cpp \
         view/register.cpp \
@@ -63,16 +68,20 @@ HEADERS += \
         backend/myFileDB.h \
     view/adminbookmanagement.h \
     view/admininfo.h \
+    view/adminmodifybookdetail.h \
         view/booklist.h \
         view/GlobalSetting.h \
         view/MainWidget.h \
         view/UserProfileWidget.h \
         view/bookdetails.h \
         view/bookranking.h \
+    view/borrowinstruction.h \
+    view/borrowrecord.h \
         view/mainwindow.h \
+    view/modifybookcategory.h \
         view/modifyinfowidget.h \
         view/querybookwidget.h \
-        view/register.h \
+    view/register.h \
         view/searchlineedit.h \
         view/smtp.h \
         view/stditemmodel.h \
@@ -81,11 +90,15 @@ HEADERS += \
 FORMS += \
     view/adminbookmanagement.ui \
     view/admininfo.ui \
+    view/adminmodifybookdetail.ui \
     view/booklist.ui \
     view/bookdetails.ui \
     view/bookranking.ui \
+    view/borrowinstruction.ui \
+    view/borrowrecord.ui \
     view/mainwidget.ui \
     view/mainwindow.ui \
+    view/modifybookcategory.ui \
     view/modifyinfowidget.ui \
     view/querybookwidget.ui \
     view/register.ui \

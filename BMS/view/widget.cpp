@@ -82,6 +82,7 @@ void Widget::on_btn_login_clicked()
     char* account2=const_cast<char*>(t.c_str());
     char* pwd2=const_cast<char*>(b.c_str());
 
+
     flag=now_utils.Login(account2,pwd2);
     if(flag==0){
         //账户不存在

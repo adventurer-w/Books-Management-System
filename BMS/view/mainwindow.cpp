@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->resize(1600,900);
     /* judge admin 0 or user 1 here*/
     /* start */
-    userType = 1;
+    userType = 0;
     /* end */
     loadUserInfo();
     loadMenuBar();
