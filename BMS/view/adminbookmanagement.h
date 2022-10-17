@@ -42,18 +42,18 @@ public:
 
     void on_TableBtn_clicked();
 
-    int nCurScroller = 0; //·­Ò³Ê±µÄµ±Ê±»¬¶¯ÌõÎ»ÖÃ
+    int nCurScroller = 0; //ç¿»é¡µæ—¶çš„å½“æ—¶æ»‘åŠ¨æ¡ä½ç½®
     int curPgNum = 1;
-    int maxPgNum = 4; // Ò»Ò³ÏÔÊ¾ÌõÊı
-    int maxPgs;//×î´óÒ³Êı
-    int curRecord = 0;//ÒÑ¾­²åÈëµÄ¼ÇÂ¼
-    QString pages;//ÏÔÊ¾µ±Ç°Ò³
+    int maxPgNum = 4; // ä¸€é¡µæ˜¾ç¤ºæ¡æ•°
+    int maxPgs;//æœ€å¤§é¡µæ•°
+    int curRecord = 0;//å·²ç»æ’å…¥çš„è®°å½•
+    QString pages;//æ˜¾ç¤ºå½“å‰é¡µ
     StdItemModel *model;
 
 
 public:
     MainWidget *sub_mw;
-    
+
 private
     slots:
             void on_btn_search_clicked();
@@ -82,8 +82,8 @@ private
 
 private:
     Ui::AdminBookManagement *ui;
-    QString classify;//µ±Ç°Ñ¡ÔñµÄ·ÖÀà
-    MainWidget *psw;//µ×²ãstackwidget¶ÔÏóµÄÖ¸Õë£¬±ãÓÚ·µ»Ø
+    QString classify;//å½“å‰é€‰æ‹©çš„åˆ†ç±»
+    MainWidget *psw;//åº•å±‚stackwidgetå¯¹è±¡çš„æŒ‡é’ˆï¼Œä¾¿äºè¿”å›
 };
 
 #endif // ADMINBOOKLIST_H

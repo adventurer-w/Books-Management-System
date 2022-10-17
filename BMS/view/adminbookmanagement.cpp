@@ -20,6 +20,7 @@
 #include <QFontDialog>
 #include <QListView>
 #include <QObject>
+#include <QtCharts>
 #include "qglobal.h"
 
 #include "stditemmodel.h"
@@ -37,6 +38,7 @@
 #include "backend/Utils.h"
 #include "GlobalSetting.h"
 
+#include "adminmodifybookdetail.h"
 
 extern Utils now_utils;
 extern vector<Book> re;
@@ -62,29 +64,29 @@ AdminBookManagement::AdminBookManagement(QWidget *parent) :
     //book_list
     model = new StdItemModel();
 
-    model->setColumnCount(9); //设置有9列
-    model->setHeaderData(0, Qt::Horizontal, "封面");
-    model->setHeaderData(1, Qt::Horizontal, "书名");
-    model->setHeaderData(2, Qt::Horizontal, "作者");
-    model->setHeaderData(3, Qt::Horizontal, "出版社");
-    model->setHeaderData(4, Qt::Horizontal, "ISBN");
-    model->setHeaderData(5, Qt::Horizontal, "库存量");
-    model->setHeaderData(6, Qt::Horizontal, "修改库存");
-    model->setHeaderData(7, Qt::Horizontal, "修改图书");
-    model->setHeaderData(8, Qt::Horizontal, "删除图书");
+    model->setColumnCount(7); //设置有9列
+
+    model->setHeaderData(0, Qt::Horizontal, "书名");
+    model->setHeaderData(1, Qt::Horizontal, "作者");
+    model->setHeaderData(2, Qt::Horizontal, "出版社");
+    model->setHeaderData(3, Qt::Horizontal, "ISBN");
+    model->setHeaderData(4, Qt::Horizontal, "库存量");
+    model->setHeaderData(5, Qt::Horizontal, "修改图书");
+    model->setHeaderData(6, Qt::Horizontal, "删除图书");
     ui->tb->setModel(model);
     ui->tb->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    ui->tb->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);//布局排版是全部伸展开的效果
     //设置列宽
-    ui->tb->setColumnWidth(0, 120);            //参数：列号，宽度
-    ui->tb->setColumnWidth(1, 180);
-    ui->tb->setColumnWidth(2, 120);
-    ui->tb->setColumnWidth(3, 180);
-    ui->tb->setColumnWidth(4, 220);
-    ui->tb->setColumnWidth(5, 120);
-    ui->tb->setColumnWidth(6, 120);
-    ui->tb->setColumnWidth(7, 90);
-    ui->tb->setColumnWidth(8, 90);
+    // ui->tb->setColumnWidth(0, 120);            //参数：列号，宽度
+    // ui->tb->setColumnWidth(1, 180);
+    // ui->tb->setColumnWidth(2, 120);
+    // ui->tb->setColumnWidth(3, 180);
+    // ui->tb->setColumnWidth(4, 220);
+    // ui->tb->setColumnWidth(5, 120);
+    // ui->tb->setColumnWidth(6, 120);
+    // ui->tb->setColumnWidth(7, 90);
+    // ui->tb->setColumnWidth(8, 90);
 
     //隐藏行头
     ui->tb->verticalHeader()->hide();
@@ -115,6 +117,7 @@ AdminBookManagement::~AdminBookManagement()
     delete ui;
 }
 
+// use in paint top of GUI
 void AdminBookManagement::setShadow()
 {
     QAbstractItemView *view = ui->cbox_classify->view();
@@ -136,6 +139,7 @@ void AdminBookManagement::setShadow()
     container->setWindowFlag(Qt::NoDropShadowWindowHint);
 }
 
+// use in paint top of GUI
 void AdminBookManagement::paintEvent(QPaintEvent *)
 {
     //需要Qpainter头文件
@@ -151,10 +155,9 @@ void AdminBookManagement::on_btn_addbook_clicked()
     qDebug() << "abc";
 }
 
-
+// use in select the way of finding books
 int flag_admin = 0;//1书名，2作者，3isbn
 int ctrl_admin = 0x000;
-
 void AdminBookManagement::on_btn_bookname_clicked()
 {
     if ((ctrl_admin >> 8) % 2 == 1)
@@ -274,6 +277,8 @@ void AdminBookManagement::on_btn_search_clicked()
     qDebug() << "搜索值" << val;
 
     getBookList(classification, val);
+
+    loadBooks();
 }
 
 
@@ -314,7 +319,6 @@ void AdminBookManagement::new_button(QString button_text,QString picture_name, i
 {
     //往表格中添加按钮控件
     QPushButton *button = new QPushButton(button_text);
-    QLabel *l1 = new QLabel();     //创建lable
     string t1(book.getImgPath());
     string t2(book.getIsbn());
     string pic;
@@ -329,17 +333,12 @@ void AdminBookManagement::new_button(QString button_text,QString picture_name, i
     if (pixmap.isNull())
     {
         QPixmap pixmap2((pictureDbPath + "moren.jpg").c_str());
-        fitpixmap = pixmap2.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        fitpixmap = pixmap2.scaled(120, 75, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
     else
     {
-        fitpixmap = pixmap.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        fitpixmap = pixmap.scaled(120, 75, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
-
-    l1->setPixmap(fitpixmap);    //加载图片
-    l1->setScaledContents(true);
-    l1->setAlignment(Qt::AlignCenter);      //设置居中
-    ui->tb->setIndexWidget(model->index(i, 0), l1);     //显示
 
     //设置按钮的自定义属性
     button->setProperty("tb_ISBN", model->index(i, 4, QModelIndex()).data().toString());
@@ -350,7 +349,6 @@ void AdminBookManagement::new_button(QString button_text,QString picture_name, i
 
 void AdminBookManagement::loadBooks()
 {
-
     nCurScroller = ui->tb->verticalScrollBar()->value();
     int curPg = nCurScroller % maxPgNum == 0 ? nCurScroller / maxPgNum + 1 : nCurScroller / maxPgNum + 2;//当前所在页数
     int curSumPg = curRecord % maxPgNum == 0 ? curRecord / maxPgNum : curRecord / maxPgNum + 1;//滚动条总的页数
@@ -366,19 +364,17 @@ void AdminBookManagement::loadBooks()
 
     for (int i = curNum; i < curRecord; i++)
     {
+        model->setItem(i, 0, new QStandardItem(re[i].getBookName()));
+        model->setItem(i, 1, new QStandardItem(re[i].getAuthor()));
+        model->setItem(i, 2, new QStandardItem(re[i].getPublisher()));
+        model->setItem(i, 3, new QStandardItem(re[i].getIsbn()));
+        model->setItem(i, 4, new QStandardItem(QString::number(re[i].getLeft())));
 
-        model->setItem(i, 1, new QStandardItem(re[i].getBookName()));
-        model->setItem(i, 2, new QStandardItem(re[i].getAuthor()));
-        model->setItem(i, 3, new QStandardItem(re[i].getPublisher()));
-        model->setItem(i, 4, new QStandardItem(re[i].getIsbn()));
-        model->setItem(i, 5, new QStandardItem(QString::number(re[i].getLeft())));
+        ui->tb->setRowHeight(i, 75);
 
-        ui->tb->setRowHeight(i, 150);
+        AdminBookManagement::new_button("修改","moren",5,re[i],i);
+        AdminBookManagement::new_button("删除","moren",6,re[i],i);
 
-        AdminBookManagement::new_button("修改","moren",6,re[i],i);
-        AdminBookManagement::new_button("修改","moren",7,re[i],i);
-        AdminBookManagement::new_button("删除","moren",8,re[i],i);
-        
     }
 }
 
@@ -397,17 +393,34 @@ void AdminBookManagement::setIcons()
 }
 
 void AdminBookManagement::on_TableBtn_clicked()
-{
-    //先获取信号的发送者
+{   
+
+
+
+//    qDebug() << "now come here";
+//    //先获取信号的发送者
     QPushButton *button = (QPushButton *) sender();
+
     //提取按钮的自定义属性 数据类型须统一
     QString ISBN = button->property("tb_ISBN").toString();//根据ISBN删借阅信息
+
     now_utils.GetBookByIsbn(const_cast<char *>(ISBN.toStdString().c_str()), now_book);
-    BookDetails *bookDetails = new BookDetails();
-    bookDetails->resize(1300, 730);
-    bookDetails->setStackWidget(psw);
-    psw->insertWidget(2, bookDetails);
-    psw->setCurrentIndex(2);
+
+    AdminModifyBookDetail *admin_modify_book_detail = new AdminModifyBookDetail();
+    qDebug() << "now come here5";
+    admin_modify_book_detail->resize(1300, 730);
+    admin_modify_book_detail->setStackWidget(psw);
+
+//    ui->tb->setLayout(new QVBoxLayout);
+//    QtCharts::QChart *chart = new QtCharts::QChart();
+//    QtCharts::QChartView *chartView = new QtCharts::QChartView(chart, ui->tb);
+//    ui->tb->layout()->addWidget(chartView);
+
+//    qDebug() << "now come here6";
+//    psw->setCurrentIndex(2);
+    qDebug() << "now come here7";
+    psw->insertWidget(2, admin_modify_book_detail);
+//    qDebug() << "now come here8";
 
     //int Password = button->property("S_Password").toInt();
     //删除数据再重新调用
