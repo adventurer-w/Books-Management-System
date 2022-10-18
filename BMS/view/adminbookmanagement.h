@@ -34,6 +34,8 @@ public:
 
     void new_button(QString button_text,QString picture_name, int position, Book book, int i);
 
+    void showTableString(const QStringList table);
+
     void loadBooks();
 
     void setStackWidget(MainWidget *p);
