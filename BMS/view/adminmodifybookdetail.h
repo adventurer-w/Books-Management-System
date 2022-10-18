@@ -20,6 +20,8 @@ public:
     void setIcons();
     bool loadQss(const QString &StyleSheetFile);
 
+    void on_pushButton_clicked();
+
 // private slots:
 //     void on_btn_back_clicked();
 

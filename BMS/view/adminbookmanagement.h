@@ -42,6 +42,10 @@ public:
 
     void on_TableBtn_clicked();
 
+    void on_remove_clicked();
+
+    bool openExcel(const QString &filename);
+
     int nCurScroller = 0; //翻页时的当时滑动条位置
     int curPgNum = 1;
     int maxPgNum = 4; // 一页显示条数
@@ -49,6 +53,9 @@ public:
     int curRecord = 0;//已经插入的记录
     QString pages;//显示当前页
     StdItemModel *model;
+    int m_row = 0;
+int m_col = 0;
+QString m_filename = "";
 
 
 public:

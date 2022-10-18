@@ -40,6 +40,17 @@
 
 #include "adminmodifybookdetail.h"
 
+#include <QtGlobal>
+#include <QCoreApplication>
+#include <QtCore>
+#include <QVariant>
+#include <QDebug>
+
+#include <iostream>
+using namespace std;
+
+
+
 extern Utils now_utils;
 extern vector<Book> re;
 extern Book now_book;
@@ -150,9 +161,53 @@ void AdminBookManagement::paintEvent(QPaintEvent *)
     painter.drawPixmap(0, 0, this->width(), this->height(), pix);
 }
 
+bool AdminBookManagement::openExcel(const QString &filename)
+{
+    if (filename.isEmpty()) {
+        m_row = 0;
+        m_col = 0;
+        return false;
+    }
+    QFile file(filename);
+    if (!file.exists()) {
+        m_row = 0;
+        m_col = 0;
+        return false;
+    };
+
+    m_filename = filename;
+    try {
+//        getALLfromExcel();
+    }
+    catch (...) {
+        return false;
+    }
+
+    return true;
+}
+
 void AdminBookManagement::on_btn_addbook_clicked()
 {
-    qDebug() << "abc";
+        QMessageBox::information(NULL, QString::fromLocal8Bit(""), "请选择Excel文件,文件中列序按照ISBN、书名、作者、封面路径、出版社、出版时间、单价、总量、简介、分类排好", QMessageBox::Ok);
+        QString excelPath = QFileDialog::getOpenFileName(this, "选择Exccel", "", tr("Excel (*.xls *.xlsx)"));
+
+        QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF8"));
+
+        if (excelPath.isEmpty()) {
+            return;
+        }
+
+        qDebug() << excelPath;
+        excelPath.replace(QString("/"), QString("\\"));
+
+//        Document xlsxR(excelPath);
+
+
+
+//            ReadExcel read;
+//            excelPath.replace(QString("/"), QString("\\"));
+//            read.openExcel(excelPath);
+
 }
 
 // use in select the way of finding books
@@ -318,33 +373,7 @@ void AdminBookManagement::loadIntialBooks()
 void AdminBookManagement::new_button(QString button_text,QString picture_name, int position, Book book, int i)
 {
     //往表格中添加按钮控件
-    QPushButton *button = new QPushButton(button_text);
-    string t1(book.getImgPath());
-    string t2(book.getIsbn());
-    string pic;
-    if (t2.size() == 13)
-        pic = pictureDbPath + t1 + "/" + t2 + ".jpg";
-    else
-        // pic = pictureDbPath + string(picture_name) + ".jpg";
-        ;
-
-    QPixmap pixmap(pic.c_str());
-    QPixmap fitpixmap;
-    if (pixmap.isNull())
-    {
-        QPixmap pixmap2((pictureDbPath + "moren.jpg").c_str());
-        fitpixmap = pixmap2.scaled(120, 75, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    }
-    else
-    {
-        fitpixmap = pixmap.scaled(120, 75, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    }
-
-    //设置按钮的自定义属性
-    button->setProperty("tb_ISBN", model->index(i, 4, QModelIndex()).data().toString());
-    connect(button, &QPushButton::clicked, this, &AdminBookManagement::on_TableBtn_clicked);
-    //将按钮加入表格中
-    ui->tb->setIndexWidget(model->index(i, position), button);
+    
 }
 
 void AdminBookManagement::loadBooks()
@@ -372,9 +401,54 @@ void AdminBookManagement::loadBooks()
 
         ui->tb->setRowHeight(i, 75);
 
-        AdminBookManagement::new_button("修改","moren",5,re[i],i);
-        AdminBookManagement::new_button("删除","moren",6,re[i],i);
-
+        ////
+        QPushButton *button = new QPushButton("修改");
+        string t1(re[i].getImgPath());
+        string t2(re[i].getIsbn());
+        string pic;
+        if (t2.size() == 13)
+            pic = pictureDbPath + t1 + "/" + t2 + ".jpg";
+        else
+            pic = pictureDbPath + string("moren") + ".jpg";
+        QPixmap pixmap(pic.c_str());
+        QPixmap fitpixmap;
+        if (pixmap.isNull())
+        {
+            QPixmap pixmap2((pictureDbPath + "moren.jpg").c_str());
+            fitpixmap = pixmap2.scaled(120, 75, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        }
+        else
+        {
+            fitpixmap = pixmap.scaled(120, 75, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        }
+        button->setProperty("tb_ISBN", model->index(i, 3, QModelIndex()).data().toString());//设置按钮的自定义属性
+        connect(button, &QPushButton::clicked, this, &AdminBookManagement::on_TableBtn_clicked);
+        ui->tb->setIndexWidget(model->index(i,5), button);//将按钮加入表格中
+        ////
+        ////
+        QPushButton *button_remove = new QPushButton("删除");
+        string t1_2(re[i].getImgPath());
+        string t2_2(re[i].getIsbn());
+        string pic_2;
+        if (t2.size() == 13)
+            pic_2 = pictureDbPath + t1_2 + "/" + t2_2 + ".jpg";
+        else
+            pic_2 = pictureDbPath + string("moren") + ".jpg";
+        QPixmap pixmap_2(pic_2.c_str());
+        QPixmap fitpixmap_2;
+        if (pixmap_2.isNull())
+        {
+            QPixmap pixmap2_2((pictureDbPath + "moren.jpg").c_str());
+            fitpixmap_2 = pixmap2_2.scaled(120, 75, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        }
+        else
+        {
+            fitpixmap_2 = pixmap_2.scaled(120, 75, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        }
+        button_remove->setProperty("tb_ISBN", model->index(i, 3, QModelIndex()).data().toString());//设置按钮的自定义属性
+        connect(button_remove, &QPushButton::clicked, this, &AdminBookManagement::on_remove_clicked);
+        ui->tb->setIndexWidget(model->index(i,6), button_remove);//将按钮加入表格中
+        ////
     }
 }
 
@@ -394,37 +468,35 @@ void AdminBookManagement::setIcons()
 
 void AdminBookManagement::on_TableBtn_clicked()
 {   
-
-
-
-//    qDebug() << "now come here";
-//    //先获取信号的发送者
+    //先获取信号的发送者
     QPushButton *button = (QPushButton *) sender();
 
     //提取按钮的自定义属性 数据类型须统一
     QString ISBN = button->property("tb_ISBN").toString();//根据ISBN删借阅信息
 
     now_utils.GetBookByIsbn(const_cast<char *>(ISBN.toStdString().c_str()), now_book);
+    qDebug() << now_book.getAuthor();
 
     AdminModifyBookDetail *admin_modify_book_detail = new AdminModifyBookDetail();
-    qDebug() << "now come here5";
+    // qDebug() << "now come here5";
     admin_modify_book_detail->resize(1300, 730);
     admin_modify_book_detail->setStackWidget(psw);
-
-//    ui->tb->setLayout(new QVBoxLayout);
-//    QtCharts::QChart *chart = new QtCharts::QChart();
-//    QtCharts::QChartView *chartView = new QtCharts::QChartView(chart, ui->tb);
-//    ui->tb->layout()->addWidget(chartView);
-
-//    qDebug() << "now come here6";
-//    psw->setCurrentIndex(2);
-    qDebug() << "now come here7";
-    psw->insertWidget(2, admin_modify_book_detail);
-//    qDebug() << "now come here8";
+    admin_modify_book_detail->show();
 
     //int Password = button->property("S_Password").toInt();
     //删除数据再重新调用
+}
 
+void AdminBookManagement::on_remove_clicked()
+{
+    // qDebug() << "abc";
+    QPushButton *button = (QPushButton *) sender();
+
+    //提取按钮的自定义属性 数据类型须统一
+    QString ISBN = button->property("tb_ISBN").toString();//根据ISBN删借阅信息
+
+    now_utils.GetBookByIsbn(const_cast<char *>(ISBN.toStdString().c_str()), now_book);
+    now_utils.DeleteBook(now_book);
 }
 
 void AdminBookManagement::on_btn_first_3_clicked()
