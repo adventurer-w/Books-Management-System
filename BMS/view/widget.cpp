@@ -74,6 +74,8 @@ void Widget::on_btn_login_clicked()
     QString account=ui->lineE_user_name->text();
     QString pwd=ui->lineE_pwd->text();
 
+    account = "20040032002";
+    pwd = "123456aA";
     MD5 md5;
     string b= md5.read(pwd.toStdString());//加密
 

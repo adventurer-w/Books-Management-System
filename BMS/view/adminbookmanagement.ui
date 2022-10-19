@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>AdminBookList</class>
- <widget class="QWidget" name="AdminBookList">
+ <class>AdminBookManagement</class>
+ <widget class="QWidget" name="AdminBookManagement">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -173,7 +173,7 @@
    <property name="geometry">
     <rect>
      <x>1210</x>
-     <y>80</y>
+     <y>30</y>
      <width>80</width>
      <height>40</height>
     </rect>
@@ -250,14 +250,17 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QTableWidget" name="tableWidget">
+  <widget class="QPushButton" name="btn_search">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>320</y>
-     <width>256</width>
-     <height>192</height>
+     <x>1210</x>
+     <y>80</y>
+     <width>80</width>
+     <height>40</height>
     </rect>
+   </property>
+   <property name="text">
+    <string>搜索</string>
    </property>
   </widget>
  </widget>

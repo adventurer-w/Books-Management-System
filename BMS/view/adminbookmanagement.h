@@ -85,7 +85,7 @@ private
 
     void on_btn_fore_3_clicked();
 
-    void on_line_3_returnPressed();
+    void on_line_search_returnPressed();
 
     void on_btn_addbook_clicked();
 
