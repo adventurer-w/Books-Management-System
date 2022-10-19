@@ -33,8 +33,10 @@ SOURCES += \
 HEADERS += \
         backend/Admin.h \
         backend/Book.h \
+        backend/BookClass.h \
         backend/Department.h \
         backend/MD5.h \
+        backend/MyLog.h \
         backend/RankItem.h \
         backend/Record.h \
         backend/Reserve.h \

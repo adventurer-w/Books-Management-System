@@ -1,14 +1,13 @@
-#ifndef DEPARTMENT_H
-#define DEPARTMENT_H
+#ifndef BOOLCLASS_H
+#define BOOLCLASS_H
 #include <iostream>
 #include "length.h"
 
-class Department{
+class BookClass{
 public:
     int id;
-    int departmentNo;//专业编号
-    char name[MAJOR_SIZE]; // 院系名称
-    int maxBook;
+    int classNo;//分类号
+    char name[CLASSIFICATION_SIZE]; // 名称
     int dirty; //脏位
 
 
@@ -22,7 +21,7 @@ public:
         return this->name;
     }
     void setName(char* name) {
-        for (int i = 0; i < MAJOR_SIZE; i++)
+        for (int i = 0; i < CLASSIFICATION_SIZE; i++)
             this->name[i] = name[i];
     }
     int getDirty() {
@@ -32,17 +31,11 @@ public:
         this->dirty = dirty;
     }
 
-    int getMaxBook() {
-        return maxBook;
+    int getClassNo() {
+        return classNo;
     }
-    void setMaxBook(int maxBook) {
-        this->maxBook = maxBook;
-    }
-    int getDepartmentNo() {
-        return departmentNo;
-    }
-    void setDepartmentNo(int departmentNo) {
-        this->departmentNo = departmentNo;
+    void setClassNo(int classNo) {
+        this->classNo = classNo;
     }
 
 
@@ -50,8 +43,7 @@ public:
         if (Elem == "id") return typeid(id).name();
         else if (Elem == "name") return typeid(name).name();
         else if (Elem == "dirty") return typeid(dirty).name();
-        else if (Elem == "departmentNo") return typeid(departmentNo).name();
-        else if (Elem == "maxBook") return typeid(maxBook).name();
+        else if (Elem == "classNo") return typeid(classNo).name();
         else {
             throw "Field  Not Found!";
         }
@@ -60,8 +52,7 @@ public:
     int getIntElemByName(string Elem) {
         if (Elem == "id") return id;
         else if (Elem == "dirty") return dirty;
-        else if (Elem == "departmentNo") return departmentNo;
-        else if (Elem == "maxBook") return maxBook;
+        else if (Elem == "classNo") return classNo;
         else {
             throw "Field  Not Found!";
         }
@@ -80,4 +71,4 @@ public:
 
 };
 
-#endif //DEPARTMENT_H
+#endif //BOOLCLASS_H

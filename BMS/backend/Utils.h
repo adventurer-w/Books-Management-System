@@ -2,6 +2,7 @@
 #define UTILS_H
 #include "all_head.h"
 #include "myFileDB.h"
+#include "BookClass.h"
 #include <regex>
 
 class Utils {
@@ -59,7 +60,8 @@ public:
     bool GetDepartmentByName(char *name,vector<Department> &result);
 
 
-
+    //获取所有系
+    bool GetAllDepartment(vector<Department> &result);
 
     //管理员登录
     int AdminLogin(char* account, char* password);  //参数1:账号，参数2:密码。返回值：0:账户不存在；1:登陆成功；2:密码错误
@@ -75,7 +77,6 @@ public:
 
     //添加管理员
     bool InsertAdmin(Admin admin); //参数：管理员对象，进行插入操作，返回是操作是否成功
-
 
 
 
@@ -101,8 +102,8 @@ public:
     //按作者找书
     bool GetBooksByAuthor(char* author, vector<Book>&result); //参数1为作者名，参数2为存结果列表，操作为根据作者名检索图书，返回操作是否成功
 
-    //按分区找书
-    bool GetBooksByClassification(char* classification, vector<Book>&result); //参数1为分区id，参数2为存结果列表，操作为根据分区id检索图书，返回操作是否成功的结果
+    //按分区号找书
+    bool GetBooksByClassNo(int classNo, vector<Book>&result); //参数1为分区id，参数2为存结果列表，操作为根据分区id检索图书，返回操作是否成功的结果
 
     //查看该书余量
     int GetBookMargin(char* isbn);//参数1为图书isbn，返回该书还有多少没有被借走
@@ -124,6 +125,30 @@ public:
 
     //归还单本书
     bool ReturnSingleBook(SingleBook singleBook);
+
+
+
+
+
+
+
+    //添加分类
+    bool InsertClass(BookClass bookClass);
+
+    //删除分类(依据名称检索)
+    bool DeleteClass(BookClass bookClass);
+
+    //用classNo获取BookClass对象
+    bool GetClassByNo(int classNo,vector<BookClass> &result);
+
+    //用类别名获取BookClass对象
+    bool GetClassByName(char *name,vector<BookClass> &result);
+
+    //获取所有分类
+    bool GetAllClass(vector<BookClass> &result);
+
+
+
 
 
     //添加借书关系
@@ -150,6 +175,17 @@ public:
     //获取新书列表（返回最多50本）
     bool GetNewBookList(vector<Book>&result);
 
+    //返回用户的历史借书
+    bool GetUserBorrowHistory(char * account,vector<Record>&result);
+
+
+
+
+
+
+
+
+
     //获取总排行榜（前50）
     bool GetBookRank(vector<Book>&result);
 
@@ -173,7 +209,6 @@ public:
 
     //更新高分榜
     bool UpdatePointRank();
-
 
     //前端不要调用！ 更新某个排行榜
     bool UpdateAnyRank(string DB_NAME);
@@ -230,17 +265,25 @@ public:
 
     bool CheckUserExist(User user);//该对象只需要有只需填账号（学号）
 
+    bool CheckUserExistByEmail(char *email);
+
     bool CheckAdminExist(Admin admin);//该对象只需要有只需填账号
 
     bool CheckBookExist(Book book);//该对象只需要有ISBN
 
     bool CheckRecordExist(Record record);//该对象只需要有学号和ISBN号
 
+    bool CheckHistoryExist(Record record);//该对象只需要有学号和ISBN号
+
     bool CheckReserveExist(Reserve reserve); //该对象只需要有学号和ISBN号
 
     bool CheckDepartmentExistByNo(int departmentNO); //查看该departmentNO的记录是否存在
 
     bool CheckDepartmentExistByName(char *name); //查看该name的记录是否存在
+
+    bool CheckClassExistByNo(int classNo); //查看该departmentNO的记录是否存在
+
+    bool CheckClassExistByName(char *name); //查看该name的记录是否存在
 };
 
 
