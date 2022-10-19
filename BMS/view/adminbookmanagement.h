@@ -75,15 +75,15 @@ private
 
     void on_cbox_classify_currentIndexChanged(int);
 
-    void on_lineEdit_returnPressed();
 
-    void on_btn_first_3_clicked();
 
-    void on_btn_la_3_clicked();
+    void on_btn_first_clicked();
 
-    void on_btn_last_3_clicked();
+    void on_btn_la_clicked();
 
-    void on_btn_fore_3_clicked();
+    void on_btn_last_clicked();
+
+    void on_btn_fore_clicked();
 
     void on_line_search_returnPressed();
 

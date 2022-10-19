@@ -565,14 +565,14 @@ void AdminBookManagement::on_remove_clicked()
     loadIntialBooks();
 }
 
-void AdminBookManagement::on_btn_first_3_clicked()
+void AdminBookManagement::on_btn_first_clicked()
 {
     ui->tb->verticalScrollBar()->setSliderPosition(0);
     pages = "1/" + QString::number(maxPgs, 10);
     ui->line->setText(pages);
 }
 
-void AdminBookManagement::on_btn_la_3_clicked()
+void AdminBookManagement::on_btn_la_clicked()
 {
 
     int maxValue = ui->tb->verticalScrollBar()->maximum(); // 当前SCROLLER最大显示值
@@ -594,7 +594,7 @@ void AdminBookManagement::on_btn_la_3_clicked()
     }
 }
 
-void AdminBookManagement::on_btn_last_3_clicked()
+void AdminBookManagement::on_btn_last_clicked()
 {
     int curSumPg = curRecord % maxPgNum == 0 ? curRecord / maxPgNum : curRecord / maxPgNum + 1; //滚动条总的页数
     while (curSumPg < maxPgs)
@@ -609,7 +609,7 @@ void AdminBookManagement::on_btn_last_3_clicked()
     ui->line->setText(pages);
 }
 
-void AdminBookManagement::on_btn_fore_3_clicked()
+void AdminBookManagement::on_btn_fore_clicked()
 {
     int maxValue = ui->tb->verticalScrollBar()->maximum(); // 当前SCROLLER最大显示值
     nCurScroller = ui->tb->verticalScrollBar()->value();
