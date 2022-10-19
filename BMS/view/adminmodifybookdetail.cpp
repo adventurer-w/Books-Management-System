@@ -40,14 +40,21 @@ void AdminModifyBookDetail::paintEvent(QPaintEvent *)
     painter.drawPixmap(0, 0, this->width(), this->height(), pix);
 }
 void AdminModifyBookDetail::loadBookDetail(){
-    ui->line_bookname->setText(now_book.getBookName());
-    ui->line_author->setText(now_book.getAuthor());
-    ui->line_publish->setText(now_book.getPublisher());
-    ui->line_ISBN->setText(now_book.getIsbn());  
-    ui->line_classify->setText(now_book.getClassifition());
-    ui->line_publishtime->setText(now_book.getPublishDate());
-    ui->line_remain->setText(QString::number(now_book.getAllNum()));
-    ui->lineEdit->insertPlainText(now_book.getIntroduction());
+    //只有在修改界面下才会预载入这些旧书的信息
+    if(add_or_mod == 1)
+    {
+        ui->line_bookname->setText(now_book.getBookName());
+        ui->line_author->setText(now_book.getAuthor());
+        ui->line_publish->setText(now_book.getPublisher());
+        ui->line_ISBN->setText(now_book.getIsbn());
+//        ui->line_classify->setText(now_book.getClassifition());
+        vector<BookClass> now_book_class;
+        now_utils.GetClassByNo(now_book.getClassNo(),now_book_class);
+        ui->line_classify->setText(now_book_class[0].getName());
+        ui->line_publishtime->setText(now_book.getPublishDate());
+        ui->line_remain->setText(QString::number(now_book.getAllNum()));
+        ui->lineEdit->insertPlainText(now_book.getIntroduction());
+    }
 
     connect(ui->book_pushButton, &QPushButton::clicked, this, &AdminModifyBookDetail::on_pushButton_clicked);
 
@@ -119,10 +126,9 @@ bool AdminModifyBookDetail::loadQss(const QString &StyleSheetFile){
 }
 
 void AdminModifyBookDetail::on_pushButton_clicked(){
-
     Book old_book;
-    if(now_book.getIsbn())
-        qDebug() << "abc";
+//    if(now_book.getIsbn())
+//        qDebug() << "abc";
     old_book.setIsbn(now_book.getIsbn());
     /*
     ui->line_bookname->setText(now_book.getBookName());
@@ -133,6 +139,7 @@ void AdminModifyBookDetail::on_pushButton_clicked(){
     ui->line_publishtime->setText(now_book.getPublishDate());
     ui->line_remain->setText(QString::number(now_book.getAllNum()));
     */
+    //读取各个line的值
     QString bookname=ui->line_bookname->text();//书名
     QString author=ui->line_author->text();//作者
     QString publish=ui->line_publish->text();//出版社
@@ -142,27 +149,52 @@ void AdminModifyBookDetail::on_pushButton_clicked(){
     QString remain=ui->line_remain->text();//库存
     QString introduction = ui->lineEdit->toPlainText();
 
+    //设置新值
     now_book.setBookName(const_cast<char*>(bookname.toStdString().c_str()));
     now_book.setAuthor(const_cast<char*>(author.toStdString().c_str()));
     now_book.setPublisher(const_cast<char*>(publish.toStdString().c_str()));
     now_book.setIsbn(const_cast<char*>(ISBN.toStdString().c_str()));
-    now_book.setClassification(const_cast<char*>(classify.toStdString().c_str()));
-    now_book.setPublishDate(const_cast<char*>(publishtime.toStdString().c_str()));
-    now_book.setAllNum(remain.toInt());
-    now_book.setIntroduction(const_cast<char*>(introduction.toStdString().c_str()));
-    qDebug() << "come";
+//    now_book.setClassification(const_cast<char*>(classify.toStdString().c_str()));
+    vector<BookClass> now_book_class;
+    now_utils.GetClassByName(const_cast<char*>(classify.toStdString().c_str()),now_book_class);
+    now_book.setClassNo(now_book_class[0].getClassNo());
 
+    now_book.setPublishDate(const_cast<char*>(publishtime.toStdString().c_str()));
+    //区分新书库存、旧书增加库存
+    if(add_or_mod == 0)
+    {
+        now_book.setLeft(remain.toInt());
+        now_book.setAllNum(remain.toInt());
+    }
+    if(add_or_mod == 1)
+    {
+        int add_count = remain.toInt() - now_book.getAllNum();
+        now_book.setLeft(now_book.getLeft() + add_count);
+        now_book.setAllNum(remain.toInt());
+    }
+    now_book.setIntroduction(const_cast<char*>(introduction.toStdString().c_str()));
+
+    //简单的信息提示
+    if(add_or_mod == 0)
+    {
+        if(now_utils.InsertBook(now_book)){
+            QMessageBox::information(this,"添加信息","添加图书成功啦！");
+            emit bookUpdateSignal(now_book);
+            emit backSignal();
+        }else{
+            QMessageBox::information(this,"添加信息","真可惜，添加图书信息失败了!");
+        }
+    }
+    if(add_or_mod == 1)
+    {
         if(now_utils.UpdateBook(old_book,now_book)){
-            // emit modifySignal();
-            //qDebug()<<"修改成功";
             QMessageBox::information(this,"修改信息","修改图书信息成功啦！");
             emit bookUpdateSignal(now_book);
             emit backSignal();
         }else{
-            //qDebug()<<"修改失败";
             QMessageBox::information(this,"修改信息","真可惜，修改图书信息失败了!");
         }
-
+    }
 
 
 }

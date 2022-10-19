@@ -32,7 +32,7 @@ public:
 
     void loadInitialBooks();
 
-    void new_button(QString button_text,QString picture_name, int position, Book book, int i);
+    void new_button(QString button_text, QString picture_name, int position, Book book, int i);
 
     void showTableString(const QStringList table);
 
@@ -50,23 +50,21 @@ public:
 
     int nCurScroller = 0; //翻页时的当时滑动条位置
     int curPgNum = 1;
-    int maxPgNum = 8; // 一页显示条数
-    int maxPgs;//最大页数
-    int curRecord = 0;//已经插入的记录
-    QString pages;//显示当前页
+    int maxPgNum = 8;  // 一页显示条数
+    int maxPgs;        //最大页数
+    int curRecord = 0; //已经插入的记录
+    QString pages;     //显示当前页
     StdItemModel *model;
     int m_row = 0;
-int m_col = 0;
-QString m_filename = "";
-
+    int m_col = 0;
+    QString m_filename = "";
 
 public:
     MainWidget *sub_mw;
 signals:
     void changePageSignal(int Index);
-private
-    slots:
-            void on_btn_search_clicked();
+private slots:
+    void on_btn_search_clicked();
 
     void on_btn_author_clicked();
 
@@ -98,8 +96,10 @@ private
 
 private:
     Ui::AdminBookManagement *ui;
-    QString classify;//当前选择的分类
-    MainWidget *psw;//底层stackwidget对象的指针，便于返回
+    QString classify; //当前选择的分类
+    MainWidget *psw;  //底层stackwidget对象的指针，便于返回
 };
+
+// extern int add_or_mod;
 
 #endif // ADMINBOOKLIST_H

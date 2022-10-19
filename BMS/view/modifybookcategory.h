@@ -4,8 +4,9 @@
 #include <QWidget>
 #include "stditemmodel.h"
 
-namespace Ui {
-class ModifyBookCategory;
+namespace Ui
+{
+    class ModifyBookCategory;
 }
 
 class ModifyBookCategory : public QWidget
@@ -16,10 +17,11 @@ public:
     explicit ModifyBookCategory(QWidget *parent = nullptr);
     ~ModifyBookCategory();
     void loadclassify();
-     StdItemModel *model;
-     void on_linePressed();
+    StdItemModel *model;
+    void on_linePressed();
     void on_btn_modify_clicked();
     void on_btn_delete_clicked();
+
 private:
     Ui::ModifyBookCategory *ui;
 };
