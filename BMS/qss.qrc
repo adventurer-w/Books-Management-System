@@ -13,6 +13,8 @@
         <file>qss/booklist/booklist.qss</file>
         <file>qss/bookranking/bookranking.qss</file>
         <file>qss/modifyinfowidget/modifyinfo.qss</file>
-        <file>qss/admin/bookmanagement.qss</file>
+        <file>qss/adminbookmanagement/bookmanagement.qss</file>
+        <file>qss/usermanagement/usermanagement.qss</file>
+        <file>qss/admininfo/admininfo.qss</file>
     </qresource>
 </RCC>

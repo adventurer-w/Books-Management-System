@@ -16,7 +16,7 @@ AdminInfo::AdminInfo(QWidget *parent) :
     ui(new Ui::AdminInfo)
 {
     ui->setupUi(this);
-    loadQss(":/qss/modifyinfowidget/modifyinfo.qss");
+
 
     //left up sub_page use in appear message of user
     //左上页用来显示用户信息
@@ -42,6 +42,7 @@ AdminInfo::AdminInfo(QWidget *parent) :
     ui->line_major->setText(QString::fromStdString(major_result[0].getName()));
     ui->line_number->setText(now_user.getAccount());
     ui->line_major_2->setText(now_user.getEmail());
+    loadQss(":/qss/admininfo/admininfo.qss");
 }
 
 AdminInfo::~AdminInfo()
@@ -125,7 +126,7 @@ void AdminInfo::on_btn_modifyPassword_clicked(){
 void AdminInfo::paintEvent(QPaintEvent *){
     QPainter painter(this);
     QPixmap pix;
-    pix.load(":/image/UserProfile/background.jpg");
+    pix.load(":/image/adminProfile/background.jpg");
     painter.drawPixmap(0,0,this->width(),this->height(),pix);
     //qDebug() << "user paint" <<endl;
 

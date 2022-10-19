@@ -37,7 +37,7 @@
 #include "GlobalSetting.h"
 
 #include "adminmodifybookdetail.h"
-
+#include "modifybookcategory.h"
 #include <QtGlobal>
 #include <QCoreApplication>
 #include <QtCore>
@@ -51,15 +51,13 @@ extern Utils now_utils;
 extern vector<Book> re;
 extern Book now_book;
 extern int now_i;
-
+int select_row=0;//用于直接修改某一条的记录
 AdminBookManagement::AdminBookManagement(QWidget *parent) : QWidget(parent),
                                                             ui(new Ui::AdminBookManagement),
                                                             sub_mw(new MainWidget)
 {
     ui->setupUi(this);
-    ui->btn_bookname->setAutoExclusive(false);
-    ui->btn_ISBN->setAutoExclusive(false);
-    ui->btn_author->setAutoExclusive(false);
+
     ui->cbox_classify->addItems(QStringList() << "全部"
                                               << "历史"
                                               << "散文"
@@ -110,19 +108,13 @@ AdminBookManagement::AdminBookManagement(QWidget *parent) : QWidget(parent),
     //设置多选
     ui->tb->setSelectionMode(QAbstractItemView::MultiSelection);
 
-    loadIntialBooks();
-    int n = re.size(); //有
-    //setIcons();
-    maxPgs = n % maxPgNum == 0 ? n / maxPgNum : n / maxPgNum + 1;
-    pages = "1/" + QString::number(maxPgs, 10);
-    ui->line->setText(pages);
     ui->tb->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->tb->setShowGrid(false);
     ui->tb->resizeRowsToContents();
 
-    connect(ui->tb->verticalScrollBar(), &QScrollBar::valueChanged, this, &AdminBookManagement::loadBooks);
 
-    loadQss(":/qss/querybookwidget/querybook.qss");
+
+    loadQss(":/qss/adminbookmanagement/bookmanagement.qss");
 }
 
 AdminBookManagement::~AdminBookManagement()
@@ -159,11 +151,20 @@ void AdminBookManagement::paintEvent(QPaintEvent *)
     QPainter painter(this); //初始化
     QPixmap pix;
     //背景图
-    pix.load(":/image/querybook/background.png");
+    pix.load(":/image/bookmanagement/background.jpg");
     painter.drawPixmap(0, 0, this->width(), this->height(), pix);
 }
+void AdminBookManagement::on_btn_addbook_clicked(){
+    /* add book */
 
-void AdminBookManagement::on_btn_addbook_clicked()
+    AdminModifyBookDetail *admin_modify_book_detail = new AdminModifyBookDetail();
+    connect(admin_modify_book_detail,SIGNAL(backSignal()),this,SLOT(backToThis()));
+    admin_modify_book_detail->resize(1300, 730);
+    psw->insertWidget(3,admin_modify_book_detail);
+    emit changePageSignal(3);//发出切换到3号页面的信号
+
+}
+void AdminBookManagement::on_btn_addbook_batch_clicked()
 {
     QMessageBox::information(NULL, QString::fromLocal8Bit(""), "请选择Excel文件,文件中列序按照封面路径、书名、作者、出版社、ISBN、分类、出版时间、总量、简介", QMessageBox::Ok);
     QString fileName = QFileDialog::getOpenFileName(this, "选择Exccel", "", tr("Excel (*.xls *.xlsx)"));
@@ -176,7 +177,7 @@ void AdminBookManagement::on_btn_addbook_clicked()
     }
 
     fileName.replace(QString("/"), QString("\\"));
-    qDebug() << fileName;
+    //qDebug() << fileName;
 
     fileName=QDir::toNativeSeparators(fileName);
  
@@ -232,55 +233,52 @@ int flag_admin = 1; // 1书名，2作者，3isbn
 int ctrl_admin = 0x100;
 void AdminBookManagement::on_btn_bookname_clicked()
 {
-    if ((ctrl_admin >> 8) % 2 == 1)
-    {
-        ui->btn_bookname->setDown(false);
-        ctrl_admin &= 0x011;
+    if(flag_admin == 1){
+        flag_admin=0;
         ui->btn_bookname->setStyleSheet("color:rgb(0,0,0);\
                                         font-family:KaiTi;\
                                         font-size:18px;\
                                         font-weight:normal;\
                                         padding:4px;");
     }
-    else
-    {
+    else {
 
-        ui->btn_bookname->setDown(true);
-        ctrl_admin |= 0x100;
-        flag_admin = 1;
+        flag_admin=1;
         ui->btn_bookname->setStyleSheet("color:rgb(255,255,255);\
                                         background-color:rgb(121,109,111);");
-    };
+        ui->btn_author->setStyleSheet("color:rgb(0,0,0);\
+                                        font-family:KaiTi;\
+                                        font-size:18px;\
+                                        font-weight:normal;\
+                                        padding:4px;");
+        ui->btn_ISBN->setStyleSheet("color:rgb(0,0,0);\
+                                        font-family:KaiTi;\
+                                        font-size:18px;\
+                                        font-weight:normal;\
+                                        padding:4px;");
+    }
 }
 
 void AdminBookManagement::on_btn_author_clicked()
 {
-    if ((ctrl_admin >> 4) % 2 == 1)
-    {
-        ui->btn_author->setDown(false);
-        ctrl_admin &= 0x101;
+    if(flag_admin == 2){
+        flag_admin=0;
         ui->btn_author->setStyleSheet("color:rgb(0,0,0);\
                                         font-family:KaiTi;\
                                         font-size:18px;\
                                         font-weight:normal;\
                                         padding:4px;");
     }
-    else
-    {
-        ui->btn_author->setDown(true);
-        ctrl_admin |= 0x010;
-        flag_admin = 2;
+    else {
+
+        flag_admin=2;
         ui->btn_author->setStyleSheet("color:rgb(255,255,255);\
                                         background-color:rgb(121,109,111);");
-    };
-}
-
-void AdminBookManagement::on_btn_ISBN_clicked()
-{
-    if ((ctrl_admin) % 2 == 1)
-    {
-        ui->btn_ISBN->setDown(false);
-        ctrl_admin &= 0x110;
+        ui->btn_bookname->setStyleSheet("color:rgb(0,0,0);\
+                                        font-family:KaiTi;\
+                                        font-size:18px;\
+                                        font-weight:normal;\
+                                        padding:4px;");
         ui->btn_ISBN->setStyleSheet("color:rgb(0,0,0);\
                                         font-family:KaiTi;\
                                         font-size:18px;\
@@ -288,14 +286,34 @@ void AdminBookManagement::on_btn_ISBN_clicked()
                                         padding:4px;");
     }
 
-    else
-    {
-        ui->btn_ISBN->setDown(true);
-        ctrl_admin |= 0x001;
-        flag_admin = 3;
+}
+
+void AdminBookManagement::on_btn_ISBN_clicked()
+{
+    if(flag_admin == 3){
+        flag_admin=0;
+        ui->btn_ISBN->setStyleSheet("color:rgb(0,0,0);\
+                                        font-family:KaiTi;\
+                                        font-size:18px;\
+                                        font-weight:normal;\
+                                        padding:4px;");
+    }
+    else {
+
+        flag_admin=3;
         ui->btn_ISBN->setStyleSheet("color:rgb(255,255,255);\
                                         background-color:rgb(121,109,111);");
-    };
+        ui->btn_bookname->setStyleSheet("color:rgb(0,0,0);\
+                                        font-family:KaiTi;\
+                                        font-size:18px;\
+                                        font-weight:normal;\
+                                        padding:4px;");
+        ui->btn_author->setStyleSheet("color:rgb(0,0,0);\
+                                        font-family:KaiTi;\
+                                        font-size:18px;\
+                                        font-weight:normal;\
+                                        padding:4px;");
+    }
 }
 
 void AdminBookManagement::on_cbox_classify_currentIndexChanged(int)
@@ -339,6 +357,10 @@ void AdminBookManagement::getBookList(QString classification, QString key)
 
 void AdminBookManagement::on_btn_search_clicked()
 {
+    ui->btn_bookname->setDown(false);
+    ui->btn_author->setDown(false);
+    ui->btn_ISBN->setDown(false);
+    flag_admin = 0;
     QString classification = ui->cbox_classify->currentText();
     QString val = ui->line_search->text();
 
@@ -346,12 +368,23 @@ void AdminBookManagement::on_btn_search_clicked()
     // qDebug() << "搜索值" << val;
 
     getBookList(classification, val);
-    loadBooks();
+    loadInitialBooks();
 }
 
 
-void AdminBookManagement::loadIntialBooks()
+void AdminBookManagement::loadInitialBooks()
 {
+    /* 更新page*/
+    int n = re.size(); //有
+    //setIcons();
+    maxPgs = n % maxPgNum == 0 ? n / maxPgNum : n / maxPgNum + 1;
+    qDebug()<< "maxpgs:" << maxPgs;
+    pages = "1/" + QString::number(maxPgs, 10);
+    ui->line->setText(pages);
+
+
+    connect(ui->tb->verticalScrollBar(), &QScrollBar::valueChanged, this, &AdminBookManagement::loadBooks);
+
 
 
      nCurScroller = ui->tb->verticalScrollBar()->value();
@@ -428,6 +461,7 @@ void AdminBookManagement::loadIntialBooks()
          ui->tb->setIndexWidget(model->index(i, 6), button_remove); //将按钮加入表格中
          ////
      }
+      update();
 }
 
 void AdminBookManagement::loadBooks()
@@ -541,10 +575,11 @@ void AdminBookManagement::on_TableModifyBtn_clicked()
     // qDebug() << "now come here5";
     admin_modify_book_detail->resize(1300, 730);
     psw->insertWidget(3,admin_modify_book_detail);
-    //admin_modify_book_detail->show();
+    /* 连接修改图书信息的信号和槽，以Book为参数*/
+    connect(admin_modify_book_detail,SIGNAL(bookUpdateSignal(Book)),this,SLOT(updateBookRecord(Book)));
+
     emit changePageSignal(3);
-    // int Password = button->property("S_Password").toInt();
-    //删除数据再重新调用
+    select_row = ui->tb->currentIndex().row();
 }
 
 void AdminBookManagement::on_remove_clicked()
@@ -555,15 +590,28 @@ void AdminBookManagement::on_remove_clicked()
     //提取按钮的自定义属性 数据类型须统一
     QString ISBN = button->property("tb_ISBN").toString(); //根据ISBN删借阅信息
 
-    qDebug() << ISBN;
+    //qDebug() << ISBN;
     now_utils.GetBookByIsbn(const_cast<char *>(ISBN.toStdString().c_str()), now_book);
-    if(now_utils.DeleteBook(now_book))qDebug() << "delete ok";
+    if(now_utils.DeleteBook(now_book)){
+        int row = ui->tb->currentIndex().row();
+        model->removeRow(row);
+        //qDebug() << "delete row:" << row << "ok" <<endl;
+    }
 
-//    QString row = button->property("row_id").toString();
-    model->setRowCount(0);
-    curPgNum=0;
-    curRecord=0;
-    loadIntialBooks();
+
+}
+void AdminBookManagement::updateBookRecord(Book book){
+    model->setItem(select_row, 0, new QStandardItem(book.getBookName()));
+    model->setItem(select_row, 1, new QStandardItem(book.getAuthor()));
+    model->setItem(select_row, 2, new QStandardItem(book.getPublisher()));
+    model->setItem(select_row, 3, new QStandardItem(book.getIsbn()));
+    model->setItem(select_row, 4, new QStandardItem(QString::number(book.getLeft())));
+}
+
+void AdminBookManagement::on_btn_addclassify_clicked(){
+    ModifyBookCategory *modifyBookCategory = new ModifyBookCategory;
+    modifyBookCategory->resize(230,450);
+    modifyBookCategory->show();
 }
 
 void AdminBookManagement::on_btn_first_clicked()
@@ -600,7 +648,7 @@ void AdminBookManagement::on_btn_last_clicked()
     int curSumPg = curRecord % maxPgNum == 0 ? curRecord / maxPgNum : curRecord / maxPgNum + 1; //滚动条总的页数
     while (curSumPg < maxPgs)
     {
-        loadIntialBooks();
+        loadInitialBooks();
         curSumPg = curRecord % maxPgNum == 0 ? curRecord / maxPgNum : curRecord / maxPgNum + 1; //滚动条总的页数
     }
 
@@ -644,7 +692,7 @@ void AdminBookManagement::on_line_search_returnPressed()
     }
     while (curSumPg < page)
     {
-        loadIntialBooks();
+        loadInitialBooks();
         curSumPg = curRecord % maxPgNum == 0 ? curRecord / maxPgNum : curRecord / maxPgNum + 1; //滚动条总的页数
     }
     ui->tb->verticalScrollBar()->setSliderPosition((page - 1) * maxPgNum);

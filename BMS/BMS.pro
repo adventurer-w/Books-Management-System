@@ -39,7 +39,6 @@ SOURCES += \
         view/bookdetails.cpp \
         view/bookranking.cpp \
     view/borrowinstruction.cpp \
-    view/borrowrecord.cpp \
         view/mainwindow.cpp \
     view/modifybookcategory.cpp \
         view/modifyinfowidget.cpp \
@@ -48,6 +47,7 @@ SOURCES += \
         view/searchlineedit.cpp \
         view/smtp.cpp \
         view/stditemmodel.cpp \
+    view/usermanagement.cpp \
         view/widget.cpp \
 
 HEADERS += \
@@ -76,7 +76,6 @@ HEADERS += \
         view/bookdetails.h \
         view/bookranking.h \
     view/borrowinstruction.h \
-    view/borrowrecord.h \
         view/mainwindow.h \
     view/modifybookcategory.h \
         view/modifyinfowidget.h \
@@ -85,6 +84,7 @@ HEADERS += \
         view/searchlineedit.h \
         view/smtp.h \
         view/stditemmodel.h \
+    view/usermanagement.h \
         view/widget.h \
 
 FORMS += \
@@ -95,7 +95,6 @@ FORMS += \
     view/bookdetails.ui \
     view/bookranking.ui \
     view/borrowinstruction.ui \
-    view/borrowrecord.ui \
     view/mainwidget.ui \
     view/mainwindow.ui \
     view/modifybookcategory.ui \
@@ -103,6 +102,7 @@ FORMS += \
     view/querybookwidget.ui \
     view/register.ui \
     view/searchlineedit.ui \
+    view/usermanagement.ui \
     view/userprofilewidget.ui \
     view/widget.ui \
 
@@ -122,6 +122,7 @@ DISTFILES += \
     image/SearchLineEdit/search.png \
     image/SearchLineEdit/search2.png \
     image/UserProfile/background.jpg \
+    image/bookmanagement/background.jpg \
     image/index/arrow_up.png \
     image/index/book_manage.png \
     image/index/book_reserve.png \
@@ -185,6 +186,7 @@ DISTFILES += \
     image/user/girl_green.png \
     image/user/girl_red.png \
     image/user/girl_yellow.png \
+    image/usermanagement/background.jpg \
     qss/base.qss \
     qss/bookranking/bookranking.qss \
     qss/login/style-1.qss \

@@ -20,7 +20,7 @@ public:
     void on_TableBtn_clicked();
     void setStackWidget(MainWidget *p);
     void loadBooks();
-    void loadIntialBooks();
+    void loadInitialBooks();
     int nCurScroller = 0; //翻页时的当时滑动条位置
     int curPgNum=1;
     int maxPgNum = 4; // 一页显示条数

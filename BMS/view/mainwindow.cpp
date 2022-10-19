@@ -17,7 +17,7 @@
 #include "modifyinfowidget.h"
 #include "admininfo.h"
 #include "adminbookmanagement.h"
-#include "borrowrecord.h"
+#include "usermanagement.h"
 #include "adminmodifybookdetail.h"
 extern User now_user;
 MainWindow::MainWindow(QWidget *parent)
@@ -148,9 +148,9 @@ void MainWindow::loadPages(int mode){
         }
         if(mode == 0||mode ==2 || mode==3){
             /*导入管理员个人借阅信息管理界面  */
-            BorrowRecord *borrowRecord = new BorrowRecord;
-            borrowRecord->resize(1300,900);
-            mw->insertWidget(2,borrowRecord);
+            UserManagement *userManagement = new UserManagement;
+            userManagement->resize(1300,900);
+            mw->insertWidget(2,userManagement);
         }
 
 
@@ -173,6 +173,7 @@ void MainWindow::loadPages(int mode){
             connect(modifyInfoWidget,SIGNAL(modifySignal()),this,SLOT(loadUserInfo()));
             //userProfileWidget->setParent(this->mw);
             mw->insertWidget(1, modifyInfoWidget);
+
         }
 
         if(mode == 0||mode == 3){
@@ -188,7 +189,6 @@ void MainWindow::loadPages(int mode){
 
 }
 void MainWindow::changePage(int index){
-    qDebug()<< "index:"<<index;
     mw->setCurrentIndex(index);
 }
 MainWindow::~MainWindow()

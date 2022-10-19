@@ -24,7 +24,7 @@ ModifyBookCategory::ModifyBookCategory(QWidget *parent) :
     ui->setupUi(this);
     model = new StdItemModel();
 
-    model->setColumnCount(2); //设置有7列
+    model->setColumnCount(2); //设置有2列
     model->setHeaderData(0,Qt::Horizontal,"类别");  //设置第一列的表头为类型
     model->setHeaderData(1,Qt::Horizontal,"删除");  //设置第一列的表头为名称
     //model->setHeaderData(2,Qt::Horizontal,"修改");
@@ -38,7 +38,7 @@ ModifyBookCategory::ModifyBookCategory(QWidget *parent) :
     //横向填满，下面设置列宽没用了
     //ui->tb->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);//布局排版是全部伸展开的效果
 
-   loadclassify();
+   //loadclassify();
 }
 
 ModifyBookCategory::~ModifyBookCategory()

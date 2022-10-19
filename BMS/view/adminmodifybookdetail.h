@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include "MainWidget.h"
-
+#include "backend/Book.h"
 namespace Ui {
 class AdminModifyBookDetail;
 }
@@ -19,10 +19,11 @@ public:
     void setStackWidget(MainWidget *p);
     void setIcons();
     bool loadQss(const QString &StyleSheetFile);
-
+    void paintEvent(QPaintEvent *);
     void on_pushButton_clicked();
 signals:
 void backSignal();
+void bookUpdateSignal(Book book);
 private slots:
      void on_btn_back_clicked();
 

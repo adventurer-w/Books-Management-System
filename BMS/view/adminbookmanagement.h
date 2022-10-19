@@ -30,7 +30,7 @@ public:
 
     void showPopularBook();
 
-    void loadIntialBooks();
+    void loadInitialBooks();
 
     void new_button(QString button_text,QString picture_name, int position, Book book, int i);
 
@@ -50,7 +50,7 @@ public:
 
     int nCurScroller = 0; //翻页时的当时滑动条位置
     int curPgNum = 1;
-    int maxPgNum = 4; // 一页显示条数
+    int maxPgNum = 8; // 一页显示条数
     int maxPgs;//最大页数
     int curRecord = 0;//已经插入的记录
     QString pages;//显示当前页
@@ -76,7 +76,7 @@ private
 
     void on_cbox_classify_currentIndexChanged(int);
 
-
+    void on_btn_addbook_batch_clicked();
 
     void on_btn_first_clicked();
 
@@ -90,7 +90,11 @@ private
 
     void on_btn_addbook_clicked();
 
+    void on_btn_addclassify_clicked();
+
     void backToThis();
+
+    void updateBookRecord(Book book);
 
 private:
     Ui::AdminBookManagement *ui;

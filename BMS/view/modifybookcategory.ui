@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>500</height>
+    <width>230</width>
+    <height>450</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,9 +16,9 @@
   <widget class="QLineEdit" name="line_addclassify">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>30</y>
-     <width>200</width>
+     <x>100</x>
+     <y>10</y>
+     <width>131</width>
      <height>30</height>
     </rect>
    </property>
@@ -26,8 +26,8 @@
   <widget class="QPushButton" name="btn_addclassify">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>30</y>
+     <x>0</x>
+     <y>10</y>
      <width>90</width>
      <height>30</height>
     </rect>
@@ -39,10 +39,10 @@
   <widget class="QTableView" name="tb">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>80</y>
-     <width>360</width>
-     <height>380</height>
+     <x>0</x>
+     <y>60</y>
+     <width>230</width>
+     <height>390</height>
     </rect>
    </property>
   </widget>

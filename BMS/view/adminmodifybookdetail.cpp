@@ -6,6 +6,7 @@
 #include <backend/Utils.h>
 #include <backend/User.h>
 #include <QDebug>
+#include <QPainter>
 #include "GlobalSetting.h"
 #include <qdatetime.h>
 extern Utils now_utils;
@@ -29,7 +30,15 @@ AdminModifyBookDetail::~AdminModifyBookDetail()
 {
     delete ui;
 }
-
+void AdminModifyBookDetail::paintEvent(QPaintEvent *)
+{
+    //需要Qpainter头文件
+    QPainter painter(this); //初始化
+    QPixmap pix;
+    //背景图
+    pix.load(":/image/bookmanage/background.jpg");
+    painter.drawPixmap(0, 0, this->width(), this->height(), pix);
+}
 void AdminModifyBookDetail::loadBookDetail(){
     ui->line_bookname->setText(now_book.getBookName());
     ui->line_author->setText(now_book.getAuthor());
@@ -147,6 +156,7 @@ void AdminModifyBookDetail::on_pushButton_clicked(){
             // emit modifySignal();
             //qDebug()<<"修改成功";
             QMessageBox::information(this,"修改信息","修改图书信息成功啦！");
+            emit bookUpdateSignal(now_book);
             emit backSignal();
         }else{
             //qDebug()<<"修改失败";
