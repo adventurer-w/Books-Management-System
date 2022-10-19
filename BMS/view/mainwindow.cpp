@@ -89,7 +89,7 @@ void MainWindow::loadMenuBar(){
     QString adminMenuBars[]={"user.png","library.png","lookup.png","logout.png"};
 
     QString userMenuText[]={"个人中心","修改信息","图书查询","退出登录"};
-    QString adminMenuText[]={"个人中心","图书管理","借阅管理","退出登录"};
+    QString adminMenuText[]={"个人中心","图书管理","用户管理","退出登录"};
     //QString adminObjectNames[]={"btn_admininfo","btn_bookmanagement","btn_borrowmanagement","btn_logout"};
 
 
@@ -147,7 +147,7 @@ void MainWindow::loadPages(int mode){
             mw->insertWidget(1,adminBookManagement);
         }
         if(mode == 0||mode ==2 || mode==3){
-            /*导入管理员个人借阅信息管理界面  */
+            /*导入管理员个人用户管理界面  */
             UserManagement *userManagement = new UserManagement;
             userManagement->resize(1300,900);
             mw->insertWidget(2,userManagement);
