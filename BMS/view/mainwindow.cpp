@@ -29,7 +29,8 @@ MainWindow::MainWindow(QWidget *parent)
     this->resize(1600,900);
     /* judge admin 0 or user 1 here*/
     /* start */
-    userType = 0;
+    if(!now_user.getAccount()[0] && !now_user.getAccount()[1])userType = 0;
+    else userType = 1;
     /* end */
     loadUserInfo();
     loadMenuBar();
