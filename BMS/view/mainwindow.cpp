@@ -17,6 +17,8 @@
 #include "modifyinfowidget.h"
 #include "admininfo.h"
 #include "adminbookmanagement.h"
+#include "borrowrecord.h"
+#include "adminmodifybookdetail.h"
 extern User now_user;
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -139,12 +141,19 @@ void MainWindow::loadPages(int mode){
             /*导入管理员图书信息管理界面 */
             AdminBookManagement *adminBookManagement = new AdminBookManagement;
             adminBookManagement->resize(1300,900);
+            adminBookManagement->setStackWidget(mw);
             //connect(adminBookManagement,SIGNAL(modifySignal()),this,SLOT(loadAdminInfo()));
+            connect(adminBookManagement,SIGNAL(changePageSignal(int)),this,SLOT(changePage(int)));
             mw->insertWidget(1,adminBookManagement);
         }
-        if(mode == 0||mode ==3){
+        if(mode == 0||mode ==2 || mode==3){
             /*导入管理员个人借阅信息管理界面  */
+            BorrowRecord *borrowRecord = new BorrowRecord;
+            borrowRecord->resize(1300,900);
+            mw->insertWidget(2,borrowRecord);
         }
+
+
     }
     else{
         if(mode == 0 || mode ==1){
@@ -177,6 +186,10 @@ void MainWindow::loadPages(int mode){
        }
 
 
+}
+void MainWindow::changePage(int index){
+    qDebug()<< "index:"<<index;
+    mw->setCurrentIndex(index);
 }
 MainWindow::~MainWindow()
 {

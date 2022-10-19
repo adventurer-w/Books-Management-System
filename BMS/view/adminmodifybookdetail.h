@@ -21,9 +21,11 @@ public:
     bool loadQss(const QString &StyleSheetFile);
 
     void on_pushButton_clicked();
+signals:
+void backSignal();
+private slots:
+     void on_btn_back_clicked();
 
-// private slots:
-//     void on_btn_back_clicked();
 
 private:
     Ui::AdminModifyBookDetail *ui;

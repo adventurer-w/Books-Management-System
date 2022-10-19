@@ -42,7 +42,7 @@ public:
 
     void setIcons();
 
-    void on_TableBtn_clicked();
+    void on_TableModifyBtn_clicked();
 
     void on_remove_clicked();
 
@@ -62,7 +62,8 @@ QString m_filename = "";
 
 public:
     MainWidget *sub_mw;
-
+signals:
+    void changePageSignal(int Index);
 private
     slots:
             void on_btn_search_clicked();
@@ -88,6 +89,8 @@ private
     void on_line_search_returnPressed();
 
     void on_btn_addbook_clicked();
+
+    void backToThis();
 
 private:
     Ui::AdminBookManagement *ui;

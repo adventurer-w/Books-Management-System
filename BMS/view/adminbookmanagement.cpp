@@ -121,6 +121,7 @@ AdminBookManagement::AdminBookManagement(QWidget *parent) : QWidget(parent),
     ui->tb->resizeRowsToContents();
 
     connect(ui->tb->verticalScrollBar(), &QScrollBar::valueChanged, this, &AdminBookManagement::loadBooks);
+
     loadQss(":/qss/querybookwidget/querybook.qss");
 }
 
@@ -333,11 +334,7 @@ void AdminBookManagement::getBookList(QString classification, QString key)
     if (re.size() != 0)
         qDebug() << "书名" << re[0].getBookName();
 
-    AdminBookManagement *bookList = new AdminBookManagement();
-    bookList->resize(1300, 730);
-    bookList->setStackWidget(sub_mw);
-    sub_mw->insertWidget(1, bookList);
-    sub_mw->setCurrentIndex(1);
+
 }
 
 void AdminBookManagement::on_btn_search_clicked()
@@ -402,7 +399,7 @@ void AdminBookManagement::loadIntialBooks()
              fitpixmap = pixmap.scaled(120, 75, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
          }
          button->setProperty("tb_ISBN", model->index(i, 3, QModelIndex()).data().toString()); //设置按钮的自定义属性
-         connect(button, &QPushButton::clicked, this, &AdminBookManagement::on_TableBtn_clicked);
+         connect(button, &QPushButton::clicked, this, &AdminBookManagement::on_TableModifyBtn_clicked);
          ui->tb->setIndexWidget(model->index(i, 5), button); //将按钮加入表格中
          ////
          ////
@@ -480,7 +477,7 @@ void AdminBookManagement::loadBooks()
             fitpixmap = pixmap.scaled(120, 75, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         }
         button->setProperty("tb_ISBN", model->index(i, 3, QModelIndex()).data().toString()); //设置按钮的自定义属性
-        connect(button, &QPushButton::clicked, this, &AdminBookManagement::on_TableBtn_clicked);
+        connect(button, &QPushButton::clicked, this, &AdminBookManagement::on_TableModifyBtn_clicked);
         ui->tb->setIndexWidget(model->index(i, 5), button); //将按钮加入表格中
         ////
         ////
@@ -524,8 +521,11 @@ void AdminBookManagement::setStackWidget(MainWidget *p)
 //    ui->btn_la_3->setIconSize(QSize(35, 35));
 //    ui->btn_la_3->setFlat(true);
 //}
+void AdminBookManagement::backToThis(){
 
-void AdminBookManagement::on_TableBtn_clicked()
+    emit changePageSignal(1);
+}
+void AdminBookManagement::on_TableModifyBtn_clicked()
 {
     //先获取信号的发送者
     QPushButton *button = (QPushButton *)sender();
@@ -537,11 +537,12 @@ void AdminBookManagement::on_TableBtn_clicked()
     qDebug() << now_book.getAuthor();
 
     AdminModifyBookDetail *admin_modify_book_detail = new AdminModifyBookDetail();
+    connect(admin_modify_book_detail,SIGNAL(backSignal()),this,SLOT(backToThis()));
     // qDebug() << "now come here5";
     admin_modify_book_detail->resize(1300, 730);
-    admin_modify_book_detail->setStackWidget(psw);
-    admin_modify_book_detail->show();
-
+    psw->insertWidget(3,admin_modify_book_detail);
+    //admin_modify_book_detail->show();
+    emit changePageSignal(3);
     // int Password = button->property("S_Password").toInt();
     //删除数据再重新调用
 }

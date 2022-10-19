@@ -81,13 +81,17 @@ void AdminModifyBookDetail::loadBookDetail(){
 void AdminModifyBookDetail::setStackWidget(MainWidget *p){
     this->psw = p;
 }
+void AdminModifyBookDetail::on_btn_back_clicked(){
+
+    emit backSignal();
+}
 void AdminModifyBookDetail::setIcons(){
     /*将图标图片缩小到指定尺寸*/
     QPixmap pixmap(":/image/querybook/back.png");
     QPixmap fitpixmap = pixmap.scaled(35, 35, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-//    ui->btn_back->setIcon(QIcon(fitpixmap));
-//    ui->btn_back->setIconSize(QSize(35, 35));
-//    ui->btn_back->setFlat(true);
+    ui->btn_back->setIcon(QIcon(fitpixmap));
+    ui->btn_back->setIconSize(QSize(35, 35));
+    ui->btn_back->setFlat(true);
 }
 bool AdminModifyBookDetail::loadQss(const QString &StyleSheetFile){
     /*QSS文件所在的路径*/
@@ -143,10 +147,12 @@ void AdminModifyBookDetail::on_pushButton_clicked(){
             // emit modifySignal();
             //qDebug()<<"修改成功";
             QMessageBox::information(this,"修改信息","修改图书信息成功啦！");
+            emit backSignal();
         }else{
             //qDebug()<<"修改失败";
             QMessageBox::information(this,"修改信息","真可惜，修改图书信息失败了!");
         }
+
 
 
 }
