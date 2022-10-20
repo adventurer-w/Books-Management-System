@@ -2,6 +2,7 @@
 #define BOOKLIST_H
 
 #include <QWidget>
+#include <QTableView>
 #include "MainWidget.h"
 #include "stditemmodel.h"
 namespace Ui {
@@ -28,7 +29,8 @@ public:
     int curRecord=0;//已经插入的记录
     QString pages;//显示当前页
     StdItemModel *model;
-
+signals:
+    void stopSignal();//停止多线程
 private slots:
     void on_btn_first_clicked();
 
@@ -45,6 +47,8 @@ private slots:
 private:
     Ui::BookList  *ui;
     MainWidget *psw;//底层stackwidget对象的指针，便于返回
+    QTableView *tbv;
+    QLineEdit *le;
 };
 
 #endif // BOOKLIST_H

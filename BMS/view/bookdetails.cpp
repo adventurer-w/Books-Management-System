@@ -58,19 +58,19 @@ void BookDetails::loadBookDetail(){
     string t2(now_book.getIsbn());
     string pic;
     if(t2.size()==13)
-               pic=t1+"/"+t2+".jpg";
+               pic=pictureDbPath+t1;
            else
-               pic=":/image/cover/moren.jpg";
+               pic=pictureDbPath+"moren.jpg";
 
     QPixmap pixmap(pic.c_str());
-           QPixmap fitpixmap;
-           if(pixmap.isNull()){
-               qDebug()<<"1空";
-               QPixmap pixmap2(":/image/cover/moren.jpg");
-               fitpixmap = pixmap2.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-           }else{
-               fitpixmap = pixmap.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-           }
+   QPixmap fitpixmap;
+   if(pixmap.isNull()){
+       qDebug()<<"1空";
+       QPixmap pixmap2((pictureDbPath+"moren.jpg").c_str());
+       fitpixmap = pixmap2.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+   }else{
+       fitpixmap = pixmap.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+   }
     ui->lb_bookphoto->setPixmap(fitpixmap);    //加载图片
 
     ui->lb_bookphoto->setScaledContents(true);

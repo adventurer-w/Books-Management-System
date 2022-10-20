@@ -36,7 +36,7 @@ void AdminModifyBookDetail::paintEvent(QPaintEvent *)
     QPainter painter(this); //初始化
     QPixmap pix;
     //背景图
-    pix.load(":/image/bookmanage/background.jpg");
+    pix.load(":/image/bookmanagement/background.jpg");
     painter.drawPixmap(0, 0, this->width(), this->height(), pix);
 }
 void AdminModifyBookDetail::loadBookDetail(){

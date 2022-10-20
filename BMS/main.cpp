@@ -42,7 +42,15 @@ int main(int argc, char *argv[])
     QString stylesheet2 = filetext2.readAll();
     app.setStyleSheet(stylesheet2);
     file2.close();
+//    if(now_utils.UpdateBookRank())
+//        qDebug()<<"总借阅榜单update成功！";
+//    if(now_utils.UpdateGirlRank())
+//        qDebug()<<"女生借阅排行榜update成功！";
+//    if(now_utils.UpdateBoyRank())
+//        qDebug()<<"男生借阅排行榜update成功！";
 
+//    if(now_utils.UpdatePointRank())
+//        qDebug()<<"高分借阅排行榜update成功！";
     now_utils.GetBookRank(result);
     now_utils.GetBoyRank(result_boy);
     now_utils.GetGirlRank(result_girl);

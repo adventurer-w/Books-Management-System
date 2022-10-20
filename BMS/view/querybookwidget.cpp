@@ -28,7 +28,7 @@
 #include "bookranking.h"
 #include <QListView>
 #include "backend/Utils.h"
-
+#include "mythread.h"
 extern Utils now_utils;
 extern vector<Book> re;
 extern Book now_book;
@@ -47,11 +47,11 @@ QueryBookWidget::QueryBookWidget(QWidget *parent) :
     ui->btn_author->setAutoExclusive(false);
 
 
-    ui->cbox_classify->addItems(QStringList()<<"全部"<<"历史"<<"散文"<<"科幻"<<"互联网"<<"传记"<<"推理");
-
-//    extern vector<string> classifications;
-//    for(int i=0;i<classifications.size();i++)
-//        ui->cbox_classify->addItem(QString::fromStdString(classifications[i]));
+    ui->cbox_classify->addItems(QStringList()<<"全部");
+    vector<BookClass> classifications;
+    now_utils.GetAllClass(classifications);
+    for(int i=0;i<classifications.size();i++)
+    ui->cbox_classify->addItem(QString::fromStdString(classifications[i].getName()));
 
     ui->cbox_classify->setCurrentIndex(0);//设置默认选项
     loadPages();
@@ -217,31 +217,56 @@ void QueryBookWidget::on_cbox_classify_currentIndexChanged(int){
 
 */
 void QueryBookWidget::getBookList(QString classification, QString key){
-    re.clear();
-    if (classification=="全部" && ctrl == 0)flag=1;
-    //qDebug() << classification << "  "<< flag;
-    if(flag==0){
-//        now_utils.GetBooksByClassification(const_cast<char*>(classification.toStdString().c_str()),re);
-        vector<BookClass> now_book_class;
-        now_utils.GetClassByName(const_cast<char*>(classify.toStdString().c_str()),now_book_class);
-        now_utils.GetBooksByClassNo(now_book_class[0].getClassNo(),re);
-    }else if(flag==1){
-        now_utils.GetBooksByBookName(const_cast<char*>(key.toStdString().c_str()),re);
-    }else if(flag==2){
-        now_utils.GetBooksByAuthor(const_cast<char*>(key.toStdString().c_str()),re);
-    }else{
-        now_utils.GetBookByIsbn(const_cast<char*>(key.toStdString().c_str()),now_book);
-        re.push_back(now_book);
+    if(key.size()>BOOK_NAME_SIZE-1)
+        QMessageBox::information(this,"提示信息","输入字符过长");
+    else{
+        re.clear();
+        if (classification=="全部" && ctrl == 0)flag=1;
+        //qDebug() << classification << "  "<< flag;
+        string info;
+        info.clear();
+        if(flag==0){
+            vector<BookClass> result;
+            qDebug()<< "fuck"<<endl;
+            now_utils.GetClassByName(const_cast<char*>(classification.toStdString().c_str()),result);
+            qDebug()<< "fuck "<<result.size();
+            now_utils.GetBooksByClassNo(result[0].getClassNo(),re);
+        }else if(flag==1){
+            if(key.size()==0)
+                info+="请输入书名！";
+            now_utils.GetBooksByBookName(const_cast<char*>(key.toStdString().c_str()),re);
+        }else if(flag==2){
+            if(key.size()==0)
+                info+="请输入作者名！";
+            now_utils.GetBooksByAuthor(const_cast<char*>(key.toStdString().c_str()),re);
+        }else{
+            if(key.size()==0)
+                info+="请输入ISBN号！";
+            else if(key.size()!=13)
+                info+="ISBN号输入错误，请输入13位数字（无-隔开）";
+            now_utils.GetBookByIsbn(const_cast<char*>(key.toStdString().c_str()),now_book);
+            re.push_back(now_book);
+        }
+        if(info.size()==0){
+            BookList *bookList =new BookList();
+            //connect(bookList,SIGNAL(stopSignal()),this,SLOT(killThread()));
+            //thread = new MyThread(bookList);
+            //thread->start();
+            bookList->resize(1300,730);
+            bookList->setStackWidget(sub_mw);
+            sub_mw->insertWidget(1,bookList);
+            sub_mw->setCurrentIndex(1);
+        }else{
+            QMessageBox::information(this,"提示信息",QString::fromStdString(info));
+        }
+
     }
-//    if(re.size()!=0)
-//        qDebug()<<"书名"<<re[0].getBookName();
-    BookList *bookList =new BookList();
-    bookList->resize(1300,730);
-    bookList->setStackWidget(sub_mw);
-    sub_mw->insertWidget(1,bookList);
-    sub_mw->setCurrentIndex(1);
+}
 
-
+void QueryBookWidget::killThread(){
+    if(!thread->bookList)return;
+    thread->wait();
+    thread->quit();
 }
 void QueryBookWidget::on_btn_search_clicked()
 {

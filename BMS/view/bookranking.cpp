@@ -21,19 +21,21 @@
 #include <QString>
 #include <QStackedLayout>
 #include "MainWidget.h"
-#include"QFontDialog"
+#include "QFontDialog"
 #include "searchlineedit.h"
 #include"backend/all_head.h"
 #include"backend/Utils.h"
 #include"GlobalSetting.h"
 #include "bookdetails.h"
 #include "qclickedlabel.h"
+#include "GlobalSetting.h"
 extern Utils now_utils;
 extern Book now_book;
 extern vector<Book> result;
 extern vector<Book> result_boy;
 extern vector<Book> result_girl;
 extern vector<Book> result_point;
+
 BookRanking::BookRanking(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::BookRanking)
@@ -95,11 +97,21 @@ void BookRanking::setShadow(){
 QPixmap p(string t1,string t2){
     string pic;
     if(t2.size()==13)
-        pic=t1+"/"+t2+".jpg";
+        pic=pictureDbPath+t1;
     else
-        pic=":/image/cover/moren.jpg";
-    QPixmap pixmap(pic.c_str());
-    return pixmap;
+        pic=pic=pictureDbPath+"moren.jpg";
+
+   QPixmap pixmap(pic.c_str());
+   QPixmap fitpixmap;
+   if(pixmap.isNull()){
+       //qDebug()<<"1空";
+       QPixmap pixmap2((pictureDbPath+"moren.jpg").c_str());
+       fitpixmap = pixmap2.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+   }else{
+       fitpixmap = pixmap.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+   }
+
+    return fitpixmap;
 
 }
 
@@ -127,7 +139,7 @@ void BookRanking::showBorrowRank(){
     //qDebug()<< " clb:" << result.size();
     QPixmap pix[7];//展示本书，后期可更改
     for(int i=0;i<7;i++){
-        pix[i]=p(result[i].getImgPath(),result[i].getIsbn());
+        pix[i]=p(string(result[i].getImgPath()),string(result[i].getIsbn()));
     }
 
     int pos_x = 30;
@@ -138,7 +150,7 @@ void BookRanking::showBorrowRank(){
         QClickedLabel *clb_txt = new QClickedLabel;
         clb->setParent(this);
         clb_txt->setParent(this);
-        clb->setPixmap(pix[0]);
+        clb->setPixmap(pix[i]);
         clb->setScaledContents(true);    //根据label大小缩放图片
         clb->resize(130,170);
         clb->move(pos_x,pos_y);
