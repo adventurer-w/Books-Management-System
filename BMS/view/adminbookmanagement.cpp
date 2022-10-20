@@ -63,13 +63,18 @@ AdminBookManagement::AdminBookManagement(QWidget *parent) : QWidget(parent),
     ui->btn_bookname->setAutoExclusive(false);
     ui->btn_ISBN->setAutoExclusive(false);
     ui->btn_author->setAutoExclusive(false);
-    ui->cbox_classify->addItems(QStringList() << "全部"
-                                              << "历史"
-                                              << "散文"
-                                              << "科幻"
-                                              << "互联网"
-                                              << "传记"
-                                              << "推理");
+
+    QStringList classify_list;
+    classify_list << "全部";
+    vector<BookClass> now_book_class;
+    now_utils.GetAllClass(now_book_class);
+    int n = now_book_class.size();
+    for (int i = 0; i < n; i++)
+    {
+        classify_list << now_book_class[i].getName();
+    }
+
+    ui->cbox_classify->addItems(classify_list);
     ui->cbox_classify->setCurrentIndex(0); //设置默认选项
     setShadow();
 
