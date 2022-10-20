@@ -353,8 +353,6 @@ void AdminBookManagement::on_cbox_classify_currentIndexChanged(int)
 */
 void AdminBookManagement::getBookList(QString classification, QString key)
 {
-    re.clear();
-
     if (classification == "全部" && ctrl_admin == 0)
         flag_admin = 1;
 
@@ -363,7 +361,7 @@ void AdminBookManagement::getBookList(QString classification, QString key)
     {
 //        now_utils.GetBooksByClassification(const_cast<char *>(classification.toStdString().c_str()), re);
         vector<BookClass> now_book_class;
-        now_utils.GetClassByName(const_cast<char*>(classify.toStdString().c_str()),now_book_class);
+        now_utils.GetClassByName(const_cast<char*>(classification.toStdString().c_str()),now_book_class);
         now_utils.GetBooksByClassNo(now_book_class[0].getClassNo(),re);
     }
     else if (flag_admin == 1)
@@ -392,6 +390,8 @@ void AdminBookManagement::on_btn_search_clicked()
     ui->btn_bookname->setDown(false);
     ui->btn_author->setDown(false);
     ui->btn_ISBN->setDown(false);
+    re.clear();
+//    model->removeRows(0,model->rowCount());
     
     QString classification = ui->cbox_classify->currentText();
     QString val = ui->line_search->text();
@@ -414,8 +414,6 @@ void AdminBookManagement::loadInitialBooks()
 
 
     connect(ui->tb->verticalScrollBar(), &QScrollBar::valueChanged, this, &AdminBookManagement::loadBooks);
-
-
 
      nCurScroller = ui->tb->verticalScrollBar()->value();
      int curPg = nCurScroller % maxPgNum == 0 ? nCurScroller / maxPgNum + 1 : nCurScroller / maxPgNum + 2; //当前所在页数

@@ -35,14 +35,11 @@ MainWindow::MainWindow(QWidget *parent)
 //    else userType = 1;
     userType = 0;
     /* end */
-    qDebug() << "1";
+
     loadUserInfo();
-    qDebug() << "2";
     loadMenuBar();
-    qDebug() << "3";
     loadPages(0);
 
-    qDebug() << "4";
     QString qssfilename =":/qss/mainwindow/mainwindow.qss";
     this->loadQss(qssfilename);
 

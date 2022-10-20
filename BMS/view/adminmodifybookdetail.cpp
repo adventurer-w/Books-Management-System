@@ -9,6 +9,14 @@
 #include <QPainter>
 #include "GlobalSetting.h"
 #include <qdatetime.h>
+#include <QFileDialog>
+
+#include <QImage>
+#include <QPixmap>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QScreen>
+#include <QGuiApplication>
 extern Utils now_utils;
 extern User now_user;
 extern vector<Book> re;
@@ -57,7 +65,7 @@ void AdminModifyBookDetail::loadBookDetail(){
     }
 
     connect(ui->book_pushButton, &QPushButton::clicked, this, &AdminModifyBookDetail::on_pushButton_clicked);
-
+    connect(ui->btn_modifyimage, &QPushButton::clicked, this, &AdminModifyBookDetail::on_btn_modifyimage_clicked);
     // ui->lb_grade_txt->setText(QString::number(now_book.getPoint()));
 
     // ui->lb_collect_txt->setText("未知");//后期判断是否需要增加收藏数
@@ -122,6 +130,36 @@ bool AdminModifyBookDetail::loadQss(const QString &StyleSheetFile){
 
     this->setStyleSheet(ofile.readAll());
     ofile.close();
+
+}
+
+void AdminModifyBookDetail::on_btn_modifyimage_clicked()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "选择图片", "", tr("JPEG Files(*.jpg);;PNG Files(*.png)"));
+    fileName.replace(QString("/"), QString("\\"));
+    qDebug() << fileName;
+
+
+    QString runPath;
+    QString hglpName;
+    QString hglpPath;
+
+    runPath = QCoreApplication::applicationDirPath();       //获取exe路径
+    hglpName = "photo";
+    hglpPath = QString("%1/%2").arg(runPath).arg(hglpName);
+
+    if(fileName.isEmpty())
+            return;
+    else
+    {
+        QImage img;
+        if(!(img.load(fileName))) //加载图像
+        {
+            QMessageBox::information(this, tr("打开图像失败"),tr("打开图像失败!"));
+            return;
+        }
+        ui->lb_bookphoto->setPixmap(QPixmap::fromImage(img.scaled(ui->lb_bookphoto->size())));
+    }
 
 }
 
