@@ -42,6 +42,7 @@ SOURCES += \
         view/mainwindow.cpp \
     view/modifybookcategory.cpp \
         view/modifyinfowidget.cpp \
+    view/qclickedlabel.cpp \
         view/querybookwidget.cpp \
         view/register.cpp \
         view/searchlineedit.cpp \
@@ -79,6 +80,7 @@ HEADERS += \
         view/mainwindow.h \
     view/modifybookcategory.h \
         view/modifyinfowidget.h \
+    view/qclickedlabel.h \
         view/querybookwidget.h \
     view/register.h \
         view/searchlineedit.h \

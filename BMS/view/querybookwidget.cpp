@@ -122,6 +122,11 @@ void QueryBookWidget::loadPages(){
 
     sub_mw->insertWidget(0,bookRanking);
     sub_mw->setCurrentIndex(0);
+    bookRanking->psw = sub_mw;
+
+    BookList *bookList = new BookList;
+    bookList->resize(1300,730);
+    sub_mw->insertWidget(1,bookList);
 
 }
 

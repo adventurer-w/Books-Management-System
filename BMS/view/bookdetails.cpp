@@ -103,7 +103,8 @@ bool BookDetails::loadQss(const QString &StyleSheetFile){
 }
 
 void BookDetails::on_btn_back_clicked(){
-    psw->setCurrentIndex(1);
+    //qDebug()<< "back"<< preIndex << " psw:"<< psw;
+    psw->setCurrentIndex(this->preIndex);
 }
 
 
@@ -218,4 +219,7 @@ void BookDetails::on_btn_reserve_clicked(){//预约
             QMessageBox::information(this,"预约书籍","哎呀，差点就预约上了，换一本预约吧！");
         }
     }
+}
+void BookDetails::setPreIndex(int index){
+    this->preIndex = index;
 }
