@@ -230,7 +230,9 @@ void BookList::on_TableBtn_clicked()
     now_utils.GetBookByIsbn(const_cast<char*>(ISBN.toStdString().c_str()),now_book);
     BookDetails *bookDetails= new BookDetails();
     bookDetails->resize(1300,730);
+    bookDetails->move(0,170);
     bookDetails->setStackWidget(psw);
+    bookDetails->setPreIndex(1);//用于返回前面调用的界面
     psw->insertWidget(2,bookDetails);
     psw->setCurrentIndex(2);
 

@@ -17,15 +17,14 @@ AdminInfo::AdminInfo(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    qDebug() << "1";
+
     //left up sub_page use in appear message of user
     //左上页用来显示用户信息
     ui->lb_username_txt->setText(now_user.getName());
     vector<Department> major_result;
     now_utils.GetDepartmentByNo(now_user.getDepartmentNo(),major_result);
-    qDebug() << "2";
-//    ui->lb_major_txt->setText(QString::fromStdString(major_result[0].getName()));
-    qDebug() << "3";
+
+    ui->lb_major_txt->setText(QString::fromStdString(major_result[0].getName()));
     ui->lb_number_txt->setText(now_user.getAccount());
 
     if(now_user.getSex()==1)
@@ -41,10 +40,9 @@ AdminInfo::AdminInfo(QWidget *parent) :
     //右半页用来修改用户信息
     ui->box_sex->addItems(QStringList()<<"男"<<"女");
     ui->line_name->setText(now_user.getName());
-    qDebug() << "4";
     now_utils.GetDepartmentByNo(now_user.getDepartmentNo(),major_result);
-//    ui->line_major->setText(QString::fromStdString(major_result[0].getName()));
-    qDebug() << "5";
+    ui->line_major->setText(QString::fromStdString(major_result[0].getName()));
+
     ui->line_number->setText(now_user.getAccount());
     ui->line_major_2->setText(now_user.getEmail());
     loadQss(":/qss/admininfo/admininfo.qss");

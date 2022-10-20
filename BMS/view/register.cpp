@@ -15,7 +15,7 @@ Register::Register(QWidget *parent) :
     ui->setupUi(this);
     ui->box_sex->addItems(QStringList()<<" "<<"男"<<"女");
 
-//    ui->box_department->addItems(QStringList()<<" "<<"计算机科学与技术");
+    ui->box_department->addItems(QStringList()<<" "<<"计算机科学与技术");
 
 //    vector<string> classifications;
 //    for(int i=0;i<classifications.size();i++)
@@ -104,7 +104,7 @@ void Register::on_btn_register_clicked()
         QString pwd=ui->line_password->text();//密码
         QString confirmPwd=ui->line_confirmPasswod->text();//确认密码
         QString name=ui->line_name->text();//姓名
-//        QString major=ui->box_department->currentText();//专业
+        QString major=ui->box_department->currentText();//专业
         QString email=ui->line_email->text();//邮箱
         QString user_emailcode=ui->line_emailcode->text();//邮箱验证码
         QString sex=ui->box_sex->currentText();//性别
@@ -115,7 +115,7 @@ void Register::on_btn_register_clicked()
         now_user.setAccount(const_cast<char*>(account.toStdString().c_str()));
         now_user.setName(const_cast<char*>(name.toStdString().c_str()));
         vector<Department> major_result;
-//        now_utils.GetDepartmentByName(const_cast<char*>(major.toStdString().c_str()),major_result);
+        now_utils.GetDepartmentByName(const_cast<char*>(major.toStdString().c_str()),major_result);
     //    now_user.setDepartmentNo(1);
 
         now_user.setEmail(const_cast<char*>(email.toStdString().c_str()));
@@ -151,12 +151,12 @@ void Register::on_btn_register_clicked()
             s+="昵称应小于等于"+t+"个字符\n";
         }
 
-//        if(major.size()<=0)
-//            s+="请输入身份\n";
-//        else if(major.size()>MAJOR_SIZE-1){
-//            t=MAJOR_SIZE-1;
-//            s+="专业名应小于等于"+t+"个字符\n";
-//        }
+        if(major.size()<=0)
+            s+="请输入身份\n";
+        else if(major.size()>MAJOR_SIZE-1){
+            t=MAJOR_SIZE-1;
+            s+="专业名应小于等于"+t+"个字符\n";
+        }
 
         if(email.size()<=0)
             s+="请输入邮箱\n";

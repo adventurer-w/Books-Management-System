@@ -1,95 +1,86 @@
-# 前端界面说明
+# 管理员界面-图书管理
 
-## 10.15更新
+## 10.19
 
-> 登录可以自己注册账号，或者使用`20040032002`    `123456aA`进行登录
+#### 需要增加的功能：
 
-#### 注明：图片显示有bug，因为后端把绝对路径存进去了，获取也是绝对路径。
+#### 1.修改类别modifybookcategory的后端逻辑
 
-#### 如果可以的话试着改改。
+#### 2.添加单本book adminbookmanagement::add_book的逻辑，理论界面跳转到修改图书详情界面（复用），需要对modifybookdetails界面做一定的修改。
 
-==还有pro文件记得添加这个==,作为smtp的依赖链接库。
+#### 3.用户管理的功能
+
+
+
+### 修复的bug：
+
+#### 1.qss问题，按钮闪现bug，和分类按钮的显示前端逻辑；
+
+#### 2.图书管理无法删除和修改图书的问题，通过信号槽和tableview自带函数实现修复
+
+#### 3.大部分界面背景图显示问题
+
+### ==注：为了方便测试我把用户名密码写死为user的账号了，可以前往widget和mainwindow进行修改。（催下邮箱验证码修改）==
+
+## 功能方面
+
+已经实现了图书管理界面的
+
+- 图书查询
+- 图书修改
+- 图书删除
+- 图书批量导入
+
+目前已知bug（怀疑这些bug都是因为没有实时刷新，因为代码与用户界面几乎一致，但是就是不刷新）
+
+- 顶端栏按钮不一致问题。（明明后台是按照书名分类查找，但是界面上的按钮并非这样）
+- 底部翻页、右上角添加书籍按钮没有qss，不能正常显示，鼠标放上去可以显示
+- 任何操作之后，管理员界面的booklist不会立刻刷新。但是确实是成功修改（删除）了
+
+以上bug导致，现在想要测试这些功能，需要反复进入图书管理界面，才会刷新。但是功能真的是好的
+
+还没做的部分：
+
+- 添加分类（因为qt没加载出来新按钮，有可能是我代码还没改，但是这个不急）
+- 有关封面的各种操作（这个涉及相对路径绝对路径比较麻烦）
+
+
+
+
+
+## 关于修改的文件
+
+因为我的分支里面的其他内容比较老旧，只pull我改动的文件即可。
+
+目前改动了的文件：
+
+### 专门负责这些功能的三大主要文件（建议直接覆盖旧文件）：
+
+admininfo.h、admininfo.cpp
+
+adminbookmanagement.h、adminbookmanagement.cpp、adminbookmanagement.ui
+
+adminmodifybookdetail.h、adminmodifybookdetail.cpp
+
+### mainwindow.cpp
+
+将原先的
 
 ```
-LIBS += -lWs2_32
+userType = 0;
 ```
 
-### 1.新文件
+改为
 
-1.admininfo，管理员个人信息界面
+```
+if(!now_user.getAccount()[0] && !now_user.getAccount()[1])userType = 0;
 
-2.adminbookmanagement，管理员图书管理界面
-
-
-
-### 2.修改说明
-
-#### 1.管理员个人信息界面
-
-只写好了最基本的函数，只要获取到管理员信息即可，个人信息界面同时可以修改信息，可以参照个人信息modifyinfowidget修改来写。
-
-#### 2.管理员图书查询
-
-只写好了最基本的函数，需要获取图书的信息，可参照图书查找。除此以外还需要完成动态按钮创建，可以参照booklist函数，完成对某一条图书记录的删除修改；右上角还有添加按钮，需要能够增加图书记录，支持excel批量导入等。分类，按照各种方式查询，目前按钮逻辑也没写，可以参照bookquerywidget。
-
-目标效果如下，渲染部分不需要做，下方页面页码不需要管。
-
-![image-20221015205511303](https://yuan-1314071695.cos.ap-nanjing.myqcloud.com/img/image-20221015205511303.png)
-
-#### 3.进入管理员
-
-只需要在登录后的mainwindow里面，构造函数中寻找userType成员变量。根据后端提供的信息，确定userType为0，则会自动加载管理员界面。如果为1则为普通用户,自动加载用户界面。
-
-```c++
-ui->setupUi(this);
-this->setWindowTitle("图书系统");
-this->resize(1600,900);
-/* judge admin 0 or user 1 here*/
-/* start */
-userType = 1;
-/* end */
-loadUserInfo();
-loadMenuBar();
-loadPages(0);
+else userType = 1;
 ```
 
+### 配置文件：
+
+BMS.pro （只是在尾部加上了 `QT += axcontainer`）
 
 
-你无需关心界面跳转，这些已经写好了。同时个人信息界面存在修改后延迟的问题，这个是因为我还没写相关的槽函数，如果你硬要改，可以参照如下
-
-```c++
-oid MainWindow::loadPages(int mode){
-    if(mode == 0){
-        mw->resize(1300,900);
-        mw->move(this->x()+300,this->y());
-        mw->setParent(this);
-    }
-    if(userType == 0){//表示管理员
-        if(mode == 0 || mode==1){
-            /*导入管理员个人信息界面  */
-            AdminInfo *adminInfo = new AdminInfo;
-            adminInfo->resize(1300,900);
-            //connect(adminInfo,SIGNAL(modifySignal()),this,SLOT(loadUserInfo()));
-            mw->insertWidget(0,adminInfo);
-        }
-
-        if(mode == 0||mode == 2){
-            /*导入管理员图书信息管理界面 */
-            AdminBookManagement *adminBookManagement = new AdminBookManagement;
-            adminBookManagement->resize(1300,900);
-            //connect(adminBookManagement,SIGNAL(modifySignal()),this,SLOT(loadAdminInfo()));
-            mw->insertWidget(1,adminBookManagement);
-        }
-        if(mode == 0||mode ==3){
-            /*导入管理员个人借阅信息管理界面  */
-        }
-    }
- ……
-       }
-
-
-}
-```
-
-其中注释的部分就是刷新状态的函数，其中loadAdminInfo还没写，需要你完成。
 

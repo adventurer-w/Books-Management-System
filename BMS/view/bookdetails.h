@@ -17,8 +17,10 @@ public:
     void setStackWidget(MainWidget *p);
     void setIcons();
     bool loadQss(const QString &StyleSheetFile);
+    void setPreIndex(int index);
     ~BookDetails();
-
+signals:
+    void backToPage();
 private slots:
     void on_btn_back_clicked();
     void on_btn_star_clicked();
@@ -28,6 +30,7 @@ private slots:
 private:
     Ui::BookDetails *ui;
     MainWidget *psw;//底层stackwidget对象的指针，便于返回
+    int  preIndex =0;//用于返回先前进入的界面。
 };
 
 #endif // BOOKDETAILS_H

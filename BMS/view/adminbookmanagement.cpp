@@ -349,8 +349,10 @@ void AdminBookManagement::on_cbox_classify_currentIndexChanged(int)
 void AdminBookManagement::getBookList(QString classification, QString key)
 {
     re.clear();
-//    if (classification == "全部" && ctrl_admin == 0)
-//        flag_admin = 1;
+
+    if (classification == "全部" && ctrl_admin == 0)
+        flag_admin = 1;
+
     qDebug() << classification << "  " << flag_admin;
     if (flag_admin == 0)
     {
@@ -369,8 +371,6 @@ void AdminBookManagement::getBookList(QString classification, QString key)
     }
     else
     {
-//        if(key.length() < 13)
-//            return;
         now_utils.GetBookByIsbn(const_cast<char *>(key.toStdString().c_str()), now_book);
         re.push_back(now_book);
     }
