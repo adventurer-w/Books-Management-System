@@ -156,9 +156,14 @@ void AdminModifyBookDetail::on_pushButton_clicked(){
     now_book.setIsbn(const_cast<char*>(ISBN.toStdString().c_str()));
 //    now_book.setClassification(const_cast<char*>(classify.toStdString().c_str()));
     vector<BookClass> now_book_class;
-    now_utils.GetClassByName(const_cast<char*>(classify.toStdString().c_str()),now_book_class);
+    qDebug() << "get now_book_class";
+    if(now_utils.GetClassByName(const_cast<char*>(classify.toStdString().c_str()),now_book_class) == 0)
+    {
+        QMessageBox::information(this,"录入失败","分类有误");
+        return;
+    }
     now_book.setClassNo(now_book_class[0].getClassNo());
-
+    qDebug() << now_book_class[0].getClassNo();
     now_book.setPublishDate(const_cast<char*>(publishtime.toStdString().c_str()));
     //区分新书库存、旧书增加库存
     if(add_or_mod == 0)

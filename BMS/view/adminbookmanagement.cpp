@@ -170,7 +170,7 @@ void AdminBookManagement::on_btn_addbook_clicked(){
 void AdminBookManagement::on_btn_addbook_batch_clicked()
 {
     //弹出提示框
-    QMessageBox::information(NULL, QString::fromLocal8Bit(""), "请选择Excel文件,文件中列序按照封面路径、书名、作者、出版社、ISBN、分类、出版时间、总量、简介", QMessageBox::Ok);
+    QMessageBox::information(NULL, QString::fromLocal8Bit(""), "请选择Excel文件,文件中列序按照封面路径、书名、作者、出版社、ISBN、分类、出版时间、总量、简介。会从excel第二行开始读取", QMessageBox::Ok);
     //请用户选择excel，默认路径是在项目地址下
     QString fileName = QFileDialog::getOpenFileName(this, "选择Exccel", "", tr("Excel (*.xls *.xlsx)"));
     //设置编码解码
@@ -183,7 +183,6 @@ void AdminBookManagement::on_btn_addbook_batch_clicked()
     //重构地址，用于c的文件读写
     fileName.replace(QString("/"), QString("\\"));
     qDebug() << fileName;
-
     fileName = QDir::toNativeSeparators(fileName);
 
     //打开Excel进程、获取工作簿、工作表、单元格
@@ -205,8 +204,8 @@ void AdminBookManagement::on_btn_addbook_batch_clicked()
     int count_col = colums->dynamicCall("Count").toUInt();
 
     int success_num = 0;
-    //其实会读入excel的第一行，也就是列名那一行，但是不能存到本地
-    for (int i = 1; i <= count_row; i++)
+    //从第二行开始读
+    for (int i = 2; i <= count_row; i++)
     {
         //写入各种图书信息
         now_book.setImgPath(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 1)->dynamicCall("Value").toString().toStdString().c_str()));
@@ -215,9 +214,18 @@ void AdminBookManagement::on_btn_addbook_batch_clicked()
         now_book.setPublisher(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 4)->dynamicCall("Value").toString().toStdString().c_str()));
         now_book.setIsbn(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 5)->dynamicCall("Value").toString().toStdString().c_str()));
 //        now_book.setClassification(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 6)->dynamicCall("Value").toString().toStdString().c_str()));
+        qDebug() << "match add book you can set Isbn";
+        string classify_name = const_cast<char *>(range->querySubObject("Cells(int,int)", i, 6)->dynamicCall("Value").toString().toStdString().c_str());
+        qDebug() << classify_name.c_str();
         vector<BookClass> now_book_class;
-        now_utils.GetClassByName(const_cast<char*>(classify.toStdString().c_str()),now_book_class);
+        if(now_utils.GetClassByName(const_cast<char*>(classify_name.c_str()),now_book_class) == 0)
+        {
+            QMessageBox::information(this,"录入失败","分类有误");
+            return;
+        }
+        qDebug() << now_book_class[0].getClassNo();
         now_book.setClassNo(now_book_class[0].getClassNo());
+        qDebug() << "match add book you can set ClassByName";
         now_book.setPublishDate(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 7)->dynamicCall("Value").toString().toStdString().c_str()));
         now_book.setAllNum(range->querySubObject("Cells(int,int)", i, 8)->dynamicCall("Value").toString().toInt());
         now_book.setLeft(range->querySubObject("Cells(int,int)", i, 8)->dynamicCall("Value").toString().toInt());
@@ -354,6 +362,7 @@ void AdminBookManagement::getBookList(QString classification, QString key)
     }
     else if (flag_admin == 1)
     {
+//        qDebug() << "will search by " << key;
         now_utils.GetBooksByBookName(const_cast<char *>(key.toStdString().c_str()), re);
     }
     else if (flag_admin == 2)
@@ -606,7 +615,6 @@ void AdminBookManagement::on_remove_clicked()
         model->removeRow(row);
         //qDebug() << "delete row:" << row << "ok" <<endl;
     }
-
 
 }
 void AdminBookManagement::updateBookRecord(Book book){
