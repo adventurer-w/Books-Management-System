@@ -4,10 +4,11 @@
 #include "length.h"
 
 class Department{
-    public:
+public:
     int id;
     int departmentNo;//专业编号
     char name[MAJOR_SIZE]; // 院系名称
+    int maxBook;
     int dirty; //脏位
 
 
@@ -31,6 +32,12 @@ class Department{
         this->dirty = dirty;
     }
 
+    int getMaxBook() {
+        return maxBook;
+    }
+    void setMaxBook(int maxBook) {
+        this->maxBook = maxBook;
+    }
     int getDepartmentNo() {
         return departmentNo;
     }
@@ -44,6 +51,7 @@ class Department{
         else if (Elem == "name") return typeid(name).name();
         else if (Elem == "dirty") return typeid(dirty).name();
         else if (Elem == "departmentNo") return typeid(departmentNo).name();
+        else if (Elem == "maxBook") return typeid(maxBook).name();
         else {
             throw "Field  Not Found!";
         }
@@ -53,6 +61,7 @@ class Department{
         if (Elem == "id") return id;
         else if (Elem == "dirty") return dirty;
         else if (Elem == "departmentNo") return departmentNo;
+        else if (Elem == "maxBook") return maxBook;
         else {
             throw "Field  Not Found!";
         }

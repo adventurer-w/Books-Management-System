@@ -19,6 +19,10 @@ public:
 
 private:
     Ui::AdminInfo *ui;
+
+private slots:
+    void on_btn_modifyInfo_clicked();
+    void on_btn_modifyPassword_clicked();
 };
 
 #endif // ADMININFO_H

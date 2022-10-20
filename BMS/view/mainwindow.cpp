@@ -17,6 +17,8 @@
 #include "modifyinfowidget.h"
 #include "admininfo.h"
 #include "adminbookmanagement.h"
+#include "usermanagement.h"
+#include "adminmodifybookdetail.h"
 extern User now_user;
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -29,13 +31,18 @@ MainWindow::MainWindow(QWidget *parent)
     this->resize(1600,900);
     /* judge admin 0 or user 1 here*/
     /* start */
-    userType = 1;
+//    if(!now_user.getAccount()[0] && !now_user.getAccount()[1])userType = 0;
+//    else userType = 1;
+    userType = 0;
     /* end */
+    qDebug() << "1";
     loadUserInfo();
+    qDebug() << "2";
     loadMenuBar();
+    qDebug() << "3";
     loadPages(0);
 
-
+    qDebug() << "4";
     QString qssfilename =":/qss/mainwindow/mainwindow.qss";
     this->loadQss(qssfilename);
 
@@ -85,7 +92,7 @@ void MainWindow::loadMenuBar(){
     QString adminMenuBars[]={"user.png","library.png","lookup.png","logout.png"};
 
     QString userMenuText[]={"个人中心","修改信息","图书查询","退出登录"};
-    QString adminMenuText[]={"个人中心","图书管理","借阅管理","退出登录"};
+    QString adminMenuText[]={"个人中心","图书管理","用户管理","退出登录"};
     //QString adminObjectNames[]={"btn_admininfo","btn_bookmanagement","btn_borrowmanagement","btn_logout"};
 
 
@@ -137,12 +144,19 @@ void MainWindow::loadPages(int mode){
             /*导入管理员图书信息管理界面 */
             AdminBookManagement *adminBookManagement = new AdminBookManagement;
             adminBookManagement->resize(1300,900);
+            adminBookManagement->setStackWidget(mw);
             //connect(adminBookManagement,SIGNAL(modifySignal()),this,SLOT(loadAdminInfo()));
+            connect(adminBookManagement,SIGNAL(changePageSignal(int)),this,SLOT(changePage(int)));
             mw->insertWidget(1,adminBookManagement);
         }
-        if(mode == 0||mode ==3){
-            /*导入管理员个人借阅信息管理界面  */
+        if(mode == 0||mode ==2 || mode==3){
+            /*导入管理员个人用户管理界面  */
+            UserManagement *userManagement = new UserManagement;
+            userManagement->resize(1300,900);
+            mw->insertWidget(2,userManagement);
         }
+
+
     }
     else{
         if(mode == 0 || mode ==1){
@@ -162,6 +176,7 @@ void MainWindow::loadPages(int mode){
             connect(modifyInfoWidget,SIGNAL(modifySignal()),this,SLOT(loadUserInfo()));
             //userProfileWidget->setParent(this->mw);
             mw->insertWidget(1, modifyInfoWidget);
+
         }
 
         if(mode == 0||mode == 3){
@@ -175,6 +190,9 @@ void MainWindow::loadPages(int mode){
        }
 
 
+}
+void MainWindow::changePage(int index){
+    mw->setCurrentIndex(index);
 }
 MainWindow::~MainWindow()
 {

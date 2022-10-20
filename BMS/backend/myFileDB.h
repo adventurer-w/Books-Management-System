@@ -73,6 +73,8 @@ public:
 
     template<typename T>
     int getAtBeginOf(string DB_NAME,vector<T> &resultSet);
+
+    string getGuidelines();
 };
 
 template<typename T>

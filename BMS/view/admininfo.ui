@@ -67,19 +67,6 @@
      <string>姓名</string>
     </property>
    </widget>
-   <widget class="QLabel" name="lb_credit">
-    <property name="geometry">
-     <rect>
-      <x>270</x>
-      <y>100</y>
-      <width>70</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>信誉分</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="lb_sex_txt">
     <property name="geometry">
      <rect>
@@ -130,19 +117,6 @@
     </property>
     <property name="text">
      <string>性别</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lb_credit_txt">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>100</y>
-      <width>100</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
     </property>
    </widget>
    <widget class="QLabel" name="lb_username_txt">

@@ -10,6 +10,7 @@
 #include "../backend/User.h"
 #include <QDir>
 #include <QString>
+#include <QDebug>
 
 extern User now_user ;
 extern Utils now_utils;
@@ -74,6 +75,8 @@ void Widget::on_btn_login_clicked()
     QString account=ui->lineE_user_name->text();
     QString pwd=ui->lineE_pwd->text();
 
+    account = "20040032002";
+    pwd = "123456aA";
     MD5 md5;
     string b= md5.read(pwd.toStdString());//加密
 
@@ -81,6 +84,7 @@ void Widget::on_btn_login_clicked()
     string t=account.toStdString();
     char* account2=const_cast<char*>(t.c_str());
     char* pwd2=const_cast<char*>(b.c_str());
+
 
     flag=now_utils.Login(account2,pwd2);
     if(flag==0){

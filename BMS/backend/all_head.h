@@ -7,5 +7,8 @@
 #include "Reserve.h"
 #include "Department.h"
 #include "SingleBook.h"
+#include "BookClass.h"
+#include "MyLog.h"
+
 
 #endif //ALL_HEAD_H

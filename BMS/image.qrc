@@ -66,5 +66,8 @@
         <file>image/user/girl_red.png</file>
         <file>image/user/girl_yellow.png</file>
         <file>image/UserProfile/background.jpg</file>
+        <file>image/bookmanagement/background.jpg</file>
+        <file>image/usermanagement/background.jpg</file>
+        <file>image/adminProfile/background.jpg</file>
     </qresource>
 </RCC>

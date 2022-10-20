@@ -26,6 +26,7 @@ public:
 private slots:
     void menuBarBtnClicked();
     void loadUserInfo();
+    void changePage(int index);
 
 
 private:

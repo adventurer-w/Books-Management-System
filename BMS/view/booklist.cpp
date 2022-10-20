@@ -70,7 +70,7 @@ BookList::BookList(QWidget *parent) :
     ui->tb->setSelectionMode(QAbstractItemView::MultiSelection);
 
     //qDebug()<<re.size();
-    loadIntialBooks();
+    loadInitialBooks();
     int n = re.size();//有
     setIcons();
     maxPgs=n%maxPgNum==0? n/maxPgNum : n/maxPgNum+1;
@@ -92,7 +92,7 @@ BookList::BookList(QWidget *parent) :
 加载每个页面的图书列表项目
 */
 //line输入跳转时
-void BookList::loadIntialBooks(){
+void BookList::loadInitialBooks(){
     nCurScroller = ui->tb->verticalScrollBar()->value();
 
     int curNum = curRecord;
@@ -284,7 +284,7 @@ void BookList::on_btn_last_clicked()
 {
      int curSumPg =  curRecord%maxPgNum==0 ? curRecord/maxPgNum:curRecord/maxPgNum+1;//滚动条总的页数
     while(curSumPg<maxPgs){
-        loadIntialBooks();
+        loadInitialBooks();
          curSumPg =  curRecord%maxPgNum==0 ? curRecord/maxPgNum:curRecord/maxPgNum+1;//滚动条总的页数
     }
 
@@ -325,7 +325,7 @@ void BookList::on_line_returnPressed()
         return ;
     }
     while(curSumPg<page){
-        loadIntialBooks();
+        loadInitialBooks();
          curSumPg =  curRecord%maxPgNum==0 ? curRecord/maxPgNum:curRecord/maxPgNum+1;//滚动条总的页数
     }
         ui->tb->verticalScrollBar()->setSliderPosition((page-1)*maxPgNum);

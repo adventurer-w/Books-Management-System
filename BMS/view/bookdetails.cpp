@@ -12,6 +12,7 @@ extern Utils now_utils;
 extern User now_user;
 extern vector<Book> re;
 extern Book now_book;
+extern vector<BookClass> now_book_class;
 
 
 BookDetails::BookDetails(QWidget *parent) :
@@ -39,8 +40,9 @@ void BookDetails::loadBookDetail(){
     ui->lb_remain_txt->setText(QString::number(now_book.getLeft())+"/"+QString::number(now_book.getAllNum()));
 
     ui->lb_collect_txt->setText("未知");//后期判断是否需要增加收藏数
-
-    ui->lb_classify_txt->setText(now_book.getClassifition());
+    vector<BookClass> now_book_class;
+    now_utils.GetClassByNo(now_book.getClassNo(),now_book_class);
+    ui->lb_classify_txt->setText(now_book_class[0].getName());
     ui->lb_publishtime_txt->setText(now_book.getPublishDate());
 
     ui->lb_bookposition_txt->setText("未知");//后期判断是否需要增加图书位置
