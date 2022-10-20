@@ -51,13 +51,18 @@ extern Utils now_utils;
 extern vector<Book> re;
 extern Book now_book;
 extern int now_i;
+int add_or_mod;
 int select_row=0;//用于直接修改某一条的记录
 AdminBookManagement::AdminBookManagement(QWidget *parent) : QWidget(parent),
                                                             ui(new Ui::AdminBookManagement),
                                                             sub_mw(new MainWidget)
 {
+    //顶部栏设置
+    //基于querybookwidget
     ui->setupUi(this);
-
+    ui->btn_bookname->setAutoExclusive(false);
+    ui->btn_ISBN->setAutoExclusive(false);
+    ui->btn_author->setAutoExclusive(false);
     ui->cbox_classify->addItems(QStringList() << "全部"
                                               << "历史"
                                               << "散文"
@@ -66,15 +71,13 @@ AdminBookManagement::AdminBookManagement(QWidget *parent) : QWidget(parent),
                                               << "传记"
                                               << "推理");
     ui->cbox_classify->setCurrentIndex(0); //设置默认选项
-
     setShadow();
 
-
-    // book_list
+    //图书搜索栏与图书搜索结果列表
+    //基于book_list
     model = new StdItemModel();
 
-    model->setColumnCount(7); //设置有9列
-
+    model->setColumnCount(7); //设置有7列
     model->setHeaderData(0, Qt::Horizontal, "书名");
     model->setHeaderData(1, Qt::Horizontal, "作者");
     model->setHeaderData(2, Qt::Horizontal, "出版社");
@@ -86,16 +89,6 @@ AdminBookManagement::AdminBookManagement(QWidget *parent) : QWidget(parent),
     ui->tb->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     ui->tb->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch); //布局排版是全部伸展开的效果
-    //设置列宽
-    // ui->tb->setColumnWidth(0, 120);            //参数：列号，宽度
-    // ui->tb->setColumnWidth(1, 180);
-    // ui->tb->setColumnWidth(2, 120);
-    // ui->tb->setColumnWidth(3, 180);
-    // ui->tb->setColumnWidth(4, 220);
-    // ui->tb->setColumnWidth(5, 120);
-    // ui->tb->setColumnWidth(6, 120);
-    // ui->tb->setColumnWidth(7, 90);
-    // ui->tb->setColumnWidth(8, 90);
 
     //隐藏行头
     ui->tb->verticalHeader()->hide();
@@ -111,8 +104,6 @@ AdminBookManagement::AdminBookManagement(QWidget *parent) : QWidget(parent),
     ui->tb->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->tb->setShowGrid(false);
     ui->tb->resizeRowsToContents();
-
-
 
     loadQss(":/qss/adminbookmanagement/bookmanagement.qss");
 }
@@ -154,83 +145,107 @@ void AdminBookManagement::paintEvent(QPaintEvent *)
     pix.load(":/image/bookmanagement/background.jpg");
     painter.drawPixmap(0, 0, this->width(), this->height(), pix);
 }
+
+
 void AdminBookManagement::on_btn_addbook_clicked(){
     /* add book */
-
+    // now_book.setIsbn(0);
+    add_or_mod = 0;
     AdminModifyBookDetail *admin_modify_book_detail = new AdminModifyBookDetail();
     connect(admin_modify_book_detail,SIGNAL(backSignal()),this,SLOT(backToThis()));
     admin_modify_book_detail->resize(1300, 730);
     psw->insertWidget(3,admin_modify_book_detail);
     emit changePageSignal(3);//发出切换到3号页面的信号
-
 }
+
+/*
+    批量添加书籍按钮 按下之后功能实现
+    首先是弹出提示框，请用户选择excel
+    读入整个excel
+    并将整个excel中的书存入本地
+    debug中会输出每本书是否成功
+    本来是想设计成每成功一本弹出一下的
+    但是这样肯定不友好
+*/
 void AdminBookManagement::on_btn_addbook_batch_clicked()
 {
+    //弹出提示框
     QMessageBox::information(NULL, QString::fromLocal8Bit(""), "请选择Excel文件,文件中列序按照封面路径、书名、作者、出版社、ISBN、分类、出版时间、总量、简介", QMessageBox::Ok);
+    //请用户选择excel，默认路径是在项目地址下
     QString fileName = QFileDialog::getOpenFileName(this, "选择Exccel", "", tr("Excel (*.xls *.xlsx)"));
-
+    //设置编码解码
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF8"));
-
+    //若读到的文件为空就退出
     if (fileName.isEmpty())
     {
         return;
     }
-
+    //重构地址，用于c的文件读写
     fileName.replace(QString("/"), QString("\\"));
-    //qDebug() << fileName;
+    qDebug() << fileName;
 
-    fileName=QDir::toNativeSeparators(fileName);
- 
+    fileName = QDir::toNativeSeparators(fileName);
+
     //打开Excel进程、获取工作簿、工作表、单元格
-    // qDebug() << "now come1";
-    QAxObject*myExcel=new QAxObject("Excel.application",this);
-    myExcel->setProperty("DisplayAlerts",false);
-    // qDebug() << "now come2";
-    QAxObject*workBooks=myExcel->querySubObject("WorkBooks");
-    workBooks->dynamicCall("Open(const QString&)",fileName);
-    QAxObject*workBook=myExcel->querySubObject("ActiveWorkBook");
-    QAxObject*mySheets=workBook->querySubObject("Sheets");
-    QAxObject*sheet=mySheets->querySubObject("Item(int)",1);
- 
+    QAxObject *myExcel = new QAxObject("Excel.application", this);
+    myExcel->setProperty("DisplayAlerts", false);
+    //获取workbook
+    QAxObject *workBooks = myExcel->querySubObject("WorkBooks");
+    workBooks->dynamicCall("Open(const QString&)", fileName);
+    //获取整个表格
+    QAxObject *workBook = myExcel->querySubObject("ActiveWorkBook");
+    QAxObject *mySheets = workBook->querySubObject("Sheets");
+    QAxObject *sheet = mySheets->querySubObject("Item(int)", 1);
+
     //获取已经使用的单元格区域，并得到行列数
-    QAxObject*range=sheet->querySubObject("UsedRange");
-    QAxObject*rows=range->querySubObject("Rows");
-    QAxObject*colums=range->querySubObject("Columns");
-    int count_row=rows->dynamicCall("Count").toUInt();
-    int count_col=colums->dynamicCall("Count").toUInt();
+    QAxObject *range = sheet->querySubObject("UsedRange");
+    QAxObject *rows = range->querySubObject("Rows");
+    QAxObject *colums = range->querySubObject("Columns");
+    int count_row = rows->dynamicCall("Count").toUInt();
+    int count_col = colums->dynamicCall("Count").toUInt();
 
-    // qDebug() << "now come3";
-    //提取单元格中内容，存放到StringList中
-    QStringList tableString;
-
-    tableString.clear();
-    for(int i=1;i<=count_row;i++)
+    int success_num = 0;
+    //其实会读入excel的第一行，也就是列名那一行，但是不能存到本地
+    for (int i = 1; i <= count_row; i++)
     {
+        //写入各种图书信息
+        now_book.setImgPath(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 1)->dynamicCall("Value").toString().toStdString().c_str()));
+        now_book.setBookName(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 2)->dynamicCall("Value").toString().toStdString().c_str()));
+        now_book.setAuthor(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 3)->dynamicCall("Value").toString().toStdString().c_str()));
+        now_book.setPublisher(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 4)->dynamicCall("Value").toString().toStdString().c_str()));
+        now_book.setIsbn(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 5)->dynamicCall("Value").toString().toStdString().c_str()));
+//        now_book.setClassification(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 6)->dynamicCall("Value").toString().toStdString().c_str()));
+        vector<BookClass> now_book_class;
+        now_utils.GetClassByName(const_cast<char*>(classify.toStdString().c_str()),now_book_class);
+        now_book.setClassNo(now_book_class[0].getClassNo());
+        now_book.setPublishDate(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 7)->dynamicCall("Value").toString().toStdString().c_str()));
+        now_book.setAllNum(range->querySubObject("Cells(int,int)", i, 8)->dynamicCall("Value").toString().toInt());
+        now_book.setLeft(range->querySubObject("Cells(int,int)", i, 8)->dynamicCall("Value").toString().toInt());
+        now_book.setIntroduction(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 9)->dynamicCall("Value").toString().toStdString().c_str()));
 
-        now_book.setImgPath(const_cast<char*>(range->querySubObject("Cells(int,int)",i,1)->dynamicCall("Value").toString().toStdString().c_str()));
-        now_book.setBookName(const_cast<char*>(range->querySubObject("Cells(int,int)",i,2)->dynamicCall("Value").toString().toStdString().c_str()));
-        now_book.setAuthor(const_cast<char*>(range->querySubObject("Cells(int,int)",i,3)->dynamicCall("Value").toString().toStdString().c_str()));
-        now_book.setPublisher(const_cast<char*>(range->querySubObject("Cells(int,int)",i,4)->dynamicCall("Value").toString().toStdString().c_str()));
-        now_book.setIsbn(const_cast<char*>(range->querySubObject("Cells(int,int)",i,5)->dynamicCall("Value").toString().toStdString().c_str()));
-        now_book.setClassification(const_cast<char*>(range->querySubObject("Cells(int,int)",i,6)->dynamicCall("Value").toString().toStdString().c_str()));
-        now_book.setPublishDate(const_cast<char*>(range->querySubObject("Cells(int,int)",i,7)->dynamicCall("Value").toString().toStdString().c_str()));
-        now_book.setAllNum(range->querySubObject("Cells(int,int)",i,8)->dynamicCall("Value").toString().toInt());
-        now_book.setIntroduction(const_cast<char*>(range->querySubObject("Cells(int,int)",i,9)->dynamicCall("Value").toString().toStdString().c_str()));
+        //控制台提醒哪些书籍添加完毕
+        if (now_utils.InsertBook(now_book))
+        {
+            qDebug() << now_book.getBookName() << "成功";
+            success_num++;
+        }
 
-        qDebug() << now_book.getBookName();
-        if(now_utils.InsertBook(now_book))
-            qDebug() << "成功";
+        else
+            qDebug() << now_book.getBookName() << "失败";
+
     }
+    //浅浅提示一下用户
+    string aa = "录入数量："+to_string(success_num);
+    QMessageBox::information(this,"录入成功",QString::fromStdString(aa));
 
-    // qDebug() << "now come4";
     //关闭工作簿、结束进程
     workBook->dynamicCall("Close()");
     myExcel->dynamicCall("Quit()");
 }
 
 // use in select the way of finding books
-int flag_admin = 1; // 1书名，2作者，3isbn
-int ctrl_admin = 0x100;
+int flag_admin = 0; // 1书名，2作者，3isbn
+int ctrl_admin = 0x000;
 void AdminBookManagement::on_btn_bookname_clicked()
 {
     if(flag_admin == 1){
@@ -332,7 +347,10 @@ void AdminBookManagement::getBookList(QString classification, QString key)
     qDebug() << classification << "  " << flag_admin;
     if (flag_admin == 0)
     {
-        now_utils.GetBooksByClassification(const_cast<char *>(classification.toStdString().c_str()), re);
+//        now_utils.GetBooksByClassification(const_cast<char *>(classification.toStdString().c_str()), re);
+        vector<BookClass> now_book_class;
+        now_utils.GetClassByName(const_cast<char*>(classify.toStdString().c_str()),now_book_class);
+        now_utils.GetBooksByClassNo(now_book_class[0].getClassNo(),re);
     }
     else if (flag_admin == 1)
     {
@@ -360,15 +378,13 @@ void AdminBookManagement::on_btn_search_clicked()
     ui->btn_bookname->setDown(false);
     ui->btn_author->setDown(false);
     ui->btn_ISBN->setDown(false);
-    flag_admin = 0;
+    
     QString classification = ui->cbox_classify->currentText();
     QString val = ui->line_search->text();
 
-    // qDebug() << "分类" << classification;
-    // qDebug() << "搜索值" << val;
-
     getBookList(classification, val);
     loadInitialBooks();
+    flag_admin = 0;
 }
 
 
@@ -547,20 +563,14 @@ void AdminBookManagement::setStackWidget(MainWidget *p)
     this->psw = p;
 }
 
-//void AdminBookManagement::setIcons()
-//{
-//    QPixmap pixmap(":/image/querybook/back.png");
-//    QPixmap fitpixmap = pixmap.scaled(35, 35, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-//    ui->btn_->setIcon(QIcon(fitpixmap));
-//    ui->btn_la_3->setIconSize(QSize(35, 35));
-//    ui->btn_la_3->setFlat(true);
-//}
 void AdminBookManagement::backToThis(){
 
     emit changePageSignal(1);
 }
 void AdminBookManagement::on_TableModifyBtn_clicked()
 {
+    add_or_mod = 1;
+
     //先获取信号的发送者
     QPushButton *button = (QPushButton *)sender();
 
@@ -572,7 +582,6 @@ void AdminBookManagement::on_TableModifyBtn_clicked()
 
     AdminModifyBookDetail *admin_modify_book_detail = new AdminModifyBookDetail();
     connect(admin_modify_book_detail,SIGNAL(backSignal()),this,SLOT(backToThis()));
-    // qDebug() << "now come here5";
     admin_modify_book_detail->resize(1300, 730);
     psw->insertWidget(3,admin_modify_book_detail);
     /* 连接修改图书信息的信号和槽，以Book为参数*/

@@ -33,4 +33,6 @@ private:
     MainWidget *psw;//底层stackwidget对象的指针，便于返回
 };
 
+extern int add_or_mod;
+
 #endif // ADMINMODIFYBOOKDETAIL_H
