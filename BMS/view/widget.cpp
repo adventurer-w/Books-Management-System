@@ -10,6 +10,7 @@
 #include "../backend/User.h"
 #include <QDir>
 #include <QString>
+#include <QDebug>
 
 extern User now_user ;
 extern Utils now_utils;

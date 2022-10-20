@@ -19,6 +19,7 @@ public:
     void loadclassify();
     StdItemModel *model;
     void on_linePressed();
+    void on_btn_addclassify_clicked();
     void on_btn_modify_clicked();
     void on_btn_delete_clicked();
 

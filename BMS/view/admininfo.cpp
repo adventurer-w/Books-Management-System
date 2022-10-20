@@ -23,8 +23,10 @@ AdminInfo::AdminInfo(QWidget *parent) :
     ui->lb_username_txt->setText(now_user.getName());
     vector<Department> major_result;
     now_utils.GetDepartmentByNo(now_user.getDepartmentNo(),major_result);
+
     ui->lb_major_txt->setText(QString::fromStdString(major_result[0].getName()));
     ui->lb_number_txt->setText(now_user.getAccount());
+
     if(now_user.getSex()==1)
        ui->lb_sex_txt->setText("男");
     else
@@ -40,6 +42,7 @@ AdminInfo::AdminInfo(QWidget *parent) :
     ui->line_name->setText(now_user.getName());
     now_utils.GetDepartmentByNo(now_user.getDepartmentNo(),major_result);
     ui->line_major->setText(QString::fromStdString(major_result[0].getName()));
+
     ui->line_number->setText(now_user.getAccount());
     ui->line_major_2->setText(now_user.getEmail());
     loadQss(":/qss/admininfo/admininfo.qss");
@@ -77,9 +80,6 @@ void AdminInfo::on_btn_modifyInfo_clicked(){
 
 
     //增加弹窗
-
-
-
     if(now_utils.UpdateUser(usert,now_user)){
         // emit modifySignal();
         //qDebug()<<"修改成功";

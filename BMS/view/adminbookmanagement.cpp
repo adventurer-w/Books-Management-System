@@ -322,7 +322,6 @@ void AdminBookManagement::on_btn_ISBN_clicked()
                                         padding:4px;");
     }
     else {
-
         flag_admin=3;
         ui->btn_ISBN->setStyleSheet("color:rgb(255,255,255);\
                                         background-color:rgb(121,109,111);");
@@ -350,8 +349,10 @@ void AdminBookManagement::on_cbox_classify_currentIndexChanged(int)
 void AdminBookManagement::getBookList(QString classification, QString key)
 {
     re.clear();
+
     if (classification == "全部" && ctrl_admin == 0)
         flag_admin = 1;
+
     qDebug() << classification << "  " << flag_admin;
     if (flag_admin == 0)
     {
@@ -362,7 +363,6 @@ void AdminBookManagement::getBookList(QString classification, QString key)
     }
     else if (flag_admin == 1)
     {
-//        qDebug() << "will search by " << key;
         now_utils.GetBooksByBookName(const_cast<char *>(key.toStdString().c_str()), re);
     }
     else if (flag_admin == 2)

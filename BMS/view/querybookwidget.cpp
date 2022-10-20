@@ -32,6 +32,7 @@
 extern Utils now_utils;
 extern vector<Book> re;
 extern Book now_book;
+extern vector<BookClass> now_book_class;
 
 QueryBookWidget::QueryBookWidget(QWidget *parent) :
     QWidget(parent),
@@ -220,7 +221,10 @@ void QueryBookWidget::getBookList(QString classification, QString key){
     if (classification=="全部" && ctrl == 0)flag=1;
     //qDebug() << classification << "  "<< flag;
     if(flag==0){
-        now_utils.GetBooksByClassification(const_cast<char*>(classification.toStdString().c_str()),re);
+//        now_utils.GetBooksByClassification(const_cast<char*>(classification.toStdString().c_str()),re);
+        vector<BookClass> now_book_class;
+        now_utils.GetClassByName(const_cast<char*>(classify.toStdString().c_str()),now_book_class);
+        now_utils.GetBooksByClassNo(now_book_class[0].getClassNo(),re);
     }else if(flag==1){
         now_utils.GetBooksByBookName(const_cast<char*>(key.toStdString().c_str()),re);
     }else if(flag==2){
