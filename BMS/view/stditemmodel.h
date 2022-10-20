@@ -10,7 +10,10 @@ class StdItemModel :public QStandardItemModel
 public:
     StdItemModel();
     QVariant data(const QModelIndex &index, int role) const;
-    //void loadBookData(vector<Book> &re,BookList *bookList);
+    // 自定义的函数，为整个model设置数据
+
+
+
 };
 
 #endif // STDITEMMODEL_H

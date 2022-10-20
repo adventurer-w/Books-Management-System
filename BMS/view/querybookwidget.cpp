@@ -249,10 +249,11 @@ void QueryBookWidget::getBookList(QString classification, QString key){
         }
         if(info.size()==0){
             BookList *bookList =new BookList();
-            //connect(bookList,SIGNAL(stopSignal()),this,SLOT(killThread()));
-            //thread = new MyThread(bookList);
-            //thread->start();
+            connect(bookList,SIGNAL(stopSignal()),this,SLOT(killThread()));
+            thread = new MyThread(bookList);
+            thread->start();
             bookList->resize(1300,730);
+            bookList->move(this->x(),this->y()+170);
             bookList->setStackWidget(sub_mw);
             sub_mw->insertWidget(1,bookList);
             sub_mw->setCurrentIndex(1);

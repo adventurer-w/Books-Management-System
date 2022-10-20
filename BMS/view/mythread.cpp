@@ -17,8 +17,13 @@ MyThread::MyThread(BookList *bookList){
 
 void MyThread::run(){
     int n=10;
+
     if(bookList==NULL)return ;
-    this->bookList->loadBooks();
+    while(true){
+        this->bookList->loadBooks();
+        if(bookList->curRecord>=500)break;
+    }
+
 
 
 }

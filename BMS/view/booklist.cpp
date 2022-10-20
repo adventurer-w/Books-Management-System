@@ -107,7 +107,7 @@ void BookList::loadInitialBooks(){
     nCurScroller = tbv->verticalScrollBar()->value();
 
     int curNum = curRecord;
-    int maxLoadNum = 30;
+    int maxLoadNum = 0;
     model->setRowCount(re.size()-1);
     tbv->horizontalHeader()->setDefaultSectionSize(150);
     curRecord = re.size() <= curNum+maxLoadNum ? re.size():curNum+maxLoadNum;
@@ -199,8 +199,7 @@ void BookList::loadBooks(){
         tbv->setRowHeight(i,150);
         //往表格中添加按钮控件
         QPushButton *button = new QPushButton("详情");
-        QLabel *l1 = new QLabel();     //创建lable
-        //qDebug()<< -i << " ";
+        QLabel *l1 = new QLabel();     //创建lablel        //qDebug()<< -i << " ";
         string t1(re[i].getImgPath());
         string t2(re[i].getIsbn());
         string pic;
@@ -210,28 +209,28 @@ void BookList::loadBooks(){
                    pic=pictureDbPath+"moren.jpg";
 
         QPixmap pixmap(pic.c_str());
-               QPixmap fitpixmap;
-               if(pixmap.isNull()){
-                   QPixmap pixmap2((pictureDbPath+"moren.jpg").c_str());
-                   fitpixmap = pixmap2.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-               }else{
-                   fitpixmap = pixmap.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-               }
+       QPixmap fitpixmap;
+       if(pixmap.isNull()){
+           QPixmap pixmap2((pictureDbPath+"moren.jpg").c_str());
+           fitpixmap = pixmap2.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+       }else{
+           fitpixmap = pixmap.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+       }
 
         //qDebug()<< i << " ";
         l1->setPixmap(fitpixmap);    //加载图片
         l1->setScaledContents(true);
-        //qDebug()<< i+1 << " ";
+        qDebug()<< i+1 << " ";
         l1->setAlignment(Qt::AlignCenter);      //设置居中
-        tbv->setIndexWidget(model->index(i,0),l1);     //显示
+        tbv->setIndexWidget((const QModelIndex &)model->index(i,0),l1);     //显示
          //model->setData(model->index(i, 0), l1);
-        //qDebug()<< -i << " ";
+        qDebug()<< -i << " ";
         //设置按钮的自定义属性
-        button->setProperty("tb_ISBN",model->index(i,4,QModelIndex()).data().toString());
+        button->setProperty("tb_ISBN",(const QVariant &)(model->index(i,4,QModelIndex()).data().toString()));
         connect(button,&QPushButton::clicked,this,&BookList::on_TableBtn_clicked);
         //qDebug()<< i << " ";
         //将按钮加入表格中
-        tbv->setIndexWidget(model->index(i,6),button);
+        tbv->setIndexWidget((const QModelIndex &)model->index(i,6),button);
 
 
     }
