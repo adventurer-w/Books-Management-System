@@ -9,13 +9,6 @@ using namespace std;
 //！！！！密码用MD5储存！！！！
 // 前端在传输数据之前需要使用MD5加密！
 
-//string getGuidelines(){
-
-//}
-
-string Utils::getGuidelines(){
-    return db.getGuidelines();
-}
 
 int Utils::Login(char *account, char *password) { //密码需传入md5加密后的
 
@@ -41,7 +34,7 @@ int Utils::Register(User user) {
     if(!CheckAccount(user.getAccount())) return -2;
     if(user.getAccount()[0]=='0'&&user.getAccount()[1]=='0') return -2;
     if(!CheckEmail(user.getEmail())) return -4;
-
+    if(!CheckUserExistByEmail(user.getEmail())) return -4;
     if (CheckUserExist(user))
         return 0;
     else{
@@ -53,11 +46,21 @@ int Utils::Register(User user) {
 }
 
 bool Utils::InsertUser(User user) {
+    if(!CheckUserExistByEmail(user.getEmail())) return false;
     if (!CheckUserExist(user)){
         vector<User> vec;
         vec.push_back(user);
-        if (db.insert("user", vec) != -1)
+        if (db.insert("user", vec) != -1){
+            MyLog myLog = MyLog();
+            myLog.setOptionId(11);
+            myLog.setKey_1(user.getAccount());
+            myLog.setKey_2(user.getEmail());
+
+            vector<MyLog>  ett;
+            ett.push_back(myLog);
+            db.insert("log", ett);
             return true;
+        }
         else
             return false;
     }else{
@@ -84,8 +87,16 @@ bool Utils::DeleteUser(User user) {
         vector<string> vec;
         vec.push_back("not-all");
         vec.push_back("account");
-        if (db.Delete("user", user, vec) != -1)
+        if (db.Delete("user", user, vec) != -1){
+            MyLog myLog = MyLog();
+            myLog.setOptionId(12);
+            myLog.setKey_1(user.getAccount());
+
+            vector<MyLog>  ett;
+            ett.push_back(myLog);
+            db.insert("log", ett);
             return true;
+        }
         else
             return false;
     }else {
@@ -141,6 +152,20 @@ bool Utils::CheckRecordExist(Record record){
     vector<Record> res;
 
     if (db.select("record", record, vec, res) != -1)
+        return true;
+    else
+        return false;
+}
+
+bool Utils::CheckHistoryExist(Record record){
+    vector<string> vec;
+    vec.push_back("not-all");
+    vec.push_back("account");
+    vec.push_back("isbn");
+
+    vector<Record> res;
+
+    if (db.select("recordHistory", record, vec, res) != -1)
         return true;
     else
         return false;
@@ -299,7 +324,7 @@ int Utils::AdminRegister(Admin admin) {
 
 bool Utils::InsertAdmin(Admin admin){
     if (!CheckAdminExist(admin)){
-    if(admin.getAccount()[0]!='0'||admin.getAccount()[1]!='0') return false;
+        if(admin.getAccount()[0]!='0'||admin.getAccount()[1]!='0') return false;
         vector<Admin> vec;
         vec.push_back(admin);
         if (db.insert("admin", vec) != -1)
@@ -326,6 +351,15 @@ bool Utils::InsertBook(Book book)
             }
             InsertSingleBooks(books);
 
+            MyLog myLog = MyLog();
+            myLog.setOptionId(21);
+            myLog.setKey_1(book.getIsbn());
+
+
+            vector<MyLog>  ett;
+            ett.push_back(myLog);
+            db.insert("log", ett);
+
             return true;
         }else {
             return false;
@@ -340,8 +374,17 @@ bool Utils::DeleteBook(Book book){
         vector<string> vec;
         vec.push_back("not-all");
         vec.push_back("isbn");
-        if (db.Delete("book", book, vec) != -1)
+        if (db.Delete("book", book, vec) != -1){
+            MyLog myLog = MyLog();
+            myLog.setOptionId(32);
+            myLog.setKey_1(book.getIsbn());
+
+            vector<MyLog>  ett;
+            ett.push_back(myLog);
+            db.insert("log", ett);
             return true;
+        }
+
         else
             return false;
     }else {
@@ -412,12 +455,12 @@ bool Utils::GetBooksByAuthor(char* author, vector<Book>&result){
         return false;
 }
 
-bool Utils::GetBooksByClassification(char* classification, vector<Book>&result){
+bool Utils::GetBooksByClassNo(int classNo, vector<Book>&result){
     vector<string> value;
     value.push_back("not-all");
-    value.push_back("classification");
+    value.push_back("classNo");
     Book book = Book();
-    book.setClassification(classification);
+    book.setClassNo(classNo);
     if (db.select("book", book, value, result) != -1)
         return true;
     else
@@ -468,6 +511,15 @@ bool Utils::InsertRecord(Record record){
         vector<Record> entity;
         entity.push_back(record);
         if (db.insert("record", entity) != -1){
+            MyLog myLog = MyLog();
+            myLog.setOptionId(31);
+            myLog.setKey_1(record.getAccount());
+            myLog.setKey_2(record.getIsbn());
+
+            vector<MyLog>  ett;
+            ett.push_back(myLog);
+            db.insert("log", ett);
+
             return true;
         }else {
             return false;
@@ -484,13 +536,37 @@ bool Utils::DeleteRecord(Record record){
         vec.push_back("not-all");
         vec.push_back("isbn");
         vec.push_back("account");
-        if (db.Delete("record", record, vec) != -1)
+        if (db.Delete("record", record, vec) != -1){
+            vector<Record> entity;
+            entity.push_back(record);
+            db.insert("recordHistory",entity);
+
+            MyLog myLog = MyLog();
+            myLog.setOptionId(32);
+            myLog.setKey_1(record.getAccount());
+            myLog.setKey_2(record.getIsbn());
+
+            vector<MyLog>  ett;
+            ett.push_back(myLog);
+            db.insert("log", ett);
+
             return true;
-        else
+        }else
             return false;
     }else {
         return false;
     }
+}
+
+bool Utils::GetAllDepartment(vector<Department> &result){
+    vector<string> vec;
+    vec.push_back("all");
+    Department d =Department();
+
+    if (db.select("department",d,vec, result) != -1)
+        return true;
+    else
+        return false;
 }
 
 bool Utils::GetBookBorrowList(char* isbn,vector<Record>&result){
@@ -522,6 +598,22 @@ bool Utils::GetUserBorrowList(char* account,vector<Record>&result){
     if(result.empty()) return false;
     return true;
 }
+
+bool Utils::GetUserBorrowHistory(char* account,vector<Record>&result){
+
+    Record record= Record();
+    record.setAccount(account);
+
+    vector<string> value;
+    value.push_back("not-all");
+    value.push_back("account");
+
+    db.select("recordHistory", record, value, result);
+
+    if(result.empty()) return false;
+    return true;
+}
+
 
 bool Utils::GetRecord(char* account, char* isbn,Record &record0){
     Record record = Record();
@@ -597,8 +689,18 @@ bool Utils::InsertReserve(Reserve reserve){
     if (!CheckReserveExist(reserve)){
         vector<Reserve> vec;
         vec.push_back(reserve);
-        if (db.insert("reserve", vec) != -1)
+        if (db.insert("reserve", vec) != -1){
+            MyLog myLog = MyLog();
+            myLog.setOptionId(31);
+            myLog.setKey_1(reserve.getAccount());
+            myLog.setKey_2(reserve.getIsbn());
+
+            vector<MyLog>  ett;
+            ett.push_back(myLog);
+            db.insert("log", ett);
+
             return true;
+        }
         else
             return false;
     }else{
@@ -613,8 +715,17 @@ bool Utils::DeleteReserve(Reserve reserve){
         vec.push_back("not-all");
         vec.push_back("isbn");
         vec.push_back("account");
-        if (db.Delete("reserve", reserve, vec) != -1)
+        if (db.Delete("reserve", reserve, vec) != -1){
+            MyLog myLog = MyLog();
+            myLog.setOptionId(32);
+            myLog.setKey_1(reserve.getAccount());
+            myLog.setKey_2(reserve.getIsbn());
+
+            vector<MyLog>  ett;
+            ett.push_back(myLog);
+            db.insert("log", ett);
             return true;
+        }
         else
             return false;
     }else {
@@ -852,6 +963,45 @@ bool Utils::CheckDepartmentExistByName(char *name){
     return true;
 }
 
+bool Utils::CheckClassExistByNo(int classNo){
+    vector<string> value;
+    value.push_back("not-all");
+    value.push_back("classNo");
+    BookClass bookClass = BookClass();
+    bookClass.setClassNo(classNo);
+
+    vector<BookClass> result;
+    if (db.select("bookClass", bookClass, value, result) == -1)
+        return false;
+    return true;
+}
+
+bool Utils::CheckClassExistByName(char *name){
+    vector<string> value;
+    value.push_back("not-all");
+    value.push_back("name");
+    BookClass bookClass = BookClass();
+    bookClass.setName(name);
+
+    vector<BookClass> result;
+    if (db.select("bookClass", bookClass, value, result) == -1)
+        return false;
+    return true;
+}
+
+
+bool Utils::CheckUserExistByEmail(char *email){
+    vector<string> value;
+    value.push_back("not-all");
+    value.push_back("email");
+    User user = User();
+    user.setEmail(email);
+
+    vector<User> result;
+    if (db.select("user", user, value, result) == -1)
+        return false;
+    return true;
+}
 
 bool Utils::InsertDepartment(Department department){
     if (!CheckDepartmentExistByName(department.getName()) && !CheckDepartmentExistByNo(department.getDepartmentNo())){
@@ -950,6 +1100,73 @@ bool Utils::ReturnSingleBook(SingleBook singleBook){
             return false;
     }
     return true;
+}
+
+
+
+
+bool Utils::InsertClass(BookClass bookClass) {
+    if (!CheckClassExistByName(bookClass.getName()) && !CheckClassExistByNo(bookClass.getClassNo())){
+        vector<BookClass> vec;
+        vec.push_back(bookClass);
+        if (db.insert("bookClass", vec) != -1)
+            return true;
+        else
+            return false;
+    }else{
+        return false;
+    }
+}
+
+bool Utils::DeleteClass(BookClass bookClass) {
+    if (CheckClassExistByName(bookClass.getName())){
+        vector<string> vec;
+        vec.push_back("not-all");
+        vec.push_back("name");
+        if (db.Delete("bookClass", bookClass, vec) != -1)
+            return true;
+        else
+            return false;
+    }else {
+        return false;
+    }
+}
+
+bool Utils::GetClassByNo(int classNo,vector<BookClass> &result){
+    BookClass bookClass = BookClass();
+    bookClass.setClassNo(classNo);
+
+    vector<string> val;
+    val.push_back("not-all");
+    val.push_back("classNo");
+    if (db.select("bookClass", bookClass, val, result) != -1)
+        return true;
+    else
+        return false;
+}
+
+bool Utils::GetClassByName(char* name,vector<BookClass> &result){
+    BookClass bookClass = BookClass();
+    bookClass.setName(name);
+
+    vector<string> val;
+    val.push_back("not-all");
+    val.push_back("name");
+    if (db.select("bookClass", bookClass, val, result) != -1)
+        return true;
+    else
+        return false;
+}
+
+bool Utils::GetAllClass(vector<BookClass> &result){
+    vector<string> vec;
+    vec.push_back("all");
+    BookClass d =BookClass();
+
+    if (db.select("bookClass",d,vec, result) != -1)
+        return true;
+    else
+        return false;
 }
 
 

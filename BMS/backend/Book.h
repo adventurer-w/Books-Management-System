@@ -16,7 +16,7 @@ public:
     char author[AUTHOR_SIZE];//作者
     char publisher[PUBLISHER_SIZE];//出版社
     char isbn[ISBN_SIZE];//13位
-    char classification[CLASSIFICATION_SIZE];//类别
+    int classNo;//类别
     char publishDate[DATE_SIZE];//出版时间
     char introduction[INTRODUCTION_SIZE]; //简介
     char imgPath[IMAGE_PATH];//图片路径
@@ -55,11 +55,10 @@ public:
             this->isbn[i] = isbn[i];
     }
 
-    char *getClassifition() { return this->classification; }
+    int getClassNo() { return classNo; }
 
-    void setClassification(const char *classification) {
-        for (int i = 0; i < CLASSIFICATION_SIZE; i++)
-            this->classification[i] = classification[i];
+    void setClassNo(int classNo) {
+        this->classNo = classNo;
     }
 
     char *getPublishDate(){ return this->publishDate; }
@@ -105,7 +104,7 @@ public:
         else if (Elem == "author")return typeid(author).name();
         else if (Elem == "publisher")return typeid(publisher).name();
         else if (Elem == "isbn")return typeid(isbn).name();
-        else if (Elem == "classification")return typeid(classification).name();
+        else if (Elem == "classNo")return typeid(classNo).name();
         else if (Elem == "publishDate")return typeid(publishDate).name();
         else if (Elem == "introduction")return typeid(introduction).name();
         else if (Elem == "imgPath")return typeid(imgPath).name();
@@ -126,6 +125,7 @@ public:
         if (Elem == "id") return id;
         else if (Elem == "left") return left;
         else if (Elem == "allNum") return allNum;
+        else if(Elem=="classNo")return classNo;
         else if (Elem == "historyNum")return historyNum;
         else if (Elem == "boyHistoryNum")return boyHistoryNum;
         else if (Elem == "girlHistoryNum")return girlHistoryNum;
@@ -151,7 +151,6 @@ public:
         else if (Elem == "author")return author;
         else if (Elem == "publisher")return publisher;
         else if(Elem=="isbn")return isbn;
-        else if(Elem=="classification")return classification;
         else if(Elem=="publishDate")return publishDate;
         else if(Elem=="introduction")return introduction;
         else if(Elem=="imgPath")return imgPath;

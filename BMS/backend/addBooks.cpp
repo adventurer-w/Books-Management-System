@@ -72,7 +72,7 @@ void addBooks(string origin,string cla) {
         s.clear();
         getline(in, s);
         b.setIsbn(s.c_str());
-        b.setClassification(cla.c_str());
+//        b.setClassification(cla.c_str());
 
         //余量
         b.setLeft(qrand() % 20+1);
