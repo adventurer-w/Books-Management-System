@@ -1,0 +1,33 @@
+
+/*两大榜单标题*/
+#lb_popularborrow,#lb_categoryrank{
+    color:rgb(90,90,90);
+    font-family:KaiTi;
+    font-size:25px;
+    background:transparent;
+}
+
+ /*设置分类排行榜标题*/
+#fm_man,#fm_woman,#fm_collect,#fm_newbook{
+    background-color:rgb(255,255,255);
+    border-image:none;
+    border-radius:10px;    /*角弧度*/
+    border:2px solid rgb(240,240,240);
+    }
+ /*书名的大小和字体*/
+Qlabel{
+    font-family:KaiTi;
+    font-size:8px;
+    background-color:rgb(255,255,255);
+}
+
+/*分类书籍的大小和字体*/
+#lb_man,#lb_woman,#lb_collect,#lb_newbook{
+    font-size:20px;
+    font-weight:bold;
+
+}
+
+
+
+

@@ -1,0 +1,73 @@
+/**
+    该页面为粉红色皮肤
+*/
+
+
+QLabel{
+
+    color:#000000;
+    font-size:18px;
+    font-family:KaiTi;
+
+}
+#lb_username_main{
+
+    color:#ffffff;
+    font-size:18px;
+    font-family:KaiTi;
+
+}
+#lb_number_main{
+
+color:#ffffff;
+font-size:18px;
+font-family:KaiTi;
+
+}
+QPushButton{
+
+    background-image:none;
+    background-repeat:no-repeat;
+    background-origin: padding;
+    padding-left:20px;
+    color:white;
+    font-weight:bold;
+    font-size:18px;
+    font-family:SimSun;
+    border-radius:10px;
+
+
+}
+
+QPushButton:hover{
+
+    background:rgba(192,224,223,70);
+    background-position:left;
+    background-repeat:no-repeat;
+    background-origin: content;
+    color:#27bc78;
+
+    font-weight:bold;
+    font-size:18px;
+    font-family:SimSun;
+    border-radius:10px;
+
+}
+QPushButton:press{
+
+    background:rgba(192,224,223,150);
+    background-position:left;
+    background-repeat:no-repeat;
+    color:#27bc78;
+
+    font-weight:bold;
+    font-size:18px;
+    font-family:SimSun;
+    border-radius:10px;
+
+}
+
+
+
+
+

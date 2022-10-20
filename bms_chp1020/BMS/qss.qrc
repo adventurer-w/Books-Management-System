@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qss/login/style-1.qss</file>
+        <file>qss/login/style-2.qss</file>
+        <file>qss/login/style-3.qss</file>
+        <file>qss/login/style-4.qss</file>
+        <file>qss/mainwindow/mainwindow.qss</file>
+        <file>qss/base.qss</file>
+        <file>qss/searchlineedit/le_btn.qss</file>
+        <file>qss/userprofilewidget/userprofile.qss</file>
+        <file>qss/querybookwidget/querybook.qss</file>
+        <file>qss/bookdetails/bookdetails.qss</file>
+        <file>qss/booklist/booklist.qss</file>
+        <file>qss/bookranking/bookranking.qss</file>
+        <file>qss/modifyinfowidget/modifyinfo.qss</file>
+        <file>qss/adminbookmanagement/bookmanagement.qss</file>
+        <file>qss/usermanagement/usermanagement.qss</file>
+        <file>qss/admininfo/admininfo.qss</file>
+    </qresource>
+</RCC>

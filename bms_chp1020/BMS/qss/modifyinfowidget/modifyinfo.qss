@@ -1,0 +1,96 @@
+
+
+#btn_modifyInfo {
+    padding-left:3px;
+    color:black;
+    font-weight:bold;
+    font-size:18px;
+    font-family:SimSun;
+    border-radius:5px;
+    background:rgba(255,224,206,200);
+}
+#btn_modifyInfo:hover{
+
+    background:rgba(255,224,206,160);
+    font-weight:bold;
+}
+
+#btn_modifyInfo :pressed
+{
+
+    background:rgba(255,224,206,120);
+    font-weight:bold;
+    padding-left:5px;
+    padding-top:5px;
+    border-radius:10px;
+}
+#btn_modifyPassword {
+    padding-left:3px;
+    color:black;
+    font-weight:bold;
+    font-size:18px;
+    font-family:SimSun;
+    border-radius:5px;
+    background:rgba(255,224,206,200);
+}
+#btn_modifyPassword:hover{
+
+    background:rgba(255,224,206,160);
+    font-weight:bold;
+}
+
+#btn_modifyPassword:pressed
+{
+
+    background:rgba(255,224,206,120);
+    font-weight:bold;
+    padding-left:5px;
+    padding-top:5px;
+    border-radius:10px;
+}
+QLabel {
+    color:black;
+    font-size:18px;
+    font-weight:bold;
+    font-family:Times New Roman;
+    background:transparent;
+}
+QLineEdit {
+    background-color:rgba(230, 230, 230,100);
+
+}
+QComboBox{
+    font-family: KaiTi;
+    font-size: 18px;
+    border-radius:3px;
+    background-color:rgba(230, 230, 230,100);
+}
+QComboBox:on {
+    font-family: KaiTi;
+    font-size: 18px;
+    background:rgba(230, 230, 230,100);
+    color: rgba(230, 230, 230,100);
+}
+QComboBox::drop-down {			/*下拉按钮*/
+      subcontrol-origin: padding;
+      subcontrol-position: top right;
+      width: 20px;
+      border:none;
+}
+
+QComboBox::down-arrow {		/*下拉按钮*/
+    background-image:url(":/image/querybook/down_arrow.png");
+    background-repeat:no-repeat;
+    background-origin: padding;
+    width: 20px;/*设置该图标的宽高*/
+    height: 16px;
+  }
+
+QComboBox QAbstractItemView{	/*列表 */
+        selection-background-color:rgba(200,200,200,200);
+        border-radius:4px;
+        font-size:15px;
+        font-family: KaiTi;
+
+  }
+

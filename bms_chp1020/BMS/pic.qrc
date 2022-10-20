@@ -1,0 +1,22 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/pic/1.png</file>
+        <file>res/pic/2.png</file>
+        <file>res/pic/3.png</file>
+        <file>res/pic/4.png</file>
+        <file>res/pic/qq.png</file>
+        <file>res/pic/qq-hover.png</file>
+        <file>res/pic/wx.png</file>
+        <file>res/pic/wb.png</file>
+        <file>res/pic/wb-hover.png</file>
+        <file>res/pic/wx-hover.png</file>
+        <file>res/pic/user_name.png</file>
+        <file>res/pic/pwd.png</file>
+        <file>res/pic/background-1.png</file>
+        <file>res/pic/background-2.png</file>
+        <file>res/pic/background-3.png</file>
+        <file>res/pic/background-4.png</file>
+        <file>res/pic/personal_homepage.jpg</file>
+        <file>res/pic/personal_head.png</file>
+    </qresource>
+</RCC>

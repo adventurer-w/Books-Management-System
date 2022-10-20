@@ -1,0 +1,130 @@
+
+
+QLabel{
+
+    color:#000000;
+    font-size:18px;
+    font-family:KaiTi;
+
+
+}
+#fm_personal_infor{
+
+
+}
+
+QPushButton{
+    color:#000000;
+    font-size:18px;
+    font-family:KaiTi;
+    font-weight:normal;
+}
+#lb_currentborrow{
+    font: 75 15pt "KaiTi";
+    font-weight:bold;
+
+
+}
+QScrollBar:vertical{
+    width:25px;
+    background-color:rgba(172, 232, 152, 50);/*垂直滚动条 背景 颜色*/
+    margin:1px;
+    border:1px solid #ffffff;/*边框颜色*/
+    padding-top:5px;
+    padding-bottom:5px;
+}
+QScrollBar::sub-line:vertical{
+    height:11px;
+    width:11px;
+    margin-top:2px;
+    subcontrol-position:top;
+    subcontrol-origin:margin;
+
+}
+QScrollBar::add-line:vertical{
+    height:11px;
+    width:11px;
+    margin-bottom:2px;
+    subcontrol-position:bottom;
+    subcontrol-origin:margin;
+
+}
+QScrollBar::handle:vertical{
+    width:16px;
+
+    background:rgba(172, 232, 152, 250);/*垂直滚动条 滚轮 颜色*/
+}
+QScrollBar::handle:vertical:hover{
+    width:16px;
+
+    background:rgba(172, 232, 152, 200);/*垂直滚动条 滚轮悬浮 颜色*/
+}
+
+/*隐藏箭头*/
+QScrollBar::add-line:vertial
+{
+    height: 0px;
+}
+QScrollBar::sub-line:vertial
+{
+    height: 0px;
+}
+QScrollBar::up-arrow:vertial,QScrollBar::down-arrow:vertial
+{
+    height: 0px;
+}
+
+
+
+
+QTableView{
+
+    background-color:rgb(250,250,250);
+    border:0px solid rgb(230,230,230);
+    font: 75 9pt "KaiTi";
+    color:rgb(0,0,0)
+}
+
+QTableView::item
+{
+       border:0px solid rgb(65,65,65);
+       border-bottom:2px rgb(230,230,230);
+        color:rgb(0,0,0);
+        text-align:center;
+
+}
+QTableView::item:hover
+{
+    background-color: rgb(200,200,200);
+    font: 75 9pt "KaiTi";
+    color:rgb(200,230,180);
+}
+QTableView::item::selected
+{
+    background-color: rgb(200,200,200);
+    font: 75 9pt "KaiTi";
+    color:rgb(0,0,0);
+}
+
+QHeaderView::section{
+    background-color:rgb(240,240,240);
+    color:rgb(0,0,0);
+    border:0px solid rgb(60,60,60);
+    border-bottom:0px solid rgb(70,70,70);
+    height:27px;
+    font: 75 9pt "KaiTi";
+    font-weight:bold;
+    min-width:55px;
+
+}
+QHeaderView::section:hover
+{
+    background-color:rgb(180,180,180);
+    font-weight:bold;
+    font: 75 9pt "KaiTi";
+
+
+}
+
+
+
