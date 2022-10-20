@@ -202,7 +202,6 @@ DISTFILES += \
     user.dat
 
 CONFIG += resources_big
-QT += charts
 QT += axcontainer
 
 

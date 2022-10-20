@@ -33,16 +33,16 @@ MainWindow::MainWindow(QWidget *parent)
     /* start */
 //    if(!now_user.getAccount()[0] && !now_user.getAccount()[1])userType = 0;
 //    else userType = 1;
-    userType = 0;
+    userType = 1;
     /* end */
-    qDebug() << "1";
+    //qDebug() << "1";
     loadUserInfo();
-    qDebug() << "2";
+    //qDebug() << "2";
     loadMenuBar();
-    qDebug() << "3";
+    //qDebug() << "3";
     loadPages(0);
 
-    qDebug() << "4";
+    //qDebug() << "4";
     QString qssfilename =":/qss/mainwindow/mainwindow.qss";
     this->loadQss(qssfilename);
 
@@ -204,6 +204,11 @@ void MainWindow::menuBarBtnClicked(){
     QPushButton *this_btn = qobject_cast<QPushButton*>(sender());
     int mode = sender()->objectName().toInt();
     if(mode < 0)return ;
+    if(mode == 3){
+        Widget *login = new Widget;
+       this->hide();
+        login->show();
+    }
     //qDebug() << "mode:"<<mode;
     loadPages(mode+1);
     mw->setCurrentIndex(mode);

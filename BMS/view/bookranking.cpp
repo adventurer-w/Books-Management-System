@@ -124,7 +124,7 @@ void BookRanking::navigateToDetails(){
 */
 void BookRanking::showBorrowRank(){
 
-
+    //qDebug()<< " clb:" << result.size();
     QPixmap pix[7];//展示本书，后期可更改
     for(int i=0;i<7;i++){
         pix[i]=p(result[i].getImgPath(),result[i].getIsbn());

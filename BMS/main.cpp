@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
     now_utils.GetBoyRank(result_boy);
     now_utils.GetGirlRank(result_girl);
     now_utils.GetPointRank(result_point);
+    //qDebug()<< result_boy.size();
     Widget w;
     w.show();
   //  QApplication a(argc, argv);
