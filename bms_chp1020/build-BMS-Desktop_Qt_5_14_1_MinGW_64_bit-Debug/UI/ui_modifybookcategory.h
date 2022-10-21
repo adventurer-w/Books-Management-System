@@ -30,7 +30,7 @@ public:
     {
         if (ModifyBookCategory->objectName().isEmpty())
             ModifyBookCategory->setObjectName(QString::fromUtf8("ModifyBookCategory"));
-        ModifyBookCategory->resize(230, 450);
+        ModifyBookCategory->resize(262, 492);
         line_addclassify = new QLineEdit(ModifyBookCategory);
         line_addclassify->setObjectName(QString::fromUtf8("line_addclassify"));
         line_addclassify->setGeometry(QRect(100, 10, 131, 30));

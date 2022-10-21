@@ -95,9 +95,6 @@ BookList::BookList(QWidget *parent) :
 void BookList::loadInitialBooks(){
     nCurScroller = ui->tb->verticalScrollBar()->value();
 
-    if(re.size()<=0)
-        QMessageBox::information(this,"提示信息","馆中暂无该书！");
-
     int curNum = curRecord;
     int maxLoadNum = 60;
     curRecord = re.size() <= curNum+maxLoadNum ? re.size():curNum+maxLoadNum;
@@ -126,7 +123,7 @@ void BookList::loadInitialBooks(){
         QPixmap pixmap(pic.c_str());
                QPixmap fitpixmap;
                if(pixmap.isNull()){
-                   qDebug()<<"1空";
+//                   qDebug()<<"1空";
                    QPixmap pixmap2((pictureDbPath+"moren.jpg").c_str());
                    fitpixmap = pixmap2.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
                }else{

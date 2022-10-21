@@ -35,11 +35,13 @@ Register::~Register()
 
 //}
 
+string email_emailcode;
 string emailcode;
+
 void Register::on_btn_emailcode_clicked(){
     emailcode.clear();
     QString email=ui->line_email->text();
-
+    string email_emailcode=email.toStdString();
     if(now_utils.CheckUserExistByEmail(const_cast<char*>(email.toStdString().c_str()))>0){
         QMessageBox::information(this,"提示信息","该邮箱已被注册！");
     }else{
@@ -152,6 +154,8 @@ void Register::on_btn_register_clicked()
         s+="邮箱应小于等于"+t+"个字符\n";
     }else if(!now_utils.CheckEmail(const_cast<char*>(email.toStdString().c_str()))){
         s+="邮箱格式为:名称@域名，且只允许字母、数字、下划线、英文句号、以及中划线组成\n";
+    }else if(email.toStdString()!=email_emailcode){
+        s+="邮箱与发送验证码邮箱不一致！";
     }
 
     //邮箱验证码 emailcode

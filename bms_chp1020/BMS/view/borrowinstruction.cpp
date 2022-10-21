@@ -1,5 +1,7 @@
 #include "borrowinstruction.h"
 #include "ui_borrowinstruction.h"
+#include "backend/Utils.h"
+extern Utils now_utils;
 
 BorrowInstruction::BorrowInstruction(QWidget *parent) :
     QWidget(parent),
@@ -7,6 +9,8 @@ BorrowInstruction::BorrowInstruction(QWidget *parent) :
 {
     ui->setupUi(this);
     //loadQss();
+
+    ui->textEdit->setText(QString::fromStdString(now_utils.getGuidelines()));
 }
 
 BorrowInstruction::~BorrowInstruction()
@@ -30,3 +34,5 @@ bool BorrowInstruction::loadQss(const QString &StyleSheetFile){
         ofile.close();
 
 }
+
+

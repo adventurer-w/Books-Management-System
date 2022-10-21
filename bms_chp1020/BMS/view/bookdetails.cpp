@@ -63,15 +63,14 @@ void BookDetails::loadBookDetail(){
                pic=pictureDbPath+"moren.jpg";
 
     QPixmap pixmap(pic.c_str());
-           QPixmap fitpixmap;
-           if(pixmap.isNull()){
-               qDebug()<<"1空";
-               string path=pictureDbPath+"moren.jpg";
-               QPixmap pixmap2(path.c_str());
-               fitpixmap = pixmap2.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-           }else{
-               fitpixmap = pixmap.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-           }
+   QPixmap fitpixmap;
+   if(pixmap.isNull()){
+//       qDebug()<<"1空";
+       QPixmap pixmap2((pictureDbPath+"moren.jpg").c_str());
+       fitpixmap = pixmap2.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+   }else{
+       fitpixmap = pixmap.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+   }
     ui->lb_bookphoto->setPixmap(fitpixmap);    //加载图片
 
     ui->lb_bookphoto->setScaledContents(true);
@@ -118,16 +117,8 @@ void BookDetails::on_btn_star_clicked(){//收藏
 
 void BookDetails::on_btn_borrow_clicked(){//借阅
     Record record;
-    vector<Department> department;
-    now_utils.GetDepartmentByNo(now_user.getDepartmentNo(),department);
-    int borrow_max=department[0].getMaxBook();
-
     if(now_user.getDebet()>0)
         QMessageBox::information(this,"借阅书籍","请先缴纳欠款方可借书！");
-    else if(now_user.getNumBorrowed()>=borrow_max){
-        //需要借阅上限还有一本的空闲
-        QMessageBox::information(this,"预约书籍","借阅数达上限，无法借阅");
-    }
     else{
         if(now_book.getLeft()>0){
             record.setIsbn(now_book.getIsbn());
@@ -147,11 +138,6 @@ void BookDetails::on_btn_borrow_clicked(){//借阅
                 //qDebug()<<"借书成功！";
                 QMessageBox::information(this,"借阅书籍","小伙好手速，借书成功！");
                 now_book.setLeft(now_book.getLeft()-1);
-                now_book.setHistoryNum(now_book.getHistoryNum()+1);
-                if(now_user.getSex()==1)
-                    now_book.setBoyHistoryNum(now_book.getBoyHistoryNum()+1);
-                else if(now_user.getSex()==2)
-                    now_book.setGirlHistoryNum(now_book.getGirlHistoryNum()+1);
                 Book bookt;
                 bookt.setIsbn(now_book.getIsbn());
                 User ut;
@@ -190,15 +176,13 @@ void BookDetails::on_btn_reserve_clicked(){//预约
     vector<Record> record;
     now_utils.GetUserBorrowList(now_user.getAccount(),record);
     for(int i=0;i<record.size();i++){
-        qDebug()<<record[i].getIsbn();
+//        qDebug()<<record[i].getIsbn();
         if(record[i].getIsbn()==now_book.getIsbn()){
             flag=true;
             break;
         }
     }
-    vector<Department> department;
-    now_utils.GetDepartmentByNo(now_user.getDepartmentNo(),department);
-    int borrow_max=department[0].getMaxBook();
+
     if(now_user.getDebet()>0)
         QMessageBox::information(this,"预约书籍","请先缴纳欠款方可预约书！");
     else if(flag){
@@ -207,10 +191,10 @@ void BookDetails::on_btn_reserve_clicked(){//预约
     else if(now_book.getLeft()>0){
         QMessageBox::information(this,"预约书籍","该图书尚有库存无法预约");
     }
-    else if(now_user.getNumBorrowed()>=borrow_max){
-        //需要借阅上限还有一本的空闲
-        QMessageBox::information(this,"预约书籍","借阅数达上限，无法预约");
-    }
+//    else if(){
+//        //需要借阅上限还有一本的空闲
+
+//    }
     else{
         Reserve reserve;
         reserve.setIsbn(now_book.getIsbn());
@@ -226,15 +210,6 @@ void BookDetails::on_btn_reserve_clicked(){//预约
         reserve.setPublisher(now_book.getPublisher());
         //(！！需要没人预约且无人预约,否则会返回失败!!)
         if(now_utils.InsertReserve(reserve)){
-
-            //预约则历史借阅数直接增加！
-            now_book.setHistoryNum(now_book.getHistoryNum()+1);
-            if(now_user.getSex()==1)
-                now_book.setBoyHistoryNum(now_book.getBoyHistoryNum()+1);
-            else if(now_user.getSex()==2)
-                now_book.setGirlHistoryNum(now_book.getGirlHistoryNum()+1);
-
-
             //qDebug()<<"预约成功！";
             QMessageBox::information(this,"预约书籍","小伙好手速，预约成功！");
             User ut;
