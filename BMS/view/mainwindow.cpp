@@ -32,11 +32,11 @@ MainWindow::MainWindow(QWidget *parent)
     /* judge admin 0 or user 1 here*/
     /* start */
 
-//    if(now_user.getAccount()[0]=='0' && now_user.getAccount()[1]=='0')
-//        userType = 0;
-//    else
-//        userType = 1;
-    userType = 1;
+    if(now_user.getAccount()[0]=='0' && now_user.getAccount()[1]=='0')
+        userType = 0;
+    else
+        userType = 1;
+//    userType = 1;
 
     qDebug()<<userType;
     qDebug()<<now_user.getAccount();
