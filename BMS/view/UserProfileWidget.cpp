@@ -266,6 +266,21 @@ void UserProfileWidget::showBorrow(){
         ui->tbv_borrow->setIndexWidget(model->index(i,5),button);
     }
 
+    vector<Record> re_history;
+    now_utils.GetUserBorrowHistory(now_user.getAccount(),re_history);
+    for(int j=0;i<record.size()+reserve.size()+re_history.size();i++,j++){
+        string s=re_history[j].getBookName();
+        s+="\n（曾借阅）";
+        model->setItem(i, 0, new QStandardItem(s.c_str()));
+        model->setItem(i, 1, new QStandardItem(re_history[j].getAuthor()));
+        model->setItem(i, 2, new QStandardItem(re_history[j].getPublisher()));
+        model->setItem(i, 3, new QStandardItem(re_history[j].getIsbn()));
+        s=re_history[j].getDate();
+        s+="\n(曾借阅时间)";
+        model->setItem(i, 4, new QStandardItem(s.c_str()));
+        ui->tbv_borrow->setRowHeight(i,50);
+    }
+
 
     if(debet>0){
 
