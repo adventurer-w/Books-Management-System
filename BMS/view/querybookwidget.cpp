@@ -252,7 +252,7 @@ void QueryBookWidget::getBookList(QString classification, QString key){
             connect(bookList,SIGNAL(stopSignal()),this,SLOT(killThread()));
             thread = new MyThread(bookList);
             thread->start();
-            int time = 10000;
+            int time = 10000;//设定时间给子线程加载数据，降低子线程没有加载好图片的可能性
             while(--time){};
             bookList->resize(1300,730);
             bookList->move(this->x(),this->y()+170);
