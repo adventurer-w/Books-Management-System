@@ -218,16 +218,6 @@
     <string>确认密码</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="line_major">
-   <property name="geometry">
-    <rect>
-     <x>850</x>
-     <y>520</y>
-     <width>400</width>
-     <height>40</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QLabel" name="lb_number_2">
    <property name="geometry">
     <rect>
@@ -239,16 +229,6 @@
    </property>
    <property name="text">
     <string>学号</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="line_number">
-   <property name="geometry">
-    <rect>
-     <x>850</x>
-     <y>220</y>
-     <width>400</width>
-     <height>40</height>
-    </rect>
    </property>
   </widget>
   <widget class="QLabel" name="lb_mojor_2">
@@ -300,16 +280,6 @@
     <string>修改信息</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="line_major_2">
-   <property name="geometry">
-    <rect>
-     <x>850</x>
-     <y>640</y>
-     <width>400</width>
-     <height>40</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QLabel" name="lb_name">
    <property name="geometry">
     <rect>
@@ -357,6 +327,45 @@
    </property>
    <property name="text">
     <string>性别</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lb_account">
+   <property name="geometry">
+    <rect>
+     <x>850</x>
+     <y>220</y>
+     <width>401</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lb_major_4">
+   <property name="geometry">
+    <rect>
+     <x>850</x>
+     <y>520</y>
+     <width>401</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lb_major_5">
+   <property name="geometry">
+    <rect>
+     <x>850</x>
+     <y>640</y>
+     <width>401</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
    </property>
   </widget>
  </widget>

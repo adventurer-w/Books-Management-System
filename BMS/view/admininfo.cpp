@@ -41,10 +41,10 @@ AdminInfo::AdminInfo(QWidget *parent) :
     ui->box_sex->addItems(QStringList()<<"男"<<"女");
     ui->line_name->setText(now_user.getName());
     now_utils.GetDepartmentByNo(now_user.getDepartmentNo(),major_result);
-    ui->line_major->setText(QString::fromStdString(major_result[0].getName()));
+    ui->lb_major_4->setText(QString::fromStdString(major_result[0].getName()));
 
-    ui->line_number->setText(now_user.getAccount());
-    ui->line_major_2->setText(now_user.getEmail());
+    ui->lb_account->setText(now_user.getAccount());
+    ui->lb_major_5->setText(now_user.getEmail());
     loadQss(":/qss/admininfo/admininfo.qss");
 }
 
@@ -54,28 +54,28 @@ AdminInfo::~AdminInfo()
 }
 
 void AdminInfo::on_btn_modifyInfo_clicked(){
-    QString account=ui->line_number->text();//学号
+    // QString account=ui->line_number->text();//学号
     QString name=ui->line_name->text();//姓名
-    QString major=ui->line_major->text();//专业
-    QString email=ui->line_major_2->text();//邮箱
+    // QString major=ui->line_major->text();//专业
+    // QString email=ui->line_major_2->text();//邮箱
     QString sex=ui->box_sex->currentText();//性别
 
     User usert;
     usert.setAccount(now_user.getAccount());
 
-    now_user.setAccount(const_cast<char*>(account.toStdString().c_str()));
+    // now_user.setAccount(const_cast<char*>(account.toStdString().c_str()));
     now_user.setName(const_cast<char*>(name.toStdString().c_str()));
-    vector<Department> major_result;
-    now_utils.GetDepartmentByName(const_cast<char*>(major.toStdString().c_str()),major_result);
-    now_user.setDepartmentNo(major_result[0].getDepartmentNo());
-    now_user.setEmail(email.toStdString().c_str());
+    // vector<Department> major_result;
+    // now_utils.GetDepartmentByName(const_cast<char*>(major.toStdString().c_str()),major_result);
+    // now_user.setDepartmentNo(major_result[0].getDepartmentNo());
+    // now_user.setEmail(email.toStdString().c_str());
     if(sex=="男")
         now_user.setSex(1);
     else
         now_user.setSex(2);
-    now_user.setNumBorrowed(now_user.getNumBorrowed());//借书数目
-    now_user.setNumAppointed(now_user.getNumAppointed());//预约数
-    now_user.setDebet(now_user.getDebet());//欠款数
+    // now_user.setNumBorrowed(now_user.getNumBorrowed());//借书数目
+    // now_user.setNumAppointed(now_user.getNumAppointed());//预约数
+    // now_user.setDebet(now_user.getDebet());//欠款数
 
 
 
@@ -103,14 +103,9 @@ void AdminInfo::on_btn_modifyPassword_clicked(){
     MD5 md5;
     string b= md5.read(pwd.toStdString());//加密
 
-
     //增加弹窗
 
-
     //增加提示信息label
-
-
-
     if(pwd==confirmPwd){
         now_user.setPassword(const_cast<char*>(b.c_str()));
         if(now_utils.UpdateUser(usert,now_user)){
@@ -128,10 +123,8 @@ void AdminInfo::paintEvent(QPaintEvent *){
     QPixmap pix;
     pix.load(":/image/adminProfile/background.jpg");
     painter.drawPixmap(0,0,this->width(),this->height(),pix);
-    //qDebug() << "user paint" <<endl;
-
-
 }
+
 bool AdminInfo::loadQss(const QString &StyleSheetFile){
     QFile ofile(StyleSheetFile);
     bool Ret = ofile.open(QFile::ReadOnly);
