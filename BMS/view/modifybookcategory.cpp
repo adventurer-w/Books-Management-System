@@ -49,16 +49,20 @@ ModifyBookCategory::~ModifyBookCategory()
 }
 void ModifyBookCategory::loadclassify()
 {
+    qDebug() << "re";
     vector<BookClass> now_book_class;
     now_utils.GetAllClass(now_book_class);
     int n = now_book_class.size();
     for (int i = 0; i < n; i++)
     {
+//        qDebug() << now_book_class[i].getName();
         model->setItem(i, 0, new QStandardItem(now_book_class[i].getName()));
 //        qDebug() << "成功载入类别名";
         QPushButton *btn_delete = new QPushButton("删除");
         ui->tb->setIndexWidget(model->index(i, 1), btn_delete); //显示
+//        btn_delete->setProperty("tb_classify_no", model->index(i, 3, QModelIndex()).data().toString());
 
+//        qDebug() << "成功载入按钮";
         btn_delete->setProperty("tb_classify_name", now_book_class[i].getName());
         btn_delete->setProperty("tb_classify_no", i);
 

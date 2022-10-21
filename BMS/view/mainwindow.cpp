@@ -31,15 +31,17 @@ MainWindow::MainWindow(QWidget *parent)
     this->resize(1600,900);
     /* judge admin 0 or user 1 here*/
     /* start */
-//    if(!now_user.getAccount()[0] && !now_user.getAccount()[1])userType = 0;
-//    else userType = 1;
-    userType = 0;
-    /* end */
+    if(now_user.getAccount()[0]=='0' && now_user.getAccount()[1]=='0')
+        userType = 0;
+    else
+        userType = 1;
+
+    qDebug()<<userType;
+    qDebug()<<now_user.getAccount();
 
     loadUserInfo();
     loadMenuBar();
     loadPages(0);
-
     QString qssfilename =":/qss/mainwindow/mainwindow.qss";
     this->loadQss(qssfilename);
 
@@ -180,7 +182,7 @@ void MainWindow::loadPages(int mode){
             /*默认导入 图书查询页面*/
             QueryBookWidget *queryBookWidget = new  QueryBookWidget;
             queryBookWidget->resize(1300,900);
-            //userProfileWidget->setParent(this->mw);
+//            userProfileWidget->setParent(this->mw);
             mw->insertWidget(2, queryBookWidget);
 
         }
@@ -201,6 +203,11 @@ void MainWindow::menuBarBtnClicked(){
     QPushButton *this_btn = qobject_cast<QPushButton*>(sender());
     int mode = sender()->objectName().toInt();
     if(mode < 0)return ;
+    if(mode == 3){
+        Widget *login = new Widget;
+       this->hide();
+        login->show();
+    }
     //qDebug() << "mode:"<<mode;
     loadPages(mode+1);
     mw->setCurrentIndex(mode);

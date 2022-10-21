@@ -45,7 +45,7 @@ UserProfileWidget::UserProfileWidget(QWidget *parent) :
        ui->lb_username_txt->setText(QString::fromStdString(now_user.getName()));
        vector<Department> major_result;
        now_utils.GetDepartmentByNo(now_user.getDepartmentNo(),major_result);
-       ui->lb_major_txt->setText(QString::fromStdString(major_result[0].getName()));
+       ui->lb_major_txt->setText(QString::fromStdString(major_result[0].getName())+"（上限："+QString::number(major_result[0].getMaxBook())+"本)");
        ui->lb_number_txt->setText(QString::fromStdString(now_user.getAccount()));
        if(now_user.getSex()==1)
            ui->lb_sex_txt->setText("男");
@@ -321,7 +321,10 @@ void UserProfileWidget::onTableBtnClicked()
 
     if(now_utils.Return(now_user.getAccount(), const_cast<char*>(ISBN.toStdString().c_str()))){
         QMessageBox::information(this,"还书信息","恭喜你，还书成功！");
-
+        User ut;
+        ut.setAccount(now_user.getAccount());
+        now_user.setNumBorrowed(now_user.getNumBorrowed()-1);
+        now_utils.UpdateUser(ut,now_user);
 
         Reserve reserve;
         now_utils.GetReserveUser(const_cast<char*>(ISBN.toStdString().c_str()),reserve);
@@ -423,4 +426,9 @@ bool UserProfileWidget::loadQss(const QString &StyleSheetFile){
         this->setStyleSheet(ofile.readAll());
         ofile.close();
 
+}
+
+void UserProfileWidget::on_pushButton_clicked(){
+    string s=now_utils.getGuidelines();
+    QMessageBox::information(this,"借阅须知",QString::fromStdString(s));
 }

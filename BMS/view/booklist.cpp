@@ -116,14 +116,14 @@ void BookList::loadInitialBooks(){
         string t2(re[i].getIsbn());
         string pic;
         if(t2.size()==13)
-                   pic=pictureDbPath+t1+"/"+t2+".jpg";
+                   pic=pictureDbPath+t1;
                else
                    pic=pictureDbPath+"moren.jpg";
 
         QPixmap pixmap(pic.c_str());
                QPixmap fitpixmap;
                if(pixmap.isNull()){
-                   qDebug()<<"1空";
+//                   qDebug()<<"1空";
                    QPixmap pixmap2((pictureDbPath+"moren.jpg").c_str());
                    fitpixmap = pixmap2.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
                }else{
@@ -179,7 +179,7 @@ void BookList::loadBooks(){
         string t2(re[i].getIsbn());
         string pic;
         if(t2.size()==13)
-                   pic=pictureDbPath+t1+"/"+t2+".jpg";
+                   pic=pictureDbPath+t1;
                else
                    pic=pictureDbPath+"moren.jpg";
 
@@ -230,9 +230,7 @@ void BookList::on_TableBtn_clicked()
     now_utils.GetBookByIsbn(const_cast<char*>(ISBN.toStdString().c_str()),now_book);
     BookDetails *bookDetails= new BookDetails();
     bookDetails->resize(1300,730);
-    bookDetails->move(0,170);
     bookDetails->setStackWidget(psw);
-    bookDetails->setPreIndex(1);//用于返回前面调用的界面
     psw->insertWidget(2,bookDetails);
     psw->setCurrentIndex(2);
 
