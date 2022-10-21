@@ -13,8 +13,12 @@ public:
     MyThread(BookList *bookList);
 
     void run() override;
-
     BookList *bookList;
+signals:
+    void exitSignal();
+    void updateBooksSignal();
+
+
 };
 
 #endif // MYTHREAD_H

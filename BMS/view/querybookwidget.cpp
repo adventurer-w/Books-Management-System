@@ -227,9 +227,9 @@ void QueryBookWidget::getBookList(QString classification, QString key){
         info.clear();
         if(flag==0){
             vector<BookClass> result;
-            qDebug()<< "fuck"<<endl;
+
             now_utils.GetClassByName(const_cast<char*>(classification.toStdString().c_str()),result);
-            qDebug()<< "fuck "<<result.size();
+
             now_utils.GetBooksByClassNo(result[0].getClassNo(),re);
         }else if(flag==1){
             if(key.size()==0)
@@ -252,6 +252,8 @@ void QueryBookWidget::getBookList(QString classification, QString key){
             connect(bookList,SIGNAL(stopSignal()),this,SLOT(killThread()));
             thread = new MyThread(bookList);
             thread->start();
+            int time = 10000;
+            while(--time){};
             bookList->resize(1300,730);
             bookList->move(this->x(),this->y()+170);
             bookList->setStackWidget(sub_mw);
@@ -265,8 +267,6 @@ void QueryBookWidget::getBookList(QString classification, QString key){
 }
 
 void QueryBookWidget::killThread(){
-    if(!thread->bookList)return;
-    thread->wait();
     thread->quit();
 }
 void QueryBookWidget::on_btn_search_clicked()
