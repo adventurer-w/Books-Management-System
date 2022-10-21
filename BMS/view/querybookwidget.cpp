@@ -29,6 +29,7 @@
 #include <QListView>
 #include "backend/Utils.h"
 #include "mythread.h"
+#include <stdio.h>
 extern Utils now_utils;
 extern vector<Book> re;
 extern Book now_book;
@@ -248,17 +249,25 @@ void QueryBookWidget::getBookList(QString classification, QString key){
             re.push_back(now_book);
         }
         if(info.size()==0){
+
             BookList *bookList =new BookList();
-            connect(bookList,SIGNAL(stopSignal()),this,SLOT(killThread()));
-            thread = new MyThread(bookList);
-            thread->start();
-            int time = 10000;//设定时间给子线程加载数据，降低子线程没有加载好图片的可能性
-            while(--time){};
             bookList->resize(1300,730);
             bookList->move(this->x(),this->y()+170);
             bookList->setStackWidget(sub_mw);
             sub_mw->insertWidget(1,bookList);
             sub_mw->setCurrentIndex(1);
+            //connect(bookList,SIGNAL(stopSignal()),this,SLOT(killThread()));
+//            for(int i=0; i<2000+1; ++i){
+//                MyThread::visited[i]=false;
+//            }
+            for(int i=0; i<10; ++i){
+                thread[i] = new MyThread(bookList,i);
+                thread[i]->start();
+            }
+
+            //int time = 10000;//设定时间给子线程加载数据，降低子线程没有加载好图片的可能性
+            //while(--time){};
+
         }else{
             QMessageBox::information(this,"提示信息",QString::fromStdString(info));
         }
@@ -267,7 +276,7 @@ void QueryBookWidget::getBookList(QString classification, QString key){
 }
 
 void QueryBookWidget::killThread(){
-    thread->quit();
+    //thread->quit();
 }
 void QueryBookWidget::on_btn_search_clicked()
 {

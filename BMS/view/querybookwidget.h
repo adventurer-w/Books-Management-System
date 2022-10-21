@@ -40,7 +40,7 @@ private slots:
 private:
     Ui::QueryBookWidget *ui;
     QString classify;//当前选择的分类
-    MyThread *thread;
+    MyThread *thread[20];
 
 };
 

@@ -94,7 +94,7 @@ BookList::BookList(QWidget *parent) :
     loadQss(":/qss/booklist/booklist.qss");
 
     connect(tbv->verticalScrollBar(),&QScrollBar:: valueChanged,this,&BookList::loadBtnBooks);
-    connect(this,SIGNAL(loadImgSignal(QPixmap)),this,SLOT(loadImgInThreads(QPixmap)));
+    connect(this,SIGNAL(loadImgSignal(QPixmap,int)),this,SLOT(loadImgInThreads(QPixmap,int)));
 }
 
 /*
@@ -103,7 +103,7 @@ BookList::BookList(QWidget *parent) :
 //line输入跳转时
 void BookList::loadInitialBooks(){
     nCurScroller = tbv->verticalScrollBar()->value();
-    imgLabelList.clear();
+    imgLabelMap.clear();
     int curNum = curRecord;
     int maxLoadNum = 20;
     model->setRowCount(re.size()-1);
@@ -147,7 +147,7 @@ void BookList::loadInitialBooks(){
         l1->setPixmap(fitpixmap);    //加载图片
         l1->setScaledContents(true);
         l1->setAlignment(Qt::AlignCenter);      //设置居中
-        imgLabelList.append(l1);
+        imgLabelMap.insert(i,l1);
         tbv->setIndexWidget(model->index(i,0),l1);     //显示
 
         //设置按钮的自定义属性
@@ -162,12 +162,12 @@ void BookList::loadInitialBooks(){
 /*
 滚动条监听函数，如果当前滚动条到了最大滚动条的一半，则执行函数继续加载maxLoadNum条；否认返回
 */
-void BookList::loadImgInThreads(QPixmap pic){
+void BookList::loadImgInThreads(QPixmap pic,int index){
     mylb = new QLabel();
     mylb->setPixmap(pic);    //加载图片
     mylb->setScaledContents(true);
     mylb->setAlignment(Qt::AlignCenter);      //设置居中
-    this->imgLabelList.append(mylb);
+    this->imgLabelMap.insert(index,mylb);
 }
 void BookList::loadBtnBooks(){
 
@@ -190,7 +190,7 @@ void BookList::loadBtnBooks(){
     for(int i=curNum;i<curRecord;i++){
 
 
-        if(imgLabelList.size()>i)tbv->setIndexWidget((const QModelIndex &)model->index(i,0),imgLabelList.at(i));
+        if(imgLabelMap.find(i)!=imgLabelMap.end())tbv->setIndexWidget((const QModelIndex &)model->index(i,0),imgLabelMap[i]);
         else {
             curRecord = preRecord;
             return;
@@ -235,7 +235,7 @@ void BookList::loadAllBooks(){
     for(int i=curNum;i<re.size();i++){
 
 
-        if(imgLabelList.size()>i)tbv->setIndexWidget((const QModelIndex &)model->index(i,0),imgLabelList.at(i));
+        if(imgLabelMap.find(i)!=imgLabelMap.end())tbv->setIndexWidget((const QModelIndex &)model->index(i,0),imgLabelMap[i]);
         else {
             curRecord = preRecord;
             return;
