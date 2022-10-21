@@ -65,7 +65,7 @@ void BookDetails::loadBookDetail(){
     QPixmap pixmap(pic.c_str());
    QPixmap fitpixmap;
    if(pixmap.isNull()){
-//       qDebug()<<"1空";
+
        QPixmap pixmap2((pictureDbPath+"moren.jpg").c_str());
        fitpixmap = pixmap2.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
    }else{

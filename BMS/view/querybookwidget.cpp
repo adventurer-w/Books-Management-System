@@ -28,7 +28,7 @@
 #include "bookranking.h"
 #include <QListView>
 #include "backend/Utils.h"
-
+#include "mythread.h"
 extern Utils now_utils;
 extern vector<Book> re;
 extern Book now_book;
@@ -219,40 +219,43 @@ void QueryBookWidget::getBookList(QString classification, QString key){
     if(key.size()>BOOK_NAME_SIZE-1)
         QMessageBox::information(this,"提示信息","输入字符过长");
     else{
-        string info;
         re.clear();
-//        if (classification=="全部" && ctrl == 0)flag=1;
+        if (classification=="全部" && ctrl == 0)flag=1;
         //qDebug() << classification << "  "<< flag;
-        if (classification=="全部" && ctrl == 0){
-            now_utils.GetAllBooks(re);
-            qDebug()<<re.size();
-        }
-        else if(flag==0){
+        string info;
+        info.clear();
+        if(flag==0){
             vector<BookClass> result;
+
             now_utils.GetClassByName(const_cast<char*>(classification.toStdString().c_str()),result);
+
             now_utils.GetBooksByClassNo(result[0].getClassNo(),re);
         }else if(flag==1){
             if(key.size()==0)
-                info="请输入书名！";
+                info+="请输入书名！";
             now_utils.GetBooksByBookName(const_cast<char*>(key.toStdString().c_str()),re);
         }else if(flag==2){
             if(key.size()==0)
-                info="请输入作者名！";
+                info+="请输入作者名！";
             now_utils.GetBooksByAuthor(const_cast<char*>(key.toStdString().c_str()),re);
         }else{
             if(key.size()==0)
-                info="请输入ISBN号！";
+                info+="请输入ISBN号！";
             else if(key.size()!=13)
-                info="ISBN号输入错误，请输入13位数字（无-隔开）";
+                info+="ISBN号输入错误，请输入13位数字（无-隔开）";
             now_utils.GetBookByIsbn(const_cast<char*>(key.toStdString().c_str()),now_book);
             re.push_back(now_book);
         }
-
-        if(re.size()<=0)
-            QMessageBox::information(this,"提示信息","馆中暂无该书！");
-        else if(info.size()==0){
+        if(info.size()==0){
             BookList *bookList =new BookList();
+            connect(bookList,SIGNAL(stopSignal()),this,SLOT(killThread()));
+            thread = new MyThread(bookList);
+            thread->start();
+            int time = 10000;//设定时间给子线程加载数据，降低子线程没有加载好图片的可能性
+            while(--time){};
             bookList->resize(1300,730);
+            bookList->move(this->x(),this->y()+170);
+
             bookList->setStackWidget(sub_mw);
             sub_mw->insertWidget(1,bookList);
             sub_mw->setCurrentIndex(1);
@@ -261,6 +264,11 @@ void QueryBookWidget::getBookList(QString classification, QString key){
         }
 
     }
+
+}
+
+void QueryBookWidget::killThread(){
+    thread->quit();
 }
 void QueryBookWidget::on_btn_search_clicked()
 {
