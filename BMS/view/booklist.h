@@ -6,6 +6,7 @@
 #include "MainWidget.h"
 #include "stditemmodel.h"
 #include <QLabel>
+#include <QMap>
 namespace Ui {
 class BookList;
 }
@@ -35,7 +36,7 @@ public:
 
 signals:
     void stopSignal();//停止多线程
-    void loadImgSignal(QPixmap pic);
+    void loadImgSignal(QPixmap pic,int index);
 private slots:
     void on_btn_first_clicked();
 
@@ -50,13 +51,13 @@ private slots:
     void on_btn_back_clicked();
 
 
-    void loadImgInThreads(QPixmap pic);
+    void loadImgInThreads(QPixmap pic,int index);
 private:
     Ui::BookList  *ui;
     MainWidget *psw;//底层stackwidget对象的指针，便于返回
     QTableView *tbv;
     QLineEdit *le;
-    QList<QLabel*>imgLabelList;
+    QMap<int,QLabel*>imgLabelMap;
     QLabel *mylb;
 };
 

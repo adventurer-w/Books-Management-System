@@ -99,7 +99,6 @@ QPixmap p(string t1,string t2){
     if(t2.size()==13)
         pic=pictureDbPath+t1;
     else
-
         pic=pictureDbPath+"moren.jpg";
 
 
