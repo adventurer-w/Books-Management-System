@@ -64,18 +64,7 @@ AdminBookManagement::AdminBookManagement(QWidget *parent) : QWidget(parent),
     ui->btn_ISBN->setAutoExclusive(false);
     ui->btn_author->setAutoExclusive(false);
 
-    QStringList classify_list;
-    classify_list << "全部";
-    vector<BookClass> now_book_class;
-    now_utils.GetAllClass(now_book_class);
-    int n = now_book_class.size();
-    for (int i = 0; i < n; i++)
-    {
-        classify_list << now_book_class[i].getName();
-    }
-
-    ui->cbox_classify->addItems(classify_list);
-    ui->cbox_classify->setCurrentIndex(0); //设置默认选项
+    load_classify();
     setShadow();
 
     //图书搜索栏与图书搜索结果列表
@@ -113,6 +102,23 @@ AdminBookManagement::AdminBookManagement(QWidget *parent) : QWidget(parent),
     loadQss(":/qss/adminbookmanagement/bookmanagement.qss");
 }
 
+void AdminBookManagement::load_classify()
+{
+    //单独写出来是为了在modifybookcategory里面调用
+    QStringList classify_list;
+    classify_list << "全部";
+    vector<BookClass> now_book_class;
+    now_utils.GetAllClass(now_book_class);
+    int n = now_book_class.size();
+    for (int i = 0; i < n; i++)
+    {
+        classify_list << now_book_class[i].getName();
+    }
+
+    ui->cbox_classify->addItems(classify_list);
+    ui->cbox_classify->setCurrentIndex(0); //设置默认选项
+}
+
 AdminBookManagement::~AdminBookManagement()
 {
     delete ui;
@@ -143,21 +149,19 @@ void AdminBookManagement::setShadow()
 // use in paint top of GUI
 void AdminBookManagement::paintEvent(QPaintEvent *)
 {
-    //需要Qpainter头文件
-    QPainter painter(this); //初始化
-    QPixmap pix;
-    //背景图
+    QPainter painter(this); //初始化，需要Qpainter头文件
+    QPixmap pix;//背景图
     pix.load(":/image/bookmanagement/background.jpg");
     painter.drawPixmap(0, 0, this->width(), this->height(), pix);
 }
 
 
-void AdminBookManagement::on_btn_addbook_clicked(){
-    /* add book */
-    // now_book.setIsbn(0);
+void AdminBookManagement::on_btn_addbook_clicked()
+{
+    //0代表添加
     add_or_mod = 0;
     AdminModifyBookDetail *admin_modify_book_detail = new AdminModifyBookDetail();
-    connect(admin_modify_book_detail,SIGNAL(backSignal()),this,SLOT(backToThis()));
+    connect(admin_modify_book_detail,SIGNAL(backSignal()),this,SLOT(backToThis()));//绑定返回按钮
     admin_modify_book_detail->resize(1300, 730);
     psw->insertWidget(3,admin_modify_book_detail);
     emit changePageSignal(3);//发出切换到3号页面的信号
@@ -169,8 +173,8 @@ void AdminBookManagement::on_btn_addbook_clicked(){
     读入整个excel
     并将整个excel中的书存入本地
     debug中会输出每本书是否成功
-    本来是想设计成每成功一本弹出一下的
-    但是这样肯定不友好
+    本来是想设计成每成功一本弹出一下的，但是这样肯定不友好
+    所以从简，提示成功了多少本就行
 */
 void AdminBookManagement::on_btn_addbook_batch_clicked()
 {
@@ -218,19 +222,19 @@ void AdminBookManagement::on_btn_addbook_batch_clicked()
         now_book.setAuthor(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 3)->dynamicCall("Value").toString().toStdString().c_str()));
         now_book.setPublisher(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 4)->dynamicCall("Value").toString().toStdString().c_str()));
         now_book.setIsbn(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 5)->dynamicCall("Value").toString().toStdString().c_str()));
-//        now_book.setClassification(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 6)->dynamicCall("Value").toString().toStdString().c_str()));
-        qDebug() << "match add book you can set Isbn";
+        //添加新的classify对应的No
         string classify_name = const_cast<char *>(range->querySubObject("Cells(int,int)", i, 6)->dynamicCall("Value").toString().toStdString().c_str());
-        qDebug() << classify_name.c_str();
+        // qDebug() << classify_name.c_str();
         vector<BookClass> now_book_class;
+        //表格中有错误的分类就报错
         if(now_utils.GetClassByName(const_cast<char*>(classify_name.c_str()),now_book_class) == 0)
         {
             QMessageBox::information(this,"录入失败","分类有误");
             return;
         }
-        qDebug() << now_book_class[0].getClassNo();
+        // qDebug() << now_book_class[0].getClassNo();
         now_book.setClassNo(now_book_class[0].getClassNo());
-        qDebug() << "match add book you can set ClassByName";
+        // qDebug() << "match add book you can set ClassByName";
         now_book.setPublishDate(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 7)->dynamicCall("Value").toString().toStdString().c_str()));
         now_book.setAllNum(range->querySubObject("Cells(int,int)", i, 8)->dynamicCall("Value").toString().toInt());
         now_book.setLeft(range->querySubObject("Cells(int,int)", i, 8)->dynamicCall("Value").toString().toInt());
@@ -242,7 +246,6 @@ void AdminBookManagement::on_btn_addbook_batch_clicked()
             qDebug() << now_book.getBookName() << "成功";
             success_num++;
         }
-
         else
             qDebug() << now_book.getBookName() << "失败";
 
@@ -256,7 +259,7 @@ void AdminBookManagement::on_btn_addbook_batch_clicked()
     myExcel->dynamicCall("Quit()");
 }
 
-// use in select the way of finding books
+// 以下方法都是用来在管理员界面查找书籍的
 int flag_admin = 0; // 1书名，2作者，3isbn
 int ctrl_admin = 0x000;
 void AdminBookManagement::on_btn_bookname_clicked()
@@ -391,7 +394,6 @@ void AdminBookManagement::on_btn_search_clicked()
     ui->btn_author->setDown(false);
     ui->btn_ISBN->setDown(false);
     re.clear();
-//    model->removeRows(0,model->rowCount());
     
     QString classification = ui->cbox_classify->currentText();
     QString val = ui->line_search->text();
@@ -440,6 +442,7 @@ void AdminBookManagement::loadInitialBooks()
          ui->tb->setRowHeight(i, 75);
 
          ////
+         //载入修改按钮，一开始是准备写成函数的，但是发现就两个按钮，函数还要不停的传参，就算了
          QPushButton *button = new QPushButton("修改");
          string t1(re[i].getImgPath());
          string t2(re[i].getIsbn());
@@ -464,6 +467,7 @@ void AdminBookManagement::loadInitialBooks()
          ui->tb->setIndexWidget(model->index(i, 5), button); //将按钮加入表格中
          ////
          ////
+         //载入删除按钮
          QPushButton *button_remove = new QPushButton("删除");
          string t1_2(re[i].getImgPath());
          string t2_2(re[i].getIsbn());
@@ -605,22 +609,21 @@ void AdminBookManagement::on_TableModifyBtn_clicked()
 
 void AdminBookManagement::on_remove_clicked()
 {
-
     QPushButton *button = (QPushButton *)sender();
 
     //提取按钮的自定义属性 数据类型须统一
     QString ISBN = button->property("tb_ISBN").toString(); //根据ISBN删借阅信息
 
-    //qDebug() << ISBN;
     now_utils.GetBookByIsbn(const_cast<char *>(ISBN.toStdString().c_str()), now_book);
     if(now_utils.DeleteBook(now_book)){
         int row = ui->tb->currentIndex().row();
         model->removeRow(row);
-        //qDebug() << "delete row:" << row << "ok" <<endl;
     }
 
 }
-void AdminBookManagement::updateBookRecord(Book book){
+void AdminBookManagement::updateBookRecord(Book book)
+{
+    //将图书信息一一更新
     model->setItem(select_row, 0, new QStandardItem(book.getBookName()));
     model->setItem(select_row, 1, new QStandardItem(book.getAuthor()));
     model->setItem(select_row, 2, new QStandardItem(book.getPublisher()));
@@ -628,12 +631,15 @@ void AdminBookManagement::updateBookRecord(Book book){
     model->setItem(select_row, 4, new QStandardItem(QString::number(book.getLeft())));
 }
 
-void AdminBookManagement::on_btn_addclassify_clicked(){
+void AdminBookManagement::on_btn_addclassify_clicked()
+{
+    //添加新类别
     ModifyBookCategory *modifyBookCategory = new ModifyBookCategory;
     modifyBookCategory->resize(230,450);
     modifyBookCategory->show();
 }
 
+//以下函数是翻页相关
 void AdminBookManagement::on_btn_first_clicked()
 {
     ui->tb->verticalScrollBar()->setSliderPosition(0);

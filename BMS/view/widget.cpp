@@ -108,10 +108,6 @@ void Widget::on_btn_login_clicked()
         MainWindow *personal_homepage = new MainWindow;
         personal_homepage->show();
     }
-    this->hide();
-    now_utils.GetUserByAccount(account2,now_user);
-    MainWindow *personal_homepage = new MainWindow;
-    personal_homepage->show();
 }
 
 
