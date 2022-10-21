@@ -165,8 +165,6 @@ void AdminModifyBookDetail::on_btn_modifyimage_clicked()
 
 void AdminModifyBookDetail::on_pushButton_clicked(){
     Book old_book;
-//    if(now_book.getIsbn())
-//        qDebug() << "abc";
     old_book.setIsbn(now_book.getIsbn());
     /*
     ui->line_bookname->setText(now_book.getBookName());
