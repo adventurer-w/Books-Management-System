@@ -1,6 +1,7 @@
 #include "borrowinstruction.h"
 #include "ui_borrowinstruction.h"
 #include "backend/Utils.h"
+#include<QDebug>
 extern Utils now_utils;
 
 BorrowInstruction::BorrowInstruction(QWidget *parent) :
@@ -14,12 +15,11 @@ BorrowInstruction::BorrowInstruction(QWidget *parent) :
     vector<Department> result;
     for(int i = 0; i < 4; i++ )
         now_utils.GetDepartmentByNo(i,result);
-    ui->line_teacher->setText(QString::number(result[0].getMaxBook()));
-    ui->line_undergraduate->setText(QString::number(result[1].getMaxBook()));
-    ui->line_master->setText(QString::number(result[2].getMaxBook()));
-    ui->line_doctor->setText(QString::number(result[3].getMaxBook()));
-
-    connect(ui->btn_modifyConfirm, &QPushButton::clicked, this, &BorrowInstruction::on_btn_modifyConfirm_clicked);
+    ui->line_teacher->setText(QString::number(result[3].getMaxBook()));
+    ui->line_undergraduate->setText(QString::number(result[0].getMaxBook()));
+    ui->line_master->setText(QString::number(result[1].getMaxBook()));
+    ui->line_doctor->setText(QString::number(result[2].getMaxBook()));
+    connect(ui->btn_modifyConfirm,&QPushButton::clicked,this,&BorrowInstruction::on_btn_modifyConfirm_clicked);
 }
 
 BorrowInstruction::~BorrowInstruction()
@@ -29,18 +29,24 @@ BorrowInstruction::~BorrowInstruction()
 
 void BorrowInstruction::on_btn_modifyConfirm_clicked(){
     //读入四个文本框
+    QString guidelines=ui->textEdit->document()->toPlainText();
+//    qDebug()<<guidelines;
+    now_utils.setGuidelines(guidelines.toStdString());
+
     int limit_book[4];
-    limit_book[0] = ui->line_teacher->text().toInt();
-    limit_book[1]=ui->line_undergraduate->text().toInt();
-    limit_book[2]=ui->line_master->text().toInt();
-    limit_book[3]=ui->line_doctor->text().toInt();
+    limit_book[3] = ui->line_teacher->text().toInt();
+    limit_book[0]=ui->line_undergraduate->text().toInt();
+    limit_book[1]=ui->line_master->text().toInt();
+    limit_book[2]=ui->line_doctor->text().toInt();
 
     //对应写入
-    vector<Department> result;
     for(int i = 0; i < 4; i ++ )
     {
+        vector<Department> result;
         now_utils.GetDepartmentByNo(i,result);
-        result[i].setMaxBook(limit_book[i]);
+        now_utils.DeleteDepartment(result[0]);
+        result[0].setMaxBook(limit_book[i]);
+        now_utils.InsertDepartment(result[0]);
     }
     
     //增加弹窗

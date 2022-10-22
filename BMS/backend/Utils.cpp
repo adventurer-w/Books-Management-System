@@ -264,7 +264,7 @@ bool Utils::GetUserByDepartmentNo(int departmentNo, vector<User> &result){
     user.setDepartmentNo(departmentNo);
     vector<string> val;
     val.push_back("not-all");
-    val.push_back("departmentNo");
+    val.push_back("major");
     if (db.select("user", user, val, result) != -1)
         return true;
     else

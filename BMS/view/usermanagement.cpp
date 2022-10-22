@@ -115,7 +115,7 @@ void UserManagement::on_btn_search_clicked()
         qint64 time=borrow_time.secsTo(now_time);
 
         //插入各种表项
-        model->setItem(i, 0, new QStandardItem(record[i].getAccount()));
+        model->setItem(i, 0, new QStandardItem(val));
         model->setItem(i, 1, new QStandardItem(record[i].getBookName()));
         model->setItem(i, 2, new QStandardItem(record[i].getAuthor()));
         model->setItem(i, 3, new QStandardItem(record[i].getDate()));
