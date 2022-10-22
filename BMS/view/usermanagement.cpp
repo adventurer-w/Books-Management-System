@@ -57,9 +57,11 @@ UserManagement::~UserManagement()
 {
     delete ui;
 }
-
+/*
+ * @author yuan
+ * 根据用户账户输出 每个用户所有 record信息*/
 void UserManagement::printRecords(QString account,vector<Record> &record){
-    string info;
+
 
     for(int i=curRecordIndex ;i<curRecordIndex+record.size();i++){
 
@@ -132,6 +134,7 @@ void UserManagement::on_btn_search_clicked()
     QString val=ui->line_search->text();
     //qDebug()<< val << "yes";
     vector<Record> record;
+    curRecordIndex=0;//当前记录索引清零
     if(val == "")
     {
         //获取所有用户
@@ -139,9 +142,8 @@ void UserManagement::on_btn_search_clicked()
         for(int i = 0; i < 4; i++)
         {
             now_utils.GetUserByDepartmentNo(i,result);
-
         }
-        //获取所有用户的借阅记录
+        //输出所有用户的借阅记录
         for(int i = 0; i< result.size(); i++)
         {
             now_utils.GetUserBorrowList(result[i].getAccount(),record);
@@ -154,7 +156,6 @@ void UserManagement::on_btn_search_clicked()
         printRecords(val,record);
     }
 
-    //获取该用户全部借阅信息
 
 
 
