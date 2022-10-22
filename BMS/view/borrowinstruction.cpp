@@ -18,6 +18,8 @@ BorrowInstruction::BorrowInstruction(QWidget *parent) :
     ui->line_undergraduate->setText(QString::number(result[1].getMaxBook()));
     ui->line_master->setText(QString::number(result[2].getMaxBook()));
     ui->line_doctor->setText(QString::number(result[3].getMaxBook()));
+
+    connect(ui->btn_modifyConfirm, &QPushButton::clicked, this, &BorrowInstruction::on_btn_modifyConfirm_clicked);
 }
 
 BorrowInstruction::~BorrowInstruction()
