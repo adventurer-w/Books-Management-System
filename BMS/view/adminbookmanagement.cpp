@@ -216,8 +216,17 @@ void AdminBookManagement::on_btn_addbook_batch_clicked()
     //从第二行开始读
     for (int i = 2; i <= count_row; i++)
     {
+        string pic = "zother/" + range->querySubObject("Cells(int,int)", i, 5)->dynamicCall("Value").toString().toStdString() + ".jpg";
+        now_book.setImgPath(const_cast<char *>(pic.c_str()));
+        qDebug() << "pic:" << QString::fromStdString(pic);
+        pic = pictureDbPath + pic;
+        QString save_filename =  QString::fromStdString(pic);
+        save_filename.replace(QString("\\"), QString("/"));
+        bool x = QFile::copy(range->querySubObject("Cells(int,int)", i, 1)->dynamicCall("Value").toString(),save_filename);
+
+//        now_book.setImgPath(const_cast<char *>(pic.c_str()));
         //写入各种图书信息
-        now_book.setImgPath(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 1)->dynamicCall("Value").toString().toStdString().c_str()));
+//        now_book.setImgPath(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 1)->dynamicCall("Value").toString().toStdString().c_str()));
         now_book.setBookName(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 2)->dynamicCall("Value").toString().toStdString().c_str()));
         now_book.setAuthor(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 3)->dynamicCall("Value").toString().toStdString().c_str()));
         now_book.setPublisher(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 4)->dynamicCall("Value").toString().toStdString().c_str()));
