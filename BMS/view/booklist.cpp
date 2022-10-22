@@ -40,9 +40,29 @@ BookList::BookList(QWidget *parent) :
     le->setParent(this);
     connect(le,SIGNAL(returnPressed()),this,SLOT(linePressed()));
 
+
+
+
     model = new StdItemModel();
+    tbv->setModel(model);
+    /*后续这里根据数量来动态设置列表框的高*/
     model->clear();
     model->setColumnCount(7); //设置有7列
+
+    tbv->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);//所有列都扩展自适应宽度，填充充满整个屏幕宽度
+
+    tbv->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);//对第0列单独设置固定宽度
+
+
+    //设置列宽
+    tbv->setColumnWidth(0,120);			//参数：列号，宽度
+//    tbv->setColumnWidth(1,180);
+//    tbv->setColumnWidth(2,180);
+//    tbv->setColumnWidth(3,180);
+//    tbv->setColumnWidth(4,220);
+//    tbv->setColumnWidth(5,180);
+//    tbv->setColumnWidth(6,180);
+
     model->setHeaderData(0,Qt::Horizontal,"封面");  //设置第一列的表头为类型
     model->setHeaderData(1,Qt::Horizontal,"书名");  //设置第一列的表头为名称
     model->setHeaderData(2,Qt::Horizontal,"作者");
@@ -51,21 +71,11 @@ BookList::BookList(QWidget *parent) :
     model->setHeaderData(5,Qt::Horizontal,"有无库存");
     model->setHeaderData(6,Qt::Horizontal,"详情");
 
-    //设置列宽
-    tbv->setColumnWidth(0,120);			//参数：列号，宽度
-    tbv->setColumnWidth(1,180);
-    tbv->setColumnWidth(2,180);
-    tbv->setColumnWidth(3,180);
-    tbv->setColumnWidth(4,220);
-    tbv->setColumnWidth(5,180);
-    tbv->setColumnWidth(6,180);
-    tbv->setModel(model);
-    /*后续这里根据数量来动态设置列表框的高*/
     tbv->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     //tbvv_borrow->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
     //tbv->horizontalHeader()->setDefaultAlignment(Qt::AlignCenter);
     //横向填满，下面设置列宽没用了
-    tbv->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);//布局排版是全部伸展开的效果
+    //tbv->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);//布局排版是全部伸展开的效果
 
 
     //设置行高

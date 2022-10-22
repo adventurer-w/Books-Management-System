@@ -196,6 +196,7 @@ void AdminModifyBookDetail::on_pushButton_clicked()
         return;
     }
     now_book.setClassNo(now_book_class[0].getClassNo());
+    now_book.getClassNo();
     qDebug() << now_book_class[0].getClassNo();
     now_book.setPublishDate(const_cast<char *>(publishtime.toStdString().c_str()));
     //区分新书库存、旧书增加库存
