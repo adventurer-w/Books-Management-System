@@ -30,7 +30,7 @@ AdminModifyBookDetail::AdminModifyBookDetail(QWidget *parent) : QWidget(parent),
 
     loadBookDetail();
     setIcons();
-    loadQss(":/qss/bookdetails/bookdetails.qss");
+    loadQss(":/qss/adminmodifybookdetail/adminmodifybookdetail.qss");
 }
 
 AdminModifyBookDetail::~AdminModifyBookDetail()
