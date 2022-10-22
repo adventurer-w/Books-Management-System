@@ -31,10 +31,12 @@ MainWindow::MainWindow(QWidget *parent)
     this->resize(1600,900);
     /* judge admin 0 or user 1 here*/
     /* start */
+
     if(now_user.getAccount()[0]=='0' && now_user.getAccount()[1]=='0')
         userType = 0;
     else
         userType = 1;
+//    userType = 1;
 
     qDebug()<<userType;
     qDebug()<<now_user.getAccount();
@@ -42,6 +44,7 @@ MainWindow::MainWindow(QWidget *parent)
     loadUserInfo();
     loadMenuBar();
     loadPages(0);
+
     QString qssfilename =":/qss/mainwindow/mainwindow.qss";
     this->loadQss(qssfilename);
 

@@ -73,8 +73,8 @@ void Widget::on_btn_login_clicked()
 
     QString account=ui->lineE_user_name->text();
     QString pwd=ui->lineE_pwd->text();
-    account = "000001";
-    pwd = "123456aA";
+//    account = "000001";
+//    pwd = "123456aA";
     string info;
     if(account.size()>ACCOUNT_SIZE-1)
         info+="账号过长，请重新输入！\n";
@@ -89,8 +89,8 @@ void Widget::on_btn_login_clicked()
 
     char* account2=const_cast<char*>(account.toStdString().c_str());
     char* pwd2=const_cast<char*>(b.c_str());
-    account2 = "000001";
-    pwd2 = "123456aA";
+//    account2 = "000001";
+//    pwd2 = "123456aA";
 
     int flag=now_utils.Login(account2,pwd2);
     if(flag==0){
@@ -108,10 +108,6 @@ void Widget::on_btn_login_clicked()
         MainWindow *personal_homepage = new MainWindow;
         personal_homepage->show();
     }
-    this->hide();
-    now_utils.GetUserByAccount(account2,now_user);
-    MainWindow *personal_homepage = new MainWindow;
-    personal_homepage->show();
 }
 
 

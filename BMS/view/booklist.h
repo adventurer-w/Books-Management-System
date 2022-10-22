@@ -2,8 +2,11 @@
 #define BOOKLIST_H
 
 #include <QWidget>
+#include <QTableView>
 #include "MainWidget.h"
 #include "stditemmodel.h"
+#include <QLabel>
+#include <QMap>
 namespace Ui {
 class BookList;
 }
@@ -19,7 +22,7 @@ public:
     ~BookList();
     void on_TableBtn_clicked();
     void setStackWidget(MainWidget *p);
-    void loadBooks();
+
     void loadInitialBooks();
     int nCurScroller = 0; //翻页时的当时滑动条位置
     int curPgNum=1;
@@ -28,7 +31,12 @@ public:
     int curRecord=0;//已经插入的记录
     QString pages;//显示当前页
     StdItemModel *model;
+    void loadBtnBooks();
+    void loadAllBooks();
 
+signals:
+    void stopSignal();//停止多线程
+    void loadImgSignal(QPixmap pic,int index);
 private slots:
     void on_btn_first_clicked();
 
@@ -38,13 +46,19 @@ private slots:
 
     void on_btn_fore_clicked();
 
-    void on_line_returnPressed();
+    void linePressed();
 
     void on_btn_back_clicked();
 
+
+    void loadImgInThreads(QPixmap pic,int index);
 private:
     Ui::BookList  *ui;
     MainWidget *psw;//底层stackwidget对象的指针，便于返回
+    QTableView *tbv;
+    QLineEdit *le;
+    QMap<int,QLabel*>imgLabelMap;
+    QLabel *mylb;
 };
 
 #endif // BOOKLIST_H

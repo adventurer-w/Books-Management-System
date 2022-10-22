@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include "MainWidget.h"
+#include "mythread.h"
+#include <QTableView>
 namespace Ui {
 class QueryBookWidget;
 }
@@ -23,6 +25,7 @@ public:
     void loadPages();
     bool loadQss(const QString &StyleSheetFile );
 
+
 public:
      MainWidget* sub_mw ;
 private slots:
@@ -32,10 +35,13 @@ private slots:
     void on_btn_ISBN_clicked();
     void on_cbox_classify_currentIndexChanged(int);
     void on_lineEdit_returnPressed();
+    void killThread();
 
 private:
     Ui::QueryBookWidget *ui;
     QString classify;//当前选择的分类
+    MyThread *thread[20];
+
 };
 
 //MainWidget* QueryBookWidget::sub_mw = new MainWidget();

@@ -1,6 +1,12 @@
 #include "usermanagement.h"
 #include "ui_usermanagement.h"
+#include "backend/Utils.h"
+#include "admininfo.h"
 #include <QPainter>
+#include <QDateTime>
+
+extern Utils now_utils;
+
 UserManagement::UserManagement(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::UserManagement)
@@ -30,12 +36,19 @@ UserManagement::UserManagement(QWidget *parent) :
 
     /*后续这里根据数量来动态设置列表框的高*/
     ui->tb->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    //ui->tbv_borrow->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
-    //ui->tb->horizontalHeader()->setDefaultAlignment(Qt::AlignCenter);
-    //横向填满，下面设置列宽没用了
-    //ui->tb->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);//布局排版是全部伸展开的效果
 
-    loadRecords();
+    //隐藏行头
+    ui->tb->verticalHeader()->hide();
+    //设置表格选中时为整行选中
+    ui->tb->setSelectionBehavior(QAbstractItemView::SelectRows);
+    //设置表格的单元为只读属性，即不能编辑
+    ui->tb->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    //设置单选
+    ui->tb->setSelectionMode(QAbstractItemView::SingleSelection);
+    //设置多选
+    ui->tb->setSelectionMode(QAbstractItemView::MultiSelection);
+
+//    loadRecords();
     loadQss(":/qss/usermanagement/usermanagement.qss");
 }
 
@@ -46,21 +59,9 @@ UserManagement::~UserManagement()
 
 void UserManagement::loadRecords(){
 
-    for(int i=0;i<10;i++){
-        QPushButton *btn_delete = new QPushButton("删除");
-
-
-        //设置按钮的自定义属性
-        //btn_delete->setProperty("tb_ISBN",model->index(i,4,QModelIndex()).data().toString());
-         connect(btn_delete,&QPushButton::clicked,this,&UserManagement::on_btn_delete_clicked);
-        //将按钮加入表格中
-        ui->tb->setIndexWidget(model->index(i,6),btn_delete);
-
-    }
 }
 void UserManagement::on_btn_delete_clicked(){
     //删除记录
-
 }
 
 void UserManagement::on_btn_borrowInstruction_clicked()
@@ -72,12 +73,91 @@ void UserManagement::on_btn_borrowInstruction_clicked()
 void UserManagement::on_line_search_returnPressed()
 {
     //搜索框回车，逻辑和搜索按钮一样
+    on_btn_search_clicked();
 }
 
 void UserManagement::on_btn_search_clicked()
 {
     //点击搜索按钮
+    QString val=ui->line_search->text();
+
+    vector<Record> record;
+    if(val == "")
+    {
+        //获取所有用户
+        vector<User> result;
+        for(int i = 0; i < 4; i++)
+        {
+            now_utils.GetUserByDepartmentNo(i,result);
+        }
+        //获取所有用户的借阅记录
+        for(int i = 0; i< result.size(); i++)
+        {
+            now_utils.GetUserBorrowList(result[i].getAccount(),record);
+        }
+
+    }else{
+        now_utils.GetUserBorrowList(const_cast<char*>(val.toStdString().c_str()),record);
+    }
+
+    //获取该用户全部借阅信息
+
+
+
+    string info;
+
+    for(int i=0 ;i<record.size();i++){
+
+        //基本信息计算
+        QString str=record[i].getDate();
+        QDateTime borrow_time = QDateTime::fromString(str, "yyyy-MM-dd hh:mm:ss");
+        QDateTime now_time = QDateTime::currentDateTime();
+        qint64 time=borrow_time.secsTo(now_time);
+
+        //插入各种表项
+        model->setItem(i, 0, new QStandardItem(val));
+        model->setItem(i, 1, new QStandardItem(record[i].getBookName()));
+        model->setItem(i, 2, new QStandardItem(record[i].getAuthor()));
+        model->setItem(i, 3, new QStandardItem(record[i].getDate()));
+        model->setItem(i, 4, new QStandardItem(record[i].getIsbn()));
+        if(time>=60*24*60*60)
+            model->setItem(i, 5, new QStandardItem("是"));
+        else
+            model->setItem(i, 5, new QStandardItem("否"));
+
+        ui->tb->setRowHeight(i,50);
+        //往表格中添加按钮控件
+        QPushButton *button = new QPushButton("删除");
+        button->setStyleSheet("color:#000000;\
+                              font-size:18px;\
+                              font-family:KaiTi;\
+                              font-weight:normal;");
+        button->setProperty("account",const_cast<char*>(val.toStdString().c_str()));
+        button->setProperty("isbn",record[i].getIsbn());
+        connect(button, SIGNAL(clicked(bool)), this, SLOT(on_remove_clicked()));
+        ui->tb->setIndexWidget(model->index(i,6),button);
+    }
 }
+
+void UserManagement::on_remove_clicked()
+{
+    QPushButton *button = (QPushButton *)sender();
+
+    //提取按钮的自定义属性
+    QString account = button->property("account").toString(); //根据用户账号删借阅信息
+    QString isbn = button->property("isbn").toString(); //根据ISBN删借阅信息
+
+    //获取响应的借阅记录
+    Record re0;
+    now_utils.GetRecord(const_cast<char *>(account.toStdString().c_str()),const_cast<char *>(isbn.toStdString().c_str()),re0);
+
+    //删除记录
+    if(now_utils.DeleteRecord(re0)){
+        int row = ui->tb->currentIndex().row();
+        model->removeRow(row);
+    }
+}
+
 void UserManagement::paintEvent(QPaintEvent *)
 {
     //需要Qpainter头文件
@@ -89,17 +169,17 @@ void UserManagement::paintEvent(QPaintEvent *)
 }
 bool UserManagement::loadQss(const QString &StyleSheetFile){
 
-        /*QSS文件所在的路径*/
-        QFile ofile(StyleSheetFile);
-        bool Ret = ofile.open(QFile::ReadOnly);
+    /*QSS文件所在的路径*/
+    QFile ofile(StyleSheetFile);
+    bool Ret = ofile.open(QFile::ReadOnly);
 
-        if (!Ret)
-        {
-             QMessageBox::information(this,"Tip_booklist",ofile.errorString());
-             return false;
-        }
+    if (!Ret)
+    {
+         QMessageBox::information(this,"Tip_booklist",ofile.errorString());
+         return false;
+    }
 
-        this->setStyleSheet(ofile.readAll());
-        ofile.close();
+    this->setStyleSheet(ofile.readAll());
+    ofile.close();
 
 }

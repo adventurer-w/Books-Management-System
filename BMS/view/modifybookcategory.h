@@ -22,6 +22,7 @@ public:
     void on_btn_addclassify_clicked();
     void on_btn_modify_clicked();
     void on_btn_delete_clicked();
+    void on_btn_update_clicked();
 
 private:
     Ui::ModifyBookCategory *ui;

@@ -16,5 +16,6 @@
         <file>qss/adminbookmanagement/bookmanagement.qss</file>
         <file>qss/usermanagement/usermanagement.qss</file>
         <file>qss/admininfo/admininfo.qss</file>
+        <file>qss/adminmodifybookdetail/adminmodifybookdetail.qss</file>
     </qresource>
 </RCC>

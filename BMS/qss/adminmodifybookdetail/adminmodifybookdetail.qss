@@ -1,0 +1,103 @@
+
+
+#btn_modifyimage {
+    padding-left:3px;
+    color:black;
+    font-weight:bold;
+    font-size:18px;
+    font-family:SimSun;
+    border-radius:5px;
+    background:rgba(132, 237, 239,200);
+}
+#btn_modifyimage:hover{
+
+    background:rgba(132, 237, 239,160);
+    font-weight:bold;
+}
+
+#btn_modifyimage :pressed
+{
+
+    background:rgba(132, 237, 239,120);
+    font-weight:bold;
+    padding-left:5px;
+    padding-top:5px;
+    border-radius:10px;
+}
+
+#book_pushButton {
+    padding-left:3px;
+    color:black;
+    font-weight:bold;
+    font-size:18px;
+    font-family:SimSun;
+    border-radius:5px;
+    background:rgba(132, 237, 239,200);
+}
+#book_pushButton:hover{
+
+    background:rgba(132, 237, 239,160);
+    font-weight:bold;
+}
+
+#book_pushButton:pressed
+{
+
+    background:rgba(132, 237, 239,120);
+    font-weight:bold;
+    padding-left:5px;
+    padding-top:5px;
+    border-radius:10px;
+}
+QLabel {
+    color:black;
+    font-size:18px;
+    font-weight:bold;
+    font-family:Times New Roman;
+    background:transparent;
+}
+QLineEdit {
+    background:transparent;
+    border-radius: 10px;
+    border:2px solid rgba(139, 143, 222,150);
+    font-weight:bold;
+    padding-left:5px;
+    padding-top:5px;
+
+}
+QComboBox{
+    font-family: KaiTi;
+    font-size: 18px;
+    border-radius:5px;
+    background:transparent;
+    border:2px solid rgba(139, 143, 222,150);
+}
+QComboBox:on {
+    font-family: KaiTi;
+    font-size: 18px;
+    background:rgba(230, 230, 230,100);
+    color: rgba(230, 230, 230,100);
+}
+QComboBox::drop-down {			/*下拉按钮*/
+      subcontrol-origin: padding;
+      subcontrol-position: top right;
+      width: 20px;
+      border:none;
+}
+
+QComboBox::down-arrow {		/*下拉按钮*/
+    background-image:url(":/image/querybook/down_arrow.png");
+    background-repeat:no-repeat;
+    background-origin: padding;
+    width: 20px;/*设置该图标的宽高*/
+    height: 16px;
+  }
+
+QComboBox QAbstractItemView{	/*列表 */
+        selection-background-color:rgba(200,200,200,200);
+        border-radius:4px;
+        font-size:15px;
+        font-family: KaiTi;
+
+  }
+

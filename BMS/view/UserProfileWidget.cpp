@@ -132,14 +132,7 @@ void UserProfileWidget::searchBooks(QString key){
 
 }
 void UserProfileWidget::showBorrow(){
-
-
-
-
-
-
     StdItemModel *model = new StdItemModel();
-
 
     model->setColumnCount(6); //设置有6列
     model->setHeaderData(0,Qt::Horizontal,"书名");  //设置第一列的表头为类型
@@ -174,7 +167,6 @@ void UserProfileWidget::showBorrow(){
     ui->tbv_borrow->setSelectionMode(QAbstractItemView::SingleSelection);
     //设置多选
     ui->tbv_borrow->setSelectionMode(QAbstractItemView::MultiSelection);
-
 
     //往表格中添加数据 连接后端把下面加入for循环
     vector<Record> record;
@@ -246,13 +238,13 @@ void UserProfileWidget::showBorrow(){
     now_utils.GetUserReserveList(now_user.getAccount(),reserve);
     for(int j=0;i<record.size()+reserve.size();i++,j++){
         string s=reserve[j].getBookName();
-        s+="（预约中）";
+        s+="\n（预约中）";
         model->setItem(i, 0, new QStandardItem(s.c_str()));
         model->setItem(i, 1, new QStandardItem(reserve[j].getAuthor()));
         model->setItem(i, 2, new QStandardItem(reserve[j].getPublisher()));
         model->setItem(i, 3, new QStandardItem(reserve[j].getIsbn()));
         s=reserve[j].getDate();
-        s+="(预约时间)";
+        s+="\n(预约时间)";
         model->setItem(i, 4, new QStandardItem(s.c_str()));
         ui->tbv_borrow->setRowHeight(i,50);
         QPushButton *button = new QPushButton("取消预约");
@@ -266,9 +258,21 @@ void UserProfileWidget::showBorrow(){
         ui->tbv_borrow->setIndexWidget(model->index(i,5),button);
     }
 
-
+    vector<Record> re_history;
+    now_utils.GetUserBorrowHistory(now_user.getAccount(),re_history);
+    for(int j=0;i<record.size()+reserve.size()+re_history.size();i++,j++){
+        string s=re_history[j].getBookName();
+        s+="\n（曾借阅）";
+        model->setItem(i, 0, new QStandardItem(s.c_str()));
+        model->setItem(i, 1, new QStandardItem(re_history[j].getAuthor()));
+        model->setItem(i, 2, new QStandardItem(re_history[j].getPublisher()));
+        model->setItem(i, 3, new QStandardItem(re_history[j].getIsbn()));
+        s=re_history[j].getDate();
+        s+="\n(曾借阅时间)";
+        model->setItem(i, 4, new QStandardItem(s.c_str()));
+        ui->tbv_borrow->setRowHeight(i,50);
+    }
     if(debet>0){
-
         User t;
         t.setAccount(now_user.getAccount());
         now_user.setDebet(debet);
@@ -277,17 +281,17 @@ void UserProfileWidget::showBorrow(){
     ui->lb_credit_txt->setText(QString::number(now_user.getDebet()));
     if(info.size()>0){
          QMessageBox::information(this,"提示信息",QString::fromStdString(info));
-
     }
     ui->tbv_borrow->setShowGrid(false);
 }
 
-void UserProfileWidget::onTableBtnClicked()
+void UserProfileWidget::onTableBtnClicked()//还书
 {
     //先获取信号的发送者
     QPushButton *button = (QPushButton*)sender();
     //提取按钮的自定义属性 数据类型须统一
     QString ISBN = button->property("tb_ISBN").toString();
+    bool lost_book=false;
     if(now_user.getDebet()>0){
         QMessageBox::StandardButton result=QMessageBox::question(this,"提示信息","请选择缴纳逾期罚款后还书(点击yes) 或 赔偿书籍(点击no)",QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
         //点击即可罚款
@@ -296,6 +300,7 @@ void UserProfileWidget::onTableBtnClicked()
 
         }else{
             //赔偿书籍则不还书，总量减1(库存也减1，因为还书会加1，相当于不变)
+            lost_book=true;
             Book bt1,bt2;
             bt1.setIsbn(const_cast<char*>(ISBN.toStdString().c_str()));
             now_utils.GetBookByIsbn(const_cast<char*>(ISBN.toStdString().c_str()),bt2);
@@ -333,7 +338,7 @@ void UserProfileWidget::onTableBtnClicked()
 
         //若有人预约该书，则自动借书，并发邮件提醒
         string reserve_isbn = reserve.getIsbn();
-        if(reserve_isbn.size()==13){
+        if(reserve_isbn.size()==13 && !lost_book){
             Record record;
             record.setIsbn(bt.getIsbn());
             QDateTime dateTime = QDateTime::currentDateTime();//获取系统当前的时间
@@ -349,9 +354,9 @@ void UserProfileWidget::onTableBtnClicked()
             now_utils.InsertRecord(record);
             User ut;
             now_utils.GetUserByAccount(reserve.getAccount(),ut);
-            //string email=ut.getEmail();
-            string email="805513225@qq.com";
-            string bookname=reserve.getBookName();
+            string email=ut.getEmail();
+//            string email="805513225@qq.com";
+//            string bookname=reserve.getBookName();
             string article="Your reservation has arrived at the library, please pick it up at the library as soon as possible!";
             //发邮件提醒
             CSmtp smtp(
@@ -363,15 +368,6 @@ void UserProfileWidget::onTableBtnClicked()
                     "图书馆预约提醒",                           /*主题*/
                     article      /*邮件正文*/
                     );
-                /**
-                //添加附件时注意,\一定要写成\\，因为转义字符的缘故
-                string filePath("D:\\课程设计报告.doc");
-                smtp.AddAttachment(filePath);
-                */
-
-                /*还可以调用CSmtp::DeleteAttachment函数删除附件，还有一些函数，自己看头文件吧!*/
-                //filePath = "C:\\Users\\李懿虎\\Desktop\\sendEmail.cpp";
-                //smtp.AddAttachment(filePath);
 
                 int err;
                 if ((err = smtp.SendEmail_Ex()) != 0)

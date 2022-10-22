@@ -101,10 +101,11 @@ QPixmap p(string t1,string t2){
     else
         pic=pictureDbPath+"moren.jpg";
 
+
    QPixmap pixmap(pic.c_str());
    QPixmap fitpixmap;
    if(pixmap.isNull()){
-//       qDebug()<<"1空";
+
        QPixmap pixmap2((pictureDbPath+"moren.jpg").c_str());
        fitpixmap = pixmap2.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
    }else{
@@ -136,7 +137,6 @@ void BookRanking::navigateToDetails(){
 */
 void BookRanking::showBorrowRank(){
 
-//    qDebug()<< " clb:" << result.size();
     QPixmap pix[7];//展示本书，后期可更改
     for(int i=0;i<7;i++){
         pix[i]=p(string(result[i].getImgPath()),string(result[i].getIsbn()));

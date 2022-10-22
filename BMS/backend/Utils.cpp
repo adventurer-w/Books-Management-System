@@ -16,6 +16,10 @@ string Utils::getGuidelines(){
     return db.getGuidelines();
 }
 
+bool Utils::setGuidelines(string guidelines){
+    return db.setGuidelines(guidelines);
+}
+
 int Utils::Login(char *account, char *password) { //密码需传入md5加密后的
 
 //    if(account[0]=='0'&&account[1]=='0'){
@@ -686,11 +690,11 @@ bool Utils::InsertReserve(Reserve reserve){
     if(!result.empty()) return false;
 
     //书籍剩余为0才能预约
-    Book book = Book();
-    GetBookByIsbn(reserve.getIsbn(),book);
-    if(book.getLeft()!=0) return false;
+//    Book book = Book();
+//    GetBookByIsbn(reserve.getIsbn(),book);
+//    if(book.getLeft()!=0) return false;
 
-    if (!CheckReserveExist(reserve)){
+//    if (!CheckReserveExist(reserve)){
         vector<Reserve> vec;
         vec.push_back(reserve);
         if (db.insert("reserve", vec) != -1){
@@ -707,9 +711,10 @@ bool Utils::InsertReserve(Reserve reserve){
         }
         else
             return false;
-    }else{
-        return false;
-    }
+//    }
+//       else{
+//        return false;
+//    }
 }
 
 

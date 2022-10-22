@@ -77,9 +77,11 @@ void BookDetails::loadBookDetail(){
     ui->lb_bookphoto->setAlignment(Qt::AlignCenter);      //设置居中
 
 }
+
 void BookDetails::setStackWidget(MainWidget *p){
     this->psw = p;
 }
+
 void BookDetails::setIcons(){
     /*将图标图片缩小到指定尺寸*/
     QPixmap pixmap(":/image/querybook/back.png");
@@ -88,6 +90,7 @@ void BookDetails::setIcons(){
     ui->btn_back->setIconSize(QSize(35, 35));
     ui->btn_back->setFlat(true);
 }
+
 bool BookDetails::loadQss(const QString &StyleSheetFile){
     /*QSS文件所在的路径*/
     QFile ofile(StyleSheetFile);
@@ -116,58 +119,41 @@ void BookDetails::on_btn_star_clicked(){//收藏
 }
 
 void BookDetails::on_btn_borrow_clicked(){//借阅
-    Record record;
-    if(now_user.getDebet()>0)
+
+    vector<Department> result_department;
+    now_utils.GetDepartmentByNo(now_user.getDepartmentNo(),result_department);
+
+    if(now_user.getDebet()>0){
         QMessageBox::information(this,"借阅书籍","请先缴纳欠款方可借书！");
-    else{
-        if(now_book.getLeft()>0){
-            record.setIsbn(now_book.getIsbn());
+    }else if(now_user.getNumBorrowed()>=result_department[0].getMaxBook()){
+        QMessageBox::information(this,"借阅书籍","已达借阅上限，无法借书！");
+    }else if(now_book.getLeft()<=0){
+        QMessageBox::information(this,"借阅书籍","该图书无库存，如需要请预约！");
+    }else{
+        Record record;
+        record.setIsbn(now_book.getIsbn());
+        QDateTime dateTime = QDateTime::currentDateTime();//获取系统当前的时间
+        QString str = dateTime .toString("yyyy-MM-dd hh:mm:ss");//格式化时间
+        //        QString str="2022-06-10 10:10:10";//测试时使用
+        record.setDate(str.toStdString().c_str());
+        record.setAuthor(now_book.getAuthor());
+        record.setAccount(now_user.getAccount());
+        record.setBookName(now_book.getBookName());
+        record.setPublisher(now_book.getPublisher());
 
-
-            QDateTime dateTime = QDateTime::currentDateTime();//获取系统当前的时间
-            QString str = dateTime .toString("yyyy-MM-dd hh:mm:ss");//格式化时间
-    //        QString str="2022-06-10 10:10:10";//测试时使用
-            record.setDate(str.toStdString().c_str());
-
-            record.setAuthor(now_book.getAuthor());
-            record.setAccount(now_user.getAccount());
-            record.setBookName(now_book.getBookName());
-            record.setPublisher(now_book.getPublisher());
-
-            if(now_utils.InsertRecord(record)){
-                //qDebug()<<"借书成功！";
-                QMessageBox::information(this,"借阅书籍","小伙好手速，借书成功！");
-                now_book.setLeft(now_book.getLeft()-1);
-                Book bookt;
-                bookt.setIsbn(now_book.getIsbn());
-                User ut;
-                ut.setAccount(now_user.getAccount());
-                now_user.setNumBorrowed(now_user.getNumBorrowed()+1);
-
-                if(!now_utils.UpdateBook(bookt, now_book)){
-
-
-
-
-
-                    //加入系统日志
-                    //QMessageBox::information(this,"借阅书籍","借阅书籍造成书籍信息错误！")
-
-
-                }
-                if(!now_utils.UpdateUser(ut,now_user)){
-
-                    //加入系统日志
-                    //QMessageBox::information(this,"借阅书籍","借阅书籍造成书籍信息错误！")
-
-                }
-            }else{
-                QMessageBox::information(this,"借阅书籍","已借阅该图书！一种图书无法借阅两本");
-            }
+        if(now_utils.InsertRecord(record)){
+            QMessageBox::information(this,"借阅书籍","小伙好手速，借书成功！");
+            now_book.setLeft(now_book.getLeft()-1);
+            Book bookt;
+            bookt.setIsbn(now_book.getIsbn());
+            now_utils.UpdateBook(bookt,now_book);
+            User ut;
+            ut.setAccount(now_user.getAccount());
+            now_user.setNumBorrowed(now_user.getNumBorrowed()+1);
+            now_utils.UpdateUser(ut,now_user);
         }else{
-            QMessageBox::information(this,"借阅书籍","该图书无库存，如需要请预约！");
+            QMessageBox::information(this,"借阅书籍","已借阅该图书！一种图书无法借阅两本");
         }
-
     }
 }
 
@@ -176,49 +162,46 @@ void BookDetails::on_btn_reserve_clicked(){//预约
     vector<Record> record;
     now_utils.GetUserBorrowList(now_user.getAccount(),record);
     for(int i=0;i<record.size();i++){
-//        qDebug()<<record[i].getIsbn();
         if(record[i].getIsbn()==now_book.getIsbn()){
             flag=true;
             break;
         }
     }
+    vector<Department> result_department;
+    now_utils.GetDepartmentByNo(now_user.getDepartmentNo(),result_department);
+    vector<Reserve> result_userReserveList;
+    now_utils.GetUserReserveList(now_user.getAccount(),result_userReserveList);
 
     if(now_user.getDebet()>0)
         QMessageBox::information(this,"预约书籍","请先缴纳欠款方可预约书！");
-    else if(flag){
+    else if(now_user.getNumBorrowed()>=result_department[0].getMaxBook()){
+        QMessageBox::information(this,"预约书籍","已达借阅上限，无法预约书！");
+    }else if(now_book.getLeft()>0){
+        QMessageBox::information(this,"预约书籍","该图书尚有库存，无法预约");
+    }else if(!result_userReserveList.empty()){
+        QMessageBox::information(this,"预约书籍","每人只能预约一本图书");
+    }else if(flag){
         QMessageBox::information(this,"预约书籍","已借阅该图书，不可预约");
-    }
-    else if(now_book.getLeft()>0){
-        QMessageBox::information(this,"预约书籍","该图书尚有库存无法预约");
-    }
-//    else if(){
-//        //需要借阅上限还有一本的空闲
-
-//    }
-    else{
+    }else{
         Reserve reserve;
         reserve.setIsbn(now_book.getIsbn());
-
         //resereve.setDate("2022-06-11");//测试时使用
         QDateTime dateTime = QDateTime::currentDateTime();//获取系统当前的时间
         QString str = dateTime .toString("yyyy-MM-dd hh:mm:ss");//格式化时间
         reserve.setDate(str.toStdString().c_str());
-
         reserve.setAuthor(now_book.getAuthor());
         reserve.setAccount(now_user.getAccount());
         reserve.setBookName(now_book.getBookName());
         reserve.setPublisher(now_book.getPublisher());
-        //(！！需要没人预约且无人预约,否则会返回失败!!)
+
         if(now_utils.InsertReserve(reserve)){
-            //qDebug()<<"预约成功！";
             QMessageBox::information(this,"预约书籍","小伙好手速，预约成功！");
             User ut;
             ut.setAccount(now_user.getAccount());
             now_user.setNumBorrowed(now_user.getNumBorrowed()+1);
             now_utils.UpdateUser(ut,now_user);
         }else{
-            //qDebug()<<"该图书已被预约，请静候";
-            QMessageBox::information(this,"预约书籍","哎呀，差点就预约上了，换一本预约吧！");
+            QMessageBox::information(this,"预约书籍","该图书已被预约，请静候");
         }
     }
 }
