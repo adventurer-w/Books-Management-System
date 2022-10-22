@@ -220,6 +220,21 @@ void QueryBookWidget::on_btn_ISBN_clicked()
 
 void QueryBookWidget::on_cbox_classify_currentIndexChanged(int){
     flag=0;
+    ui->btn_ISBN->setStyleSheet("color:rgb(0,0,0);\
+                                font-family:KaiTi;\
+                                font-size:18px;\
+                                font-weight:normal;\
+                                padding:4px;");
+    ui->btn_bookname->setStyleSheet("color:rgb(0,0,0);\
+                                    font-family:KaiTi;\
+                                    font-size:18px;\
+                                    font-weight:normal;\
+                                    padding:4px;");
+    ui->btn_author->setStyleSheet("color:rgb(0,0,0);\
+                                    font-family:KaiTi;\
+                                    font-size:18px;\
+                                    font-weight:normal;\
+                                    padding:4px;");
 }
 /*
 通过类别和key来得到符合条件的书本数据
