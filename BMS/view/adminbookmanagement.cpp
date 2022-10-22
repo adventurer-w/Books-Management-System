@@ -216,8 +216,18 @@ void AdminBookManagement::on_btn_addbook_batch_clicked()
     //从第二行开始读
     for (int i = 2; i <= count_row; i++)
     {
+        string pic = "zother/" + range->querySubObject("Cells(int,int)", i, 5)->dynamicCall("Value").toString().toStdString() + ".jpg";
+        now_book.setImgPath(const_cast<char *>(pic.c_str()));
+        qDebug() << "pic:" << QString::fromStdString(pic);
+        pic = pictureDbPath + pic;
+        QString save_filename =  QString::fromStdString(pic);
+        save_filename.replace(QString("\\"), QString("/"));
+        bool x = QFile::copy(range->querySubObject("Cells(int,int)", i, 1)->dynamicCall("Value").toString(),save_filename);
+
+
+//        now_book.setImgPath(const_cast<char *>(pic.c_str()));
         //写入各种图书信息
-        now_book.setImgPath(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 1)->dynamicCall("Value").toString().toStdString().c_str()));
+//        now_book.setImgPath(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 1)->dynamicCall("Value").toString().toStdString().c_str()));
         now_book.setBookName(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 2)->dynamicCall("Value").toString().toStdString().c_str()));
         now_book.setAuthor(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 3)->dynamicCall("Value").toString().toStdString().c_str()));
         now_book.setPublisher(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 4)->dynamicCall("Value").toString().toStdString().c_str()));
@@ -232,7 +242,9 @@ void AdminBookManagement::on_btn_addbook_batch_clicked()
             QMessageBox::information(this,"录入失败","分类有误");
             return;
         }
+        // qDebug() << now_book_class[0].getClassNo();
         now_book.setClassNo(now_book_class[0].getClassNo());
+        // qDebug() << "match add book you can set ClassByName";
         now_book.setPublishDate(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 7)->dynamicCall("Value").toString().toStdString().c_str()));
         now_book.setAllNum(range->querySubObject("Cells(int,int)", i, 8)->dynamicCall("Value").toString().toInt());
         now_book.setLeft(range->querySubObject("Cells(int,int)", i, 8)->dynamicCall("Value").toString().toInt());
@@ -376,6 +388,7 @@ void AdminBookManagement::getBookList(QString classification, QString key)
     //qDebug() << classification << "  " << flag_admin;
     if (flag_admin == 0)
     {
+//        now_utils.GetBooksByClassification(const_cast<char *>(classification.toStdString().c_str()), re);
         vector<BookClass> now_book_class;
         now_utils.GetClassByName(const_cast<char*>(classification.toStdString().c_str()),now_book_class);
         now_utils.GetBooksByClassNo(now_book_class[0].getClassNo(),re);
@@ -394,8 +407,11 @@ void AdminBookManagement::getBookList(QString classification, QString key)
         re.push_back(now_book);
     }
     model->setRowCount(re.size());
+
     if (re.size() != 0)
         qDebug() << "书名" << re[0].getBookName();
+
+
 }
 
 void AdminBookManagement::on_btn_search_clicked()
@@ -404,7 +420,9 @@ void AdminBookManagement::on_btn_search_clicked()
     ui->btn_author->setDown(false);
     ui->btn_ISBN->setDown(false);
     re.clear();
+
     ui->tb->verticalScrollBar()->setValue(0);
+
     QString classification = ui->cbox_classify->currentText();
     QString val = ui->line_search->text();
 
@@ -440,6 +458,7 @@ void AdminBookManagement::loadInitialBooks()
 
      for (int i = curNum; i < curRecord; i++)
      {
+
          model->setData(model->index(i,0),re[i].getBookName());
          model->setData(model->index(i,1),re[i].getAuthor());
          model->setData(model->index(i,2),re[i].getPublisher());
@@ -447,19 +466,60 @@ void AdminBookManagement::loadInitialBooks()
          model->setData(model->index(i,4),QString::number(re[i].getLeft()));
 
 
+
          ui->tb->setRowHeight(i, 75);
 
+         ////
          //载入修改按钮，一开始是准备写成函数的，但是发现就两个按钮，函数还要不停的传参，就算了
          QPushButton *button = new QPushButton("修改");
+         string t1(re[i].getImgPath());
+         string t2(re[i].getIsbn());
+         string pic;
+         if (t2.size() == 13)
+             pic = pictureDbPath + t1 + "/" + t2 + ".jpg";
+         else
+             pic = pictureDbPath + string("moren") + ".jpg";
+         QPixmap pixmap(pic.c_str());
+         QPixmap fitpixmap;
+         if (pixmap.isNull())
+         {
+             QPixmap pixmap2((pictureDbPath + "moren.jpg").c_str());
+             fitpixmap = pixmap2.scaled(120, 75, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+         }
+         else
+         {
+             fitpixmap = pixmap.scaled(120, 75, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+         }
          button->setProperty("tb_ISBN", model->index(i, 3, QModelIndex()).data().toString()); //设置按钮的自定义属性
          connect(button, &QPushButton::clicked, this, &AdminBookManagement::on_TableModifyBtn_clicked);
          ui->tb->setIndexWidget(model->index(i, 5), button); //将按钮加入表格中
-
+         ////
+         ////
          //载入删除按钮
          QPushButton *button_remove = new QPushButton("删除");
+         string t1_2(re[i].getImgPath());
+         string t2_2(re[i].getIsbn());
+         string pic_2;
+         if (t2.size() == 13)
+             pic_2 = pictureDbPath + t1_2 + "/" + t2_2 + ".jpg";
+         else
+             pic_2 = pictureDbPath + string("moren") + ".jpg";
+         QPixmap pixmap_2(pic_2.c_str());
+         QPixmap fitpixmap_2;
+         if (pixmap_2.isNull())
+         {
+             QPixmap pixmap2_2((pictureDbPath + "moren.jpg").c_str());
+             fitpixmap_2 = pixmap2_2.scaled(120, 75, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+         }
+         else
+         {
+             fitpixmap_2 = pixmap_2.scaled(120, 75, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+         }
          button_remove->setProperty("tb_ISBN", model->index(i, 3, QModelIndex()).data().toString()); //设置按钮的自定义属性
+
          connect(button_remove, &QPushButton::clicked, this, &AdminBookManagement::on_remove_clicked);
          ui->tb->setIndexWidget(model->index(i, 6), button_remove); //将按钮加入表格中
+         ////
      }
       update();
 }
@@ -552,6 +612,19 @@ void AdminBookManagement::on_remove_clicked()
     }
 
 }
+
+void AdminBookManagement::on_btn_updateRank_clicked()
+{
+    if(now_utils.UpdateBookRank())
+        qDebug()<<"总借阅榜单update成功！";
+    if(now_utils.UpdateGirlRank())
+        qDebug()<<"女生借阅排行榜update成功！";
+    if(now_utils.UpdateBoyRank())
+        qDebug()<<"男生借阅排行榜update成功！";
+    if(now_utils.UpdatePointRank())
+        qDebug()<<"高分借阅排行榜update成功！";
+}
+
 void AdminBookManagement::updateBookRecord(Book book)
 {
     //将图书信息一一更新

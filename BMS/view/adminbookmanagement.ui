@@ -276,6 +276,19 @@
     <string>批量添加图书</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>450</x>
+     <y>20</y>
+     <width>111</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>更新排行榜</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

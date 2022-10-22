@@ -50,6 +50,8 @@ public:
 
     void on_remove_clicked();
 
+    void on_btn_updateRank_clicked();
+
     bool openExcel(const QString &filename);
 
     int nCurScroller = 0; //翻页时的当时滑动条位置

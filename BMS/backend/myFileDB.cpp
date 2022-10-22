@@ -12,3 +12,13 @@ string myFileDB::getGuidelines()
     return re;
 }
 
+bool myFileDB::setGuidelines(string guidelines)
+{
+    ofstream out(rootPath+"guidelines.txt");
+    if(out){
+        out<<guidelines;
+        return true;
+    }else{
+        return false;
+    }
+}

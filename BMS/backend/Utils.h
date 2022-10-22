@@ -18,6 +18,7 @@ public:
 
 
     string getGuidelines();
+    bool setGuidelines(string guidelines);
 
     int Login(char* account, char* password); //参数1:账号，参数2:密码。   返回值：0:账户不存在； 2:登陆成功；1:密码错误
 

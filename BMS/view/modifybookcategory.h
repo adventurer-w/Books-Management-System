@@ -24,6 +24,7 @@ public:
     void on_btn_delete_clicked();
     void leModifyText(const QString text);
 
+
 private:
     Ui::ModifyBookCategory *ui;
 };
