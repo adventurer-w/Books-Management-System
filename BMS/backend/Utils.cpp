@@ -256,7 +256,7 @@ bool Utils::GetUserByDepartmentNo(int departmentNo, vector<User> &result){
     user.setDepartmentNo(departmentNo);
     vector<string> val;
     val.push_back("not-all");
-    val.push_back("major");
+    val.push_back("departmentNo");
     if (db.select("user", user, val, result) != -1)
         return true;
     else
@@ -443,6 +443,13 @@ bool Utils::GetBooksByBookName(char* name, vector<Book>&result){
         return false;
 }
 
+bool Utils::GetBooksByBookNameLike(char* name, vector<Book>&result){
+    if (db.selectLike("book", "name", name, result) != -1)
+        return true;
+    else
+        return false;
+}
+
 bool Utils::GetBooksByAuthor(char* author, vector<Book>&result){
     vector<string> value;
     value.push_back("not-all");
@@ -454,6 +461,22 @@ bool Utils::GetBooksByAuthor(char* author, vector<Book>&result){
     else
         return false;
 }
+
+bool Utils::GetBooksByAuthorLike(char* author, vector<Book>&result){
+    if (db.selectLike("book", "author", author, result) != -1)
+        return true;
+    else
+        return false;
+}
+
+
+bool Utils::GetUserByNameLike(char* name, vector<User>&result){
+    if (db.selectLike("user", "name", name, result) != -1)
+        return true;
+    else
+        return false;
+}
+
 
 bool Utils::GetBooksByClassNo(int classNo, vector<Book>&result){
     vector<string> value;
@@ -987,6 +1010,22 @@ bool Utils::CheckClassExistByName(char *name){
     if (db.select("bookClass", bookClass, value, result) == -1)
         return false;
     return true;
+}
+
+
+bool Utils::ChangeClassByNo(BookClass before, BookClass after){
+    if (CheckClassExistByNo(before.classNo)){
+        vector<string> vec;
+        vec.push_back("not-all");
+        vec.push_back("classNo");
+
+        if (db.update("record", before, after, vec) != -1)
+            return true;
+        else
+            return false;
+    }else{
+        return false;
+    }
 }
 
 
