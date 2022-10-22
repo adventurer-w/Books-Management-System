@@ -12,6 +12,7 @@ UserManagement::UserManagement(QWidget *parent) :
     ui(new Ui::UserManagement)
 {
     ui->setupUi(this);
+    curRecordIndex = 0;
     model = new StdItemModel();
 
     model->setColumnCount(7); //设置有7列
@@ -57,8 +58,42 @@ UserManagement::~UserManagement()
     delete ui;
 }
 
-void UserManagement::loadRecords(){
+void UserManagement::printRecords(QString account,vector<Record> &record){
+    string info;
 
+    for(int i=curRecordIndex ;i<curRecordIndex+record.size();i++){
+
+        //基本信息计算
+        QString str=record[i].getDate();
+        QDateTime borrow_time = QDateTime::fromString(str, "yyyy-MM-dd hh:mm:ss");
+        QDateTime now_time = QDateTime::currentDateTime();
+        qint64 time=borrow_time.secsTo(now_time);
+
+        //插入各种表项
+
+        model->setItem(i, 0, new QStandardItem(account));
+        model->setItem(i, 1, new QStandardItem(record[i].getBookName()));
+        model->setItem(i, 2, new QStandardItem(record[i].getAuthor()));
+        model->setItem(i, 3, new QStandardItem(record[i].getDate()));
+        model->setItem(i, 4, new QStandardItem(record[i].getIsbn()));
+        if(time>=60*24*60*60)
+            model->setItem(i, 5, new QStandardItem("是"));
+        else
+            model->setItem(i, 5, new QStandardItem("否"));
+
+        ui->tb->setRowHeight(i,50);
+        //往表格中添加按钮控件
+        QPushButton *button = new QPushButton("删除");
+        button->setStyleSheet("color:#000000;\
+                              font-size:18px;\
+                              font-family:KaiTi;\
+                              font-weight:normal;");
+        button->setProperty("account",const_cast<char*>(account.toStdString().c_str()));
+        button->setProperty("isbn",record[i].getIsbn());
+
+        ui->tb->setIndexWidget(model->index(i,6),button);
+        connect(button, &QPushButton::clicked, this, &UserManagement::on_btn_delete_clicked);
+    }
 }
 void UserManagement::on_btn_delete_clicked(){
     //删除记录
@@ -104,55 +139,26 @@ void UserManagement::on_btn_search_clicked()
         for(int i = 0; i < 4; i++)
         {
             now_utils.GetUserByDepartmentNo(i,result);
+
         }
         //获取所有用户的借阅记录
         for(int i = 0; i< result.size(); i++)
         {
             now_utils.GetUserBorrowList(result[i].getAccount(),record);
+            printRecords(QString(QLatin1String(result[i].getAccount())),record);
+            record.clear();
         }
 
     }else{
         now_utils.GetUserBorrowList(const_cast<char*>(val.toStdString().c_str()),record);
+        printRecords(val,record);
     }
 
     //获取该用户全部借阅信息
 
 
 
-    string info;
 
-    for(int i=0 ;i<record.size();i++){
-
-        //基本信息计算
-        QString str=record[i].getDate();
-        QDateTime borrow_time = QDateTime::fromString(str, "yyyy-MM-dd hh:mm:ss");
-        QDateTime now_time = QDateTime::currentDateTime();
-        qint64 time=borrow_time.secsTo(now_time);
-
-        //插入各种表项
-        model->setItem(i, 0, new QStandardItem(val));
-        model->setItem(i, 1, new QStandardItem(record[i].getBookName()));
-        model->setItem(i, 2, new QStandardItem(record[i].getAuthor()));
-        model->setItem(i, 3, new QStandardItem(record[i].getDate()));
-        model->setItem(i, 4, new QStandardItem(record[i].getIsbn()));
-        if(time>=60*24*60*60)
-            model->setItem(i, 5, new QStandardItem("是"));
-        else
-            model->setItem(i, 5, new QStandardItem("否"));
-
-        ui->tb->setRowHeight(i,50);
-        //往表格中添加按钮控件
-        QPushButton *button = new QPushButton("删除");
-        button->setStyleSheet("color:#000000;\
-                              font-size:18px;\
-                              font-family:KaiTi;\
-                              font-weight:normal;");
-        button->setProperty("account",const_cast<char*>(val.toStdString().c_str()));
-        button->setProperty("isbn",record[i].getIsbn());
-
-        ui->tb->setIndexWidget(model->index(i,6),button);
-        connect(button, &QPushButton::clicked, this, &UserManagement::on_btn_delete_clicked);
-    }
 }
 
 

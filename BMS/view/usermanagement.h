@@ -32,7 +32,7 @@ public:
     explicit UserManagement(QWidget *parent = nullptr);
     ~UserManagement();
     StdItemModel *model;
-    void loadRecords();
+    void printRecords(QString account,vector<Record> &record);
     void on_btn_delete_clicked();
    bool loadQss(const QString &StyleSheetFile);
    void paintEvent(QPaintEvent *);
@@ -46,6 +46,7 @@ private slots:
 
 private:
     Ui::UserManagement *ui;
+    int curRecordIndex;
 };
 
 #endif // UserManagement_H

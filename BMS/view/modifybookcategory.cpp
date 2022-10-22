@@ -85,11 +85,6 @@ void ModifyBookCategory::loadclassify()
         //绑定按钮与对应的行数，用来后面区分删除按钮
         connect(btn_delete, &QPushButton::clicked, this, &ModifyBookCategory::on_btn_delete_clicked);
 
-        QPushButton *btn_update = new QPushButton("修改");
-        ui->tb->setIndexWidget(model->index(i, 2), btn_update); //显示
-        btn_update->setProperty("tb_classify_name", now_book_class[i].getName());
-        btn_update->setProperty("tb_classify_no", i);
-        connect(btn_update, &QPushButton::clicked, this, &ModifyBookCategory::on_btn_update_clicked);
     }
     //绑定addclassify按钮与addclassify功能
     connect(ui->btn_addclassify, &QPushButton::clicked, this, &ModifyBookCategory::on_btn_addclassify_clicked);
