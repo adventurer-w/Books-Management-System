@@ -259,7 +259,7 @@ void AdminBookManagement::on_btn_addbook_batch_clicked()
 
 // 以下方法都是用来在管理员界面查找书籍的
 int flag_admin = 0; // 1书名，2作者，3isbn
-int ctrl_admin = 0x000;
+
 void AdminBookManagement::on_btn_bookname_clicked()
 {
     if(flag_admin == 1){
@@ -347,6 +347,22 @@ void AdminBookManagement::on_btn_ISBN_clicked()
 void AdminBookManagement::on_cbox_classify_currentIndexChanged(int)
 {
     flag_admin = 0;
+
+    ui->btn_ISBN->setStyleSheet("color:rgb(0,0,0);\
+                                font-family:KaiTi;\
+                                font-size:18px;\
+                                font-weight:normal;\
+                                padding:4px;");
+    ui->btn_bookname->setStyleSheet("color:rgb(0,0,0);\
+                                    font-family:KaiTi;\
+                                    font-size:18px;\
+                                    font-weight:normal;\
+                                    padding:4px;");
+    ui->btn_author->setStyleSheet("color:rgb(0,0,0);\
+                                    font-family:KaiTi;\
+                                    font-size:18px;\
+                                    font-weight:normal;\
+                                    padding:4px;");
 }
 
 /*
@@ -354,7 +370,7 @@ void AdminBookManagement::on_cbox_classify_currentIndexChanged(int)
 */
 void AdminBookManagement::getBookList(QString classification, QString key)
 {
-    if (classification == "全部" && ctrl_admin == 0)
+    if (classification == "全部" && flag_admin == 0)
         flag_admin = 1;
 
     //qDebug() << classification << "  " << flag_admin;
