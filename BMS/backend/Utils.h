@@ -17,6 +17,7 @@ public:
     bool CheckEmail(char *email);
 
 
+    string getGuidelines();
 
     int Login(char* account, char* password); //参数1:账号，参数2:密码。   返回值：0:账户不存在； 2:登陆成功；1:密码错误
 
@@ -298,5 +299,4 @@ public:
 
 //！！！！密码用MD5储存！！！！
 // 前端在传输数据之前需要使用MD5加密！
-
 

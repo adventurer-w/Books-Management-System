@@ -16,6 +16,7 @@ public:
     explicit BorrowInstruction(QWidget *parent = nullptr);
     ~BorrowInstruction();
    bool loadQss(const QString &StyleSheetFile);
+   void on_btn_modifyConfirm_clicked();
 private:
     Ui::BorrowInstruction *ui;
 };

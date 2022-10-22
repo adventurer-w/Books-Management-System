@@ -11,7 +11,7 @@ public:
     char bookName[BOOK_NAME_SIZE];//书名
     char author[AUTHOR_SIZE];//作者
     char publisher[PUBLISHER_SIZE];//出版社
-    char date[DATE_SIZE]; // 借书日期
+    char date[DATE_SIZE]; // 预约日期
     int dirty;
 
     void setId(int id){this->id=id;}

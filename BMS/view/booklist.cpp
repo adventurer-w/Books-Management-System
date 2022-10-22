@@ -134,6 +134,7 @@ void BookList::loadInitialBooks(){
                    pic=pictureDbPath+"moren.jpg";
 
         QPixmap pixmap(pic.c_str());
+
        QPixmap fitpixmap;
        if(pixmap.isNull()){
            //qDebug()<<"1空";
@@ -142,7 +143,6 @@ void BookList::loadInitialBooks(){
        }else{
            fitpixmap = pixmap.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
        }
-
 
 
         l1->setPixmap(fitpixmap);    //加载图片
@@ -205,6 +205,31 @@ void BookList::loadBtnBooks(){
         tbv->setRowHeight(i,150);
         //往表格中添加按钮控件
         QPushButton *button = new QPushButton("详情");
+
+        // QLabel *l1 = new QLabel();     //创建lable
+        // string t1(re[i].getImgPath());
+        // string t2(re[i].getIsbn());
+        // string pic;
+        // if(t2.size()==13)
+        //            pic=pictureDbPath+t1;
+        //        else
+        //            pic=pictureDbPath+"moren.jpg";
+
+        // QPixmap pixmap(pic.c_str());
+        //        QPixmap fitpixmap;
+        //        if(pixmap.isNull()){
+        //            QPixmap pixmap2((pictureDbPath+"moren.jpg").c_str());
+        //            fitpixmap = pixmap2.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        //        }else{
+        //            fitpixmap = pixmap.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        //        }
+
+
+        // l1->setPixmap(fitpixmap);    //加载图片
+        // l1->setScaledContents(true);
+        // l1->setAlignment(Qt::AlignCenter);      //设置居中
+        // ui->tb->setIndexWidget(model->index(i,0),l1);     //显示
+
 
         //设置按钮的自定义属性
         button->setProperty("tb_ISBN",(const QVariant &)(model->index(i,4,QModelIndex()).data().toString()));
@@ -286,9 +311,7 @@ void BookList::on_TableBtn_clicked()
     now_utils.GetBookByIsbn(const_cast<char*>(ISBN.toStdString().c_str()),now_book);
     BookDetails *bookDetails= new BookDetails();
     bookDetails->resize(1300,730);
-    bookDetails->move(0,170);
     bookDetails->setStackWidget(psw);
-    bookDetails->setPreIndex(1);//用于返回前面调用的界面
     psw->insertWidget(2,bookDetails);
     psw->setCurrentIndex(2);
 

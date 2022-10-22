@@ -10,27 +10,10 @@ using namespace std;
 
 extern Utils now_utils;
 
-//void Tokenize(const string& str, vector<string>& tokens, const string& delimiters)
-//{
-//    // Skip delimiters at beginning.
-//    string::size_type lastPos = str.find_first_not_of(delimiters, 0);
-//    // Find first "non-delimiter".
-//    string::size_type pos = str.find_first_of(delimiters, lastPos);
-//    while (string::npos != pos || string::npos != lastPos)
-//    {
-//        // Found a token, add it to the vector.
-//        tokens.push_back(str.substr(lastPos, pos - lastPos));
-//        // Skip delimiters.  Note the "not_of"
-//        lastPos = str.find_first_not_of(delimiters, pos);
-//        // Find next "non-delimiter"
-//        pos = str.find_first_of(delimiters, lastPos);
-//    }
-//}
-
 int num=0;
 
 void addBooks(string origin,string cla) {
-//    qDebug()<<origin;
+//    qDebug()<<QString::fromStdString(origin);
 //    qDebug()<<cla;
 
     QList < int > list;
@@ -45,18 +28,17 @@ void addBooks(string origin,string cla) {
 
     string t, t2, s;
     int i=0, j;
-    ifstream in("C:\\Users\\chp\\Desktop\\bms_chp\\BMS_1010\\bookByPython\\"+origin+".txt", ios::in);
-
-    vector<string>tokens;
+    ifstream in("C:\\Users\\chp\\Desktop\\bookByPython\\"+origin+".txt", ios::in);
+//    if(!in){
+//        qDebug()<<"!!!";
+//    }
     while (getline(in, s))
     {
-//        qDebug()<<i<<"本";
+//        qDebug()<<num<<"本";
 
         Book b;
-        string imgpath="C:\\Users\\chp\\Desktop\\bms_chp\\BMS_1010\\image\\cover\\"+origin;
-        b.setImgPath(imgpath.c_str());
         b.setBookName(s.c_str());
-        //            qDebug()<<b.getBookName();
+//                    qDebug()<<b.getBookName();
         s.clear();
         getline(in, s);
         b.setAuthor(s.c_str());
@@ -72,10 +54,13 @@ void addBooks(string origin,string cla) {
         s.clear();
         getline(in, s);
         b.setIsbn(s.c_str());
-//        b.setClassification(cla.c_str());
+
+        vector<BookClass> re;
+        now_utils.GetClassByName(const_cast<char*>(cla.c_str()),re);
+        b.setClassNo(re[0].getClassNo());
 
         //余量
-        b.setLeft(qrand() % 20+1);
+        b.setLeft(qrand() % 20+3);
 
 
         //总数
@@ -103,9 +88,11 @@ void addBooks(string origin,string cla) {
 
         string tt(b.getIsbn());
         if(tt.size()==13){
+            string imgpath=origin+"/"+tt+".jpg";
+            b.setImgPath(imgpath.c_str());
             if(now_utils.InsertBook(b)){
                 num++;
-                if(num%50==0)
+                if(num%100==0)
                     qDebug()<<num<<"成功";
             }
         }

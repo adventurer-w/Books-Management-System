@@ -31,18 +31,20 @@ MainWindow::MainWindow(QWidget *parent)
     this->resize(1600,900);
     /* judge admin 0 or user 1 here*/
     /* start */
-//    if(!now_user.getAccount()[0] && !now_user.getAccount()[1])userType = 0;
-//    else userType = 1;
-    userType = 1;
-    /* end */
-    //qDebug() << "1";
+
+    if(now_user.getAccount()[0]=='0' && now_user.getAccount()[1]=='0')
+        userType = 0;
+    else
+        userType = 1;
+//    userType = 1;
+
+    qDebug()<<userType;
+    qDebug()<<now_user.getAccount();
+
     loadUserInfo();
-    //qDebug() << "2";
     loadMenuBar();
-    //qDebug() << "3";
     loadPages(0);
 
-    //qDebug() << "4";
     QString qssfilename =":/qss/mainwindow/mainwindow.qss";
     this->loadQss(qssfilename);
 
@@ -183,7 +185,7 @@ void MainWindow::loadPages(int mode){
             /*默认导入 图书查询页面*/
             QueryBookWidget *queryBookWidget = new  QueryBookWidget;
             queryBookWidget->resize(1300,900);
-            //userProfileWidget->setParent(this->mw);
+//            userProfileWidget->setParent(this->mw);
             mw->insertWidget(2, queryBookWidget);
 
         }

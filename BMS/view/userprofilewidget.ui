@@ -73,7 +73,7 @@
    <widget class="QLabel" name="lb_credit">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>270</x>
       <y>100</y>
       <width>70</width>
       <height>30</height>
@@ -86,7 +86,7 @@
    <widget class="QLabel" name="lb_sex_txt">
     <property name="geometry">
      <rect>
-      <x>370</x>
+      <x>350</x>
       <y>60</y>
       <width>100</width>
       <height>30</height>
@@ -119,13 +119,13 @@
      </rect>
     </property>
     <property name="text">
-     <string>专业</string>
+     <string>学历</string>
     </property>
    </widget>
    <widget class="QLabel" name="lb_sex">
     <property name="geometry">
      <rect>
-      <x>270</x>
+      <x>280</x>
       <y>60</y>
       <width>70</width>
       <height>30</height>
@@ -138,7 +138,7 @@
    <widget class="QLabel" name="lb_credit_txt">
     <property name="geometry">
      <rect>
-      <x>370</x>
+      <x>350</x>
       <y>100</y>
       <width>100</width>
       <height>30</height>

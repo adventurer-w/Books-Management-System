@@ -20,6 +20,7 @@ public:
     void setIcons();
     bool loadQss(const QString &StyleSheetFile);
     void paintEvent(QPaintEvent *);
+    void on_btn_modifyimage_clicked();
     void on_pushButton_clicked();
 signals:
 void backSignal();

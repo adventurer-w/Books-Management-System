@@ -10,11 +10,17 @@ using namespace std;
 // 前端在传输数据之前需要使用MD5加密！
 
 
+
+
+string Utils::getGuidelines(){
+    return db.getGuidelines();
+}
+
 int Utils::Login(char *account, char *password) { //密码需传入md5加密后的
 
-    if(account[0]=='0'&&account[1]=='0'){
-        return AdminLogin(account,password)+3;
-    }else{
+//    if(account[0]=='0'&&account[1]=='0'){
+//        return AdminLogin(account,password)+3;
+//    }else{
         User user = User();
         GetUserByAccount(account,user);
 
@@ -27,14 +33,12 @@ int Utils::Login(char *account, char *password) { //密码需传入md5加密后�
         }else{
             return 0;
         }
-    }
+//    }
 }
 
 int Utils::Register(User user) {
-    if(!CheckAccount(user.getAccount())) return -2;
-    if(user.getAccount()[0]=='0'&&user.getAccount()[1]=='0') return -2;
-    if(!CheckEmail(user.getEmail())) return -4;
-    if(!CheckUserExistByEmail(user.getEmail())) return -4;
+//    if(user.getAccount()[0]=='0'&&user.getAccount()[1]=='0') return -2;
+//    if(!CheckUserExistByEmail(user.getEmail())) return -4;
     if (CheckUserExist(user))
         return 0;
     else{
@@ -46,7 +50,7 @@ int Utils::Register(User user) {
 }
 
 bool Utils::InsertUser(User user) {
-    if(!CheckUserExistByEmail(user.getEmail())) return false;
+//    if(!CheckUserExistByEmail(user.getEmail())) return false;
     if (!CheckUserExist(user)){
         vector<User> vec;
         vec.push_back(user);

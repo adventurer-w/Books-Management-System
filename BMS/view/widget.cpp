@@ -10,8 +10,7 @@
 #include "../backend/User.h"
 #include <QDir>
 #include <QString>
-#include <QDebug>
-
+#include <QMessageBox>
 extern User now_user ;
 extern Utils now_utils;
 
@@ -74,19 +73,26 @@ void Widget::on_btn_login_clicked()
 
     QString account=ui->lineE_user_name->text();
     QString pwd=ui->lineE_pwd->text();
+//    account = "000001";
+//    pwd = "123456aA";
+    string info;
+    if(account.size()>ACCOUNT_SIZE-1)
+        info+="账号过长，请重新输入！\n";
+    if(pwd.size()>PASSWORD_SIZE-1)
+        info+="密码过长，请重新输入！\n";
+    if(info.size()>0)
+        QMessageBox::information(this,"提示信息",QString::fromStdString(info));
+    info.clear();
 
-    account = "20040032002";
-    pwd = "123456aA";
     MD5 md5;
     string b= md5.read(pwd.toStdString());//加密
 
-    int flag;
-    string t=account.toStdString();
-    char* account2=const_cast<char*>(t.c_str());
+    char* account2=const_cast<char*>(account.toStdString().c_str());
     char* pwd2=const_cast<char*>(b.c_str());
+//    account2 = "000001";
+//    pwd2 = "123456aA";
 
-
-    flag=now_utils.Login(account2,pwd2);
+    int flag=now_utils.Login(account2,pwd2);
     if(flag==0){
         //账户不存在
         ui->label->setText("账户不存在");
@@ -102,7 +108,6 @@ void Widget::on_btn_login_clicked()
         MainWindow *personal_homepage = new MainWindow;
         personal_homepage->show();
     }
-
 }
 
 

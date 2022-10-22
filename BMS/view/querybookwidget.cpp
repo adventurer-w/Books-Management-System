@@ -33,7 +33,6 @@
 extern Utils now_utils;
 extern vector<Book> re;
 extern Book now_book;
-extern vector<BookClass> now_book_class;
 
 QueryBookWidget::QueryBookWidget(QWidget *parent) :
     QWidget(parent),
@@ -52,7 +51,7 @@ QueryBookWidget::QueryBookWidget(QWidget *parent) :
     vector<BookClass> classifications;
     now_utils.GetAllClass(classifications);
     for(int i=0;i<classifications.size();i++)
-    ui->cbox_classify->addItem(QString::fromStdString(classifications[i].getName()));
+        ui->cbox_classify->addItem(QString::fromStdString(classifications[i].getName()));
 
     ui->cbox_classify->setCurrentIndex(0);//设置默认选项
     loadPages();
@@ -253,6 +252,7 @@ void QueryBookWidget::getBookList(QString classification, QString key){
             BookList *bookList =new BookList();
             bookList->resize(1300,730);
             bookList->move(this->x(),this->y()+170);
+
             bookList->setStackWidget(sub_mw);
             sub_mw->insertWidget(1,bookList);
             sub_mw->setCurrentIndex(1);
@@ -267,6 +267,7 @@ void QueryBookWidget::getBookList(QString classification, QString key){
         }
 
     }
+
 }
 
 void QueryBookWidget::killThread(){

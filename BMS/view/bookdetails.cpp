@@ -65,6 +65,7 @@ void BookDetails::loadBookDetail(){
     QPixmap pixmap(pic.c_str());
    QPixmap fitpixmap;
    if(pixmap.isNull()){
+
        QPixmap pixmap2((pictureDbPath+"moren.jpg").c_str());
        fitpixmap = pixmap2.scaled(120, 150, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
    }else{
@@ -175,7 +176,7 @@ void BookDetails::on_btn_reserve_clicked(){//预约
     vector<Record> record;
     now_utils.GetUserBorrowList(now_user.getAccount(),record);
     for(int i=0;i<record.size();i++){
-        qDebug()<<record[i].getIsbn();
+//        qDebug()<<record[i].getIsbn();
         if(record[i].getIsbn()==now_book.getIsbn()){
             flag=true;
             break;

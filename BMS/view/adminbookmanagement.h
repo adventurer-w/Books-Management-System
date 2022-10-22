@@ -18,13 +18,17 @@ class AdminBookManagement : public QWidget
 public:
     explicit AdminBookManagement(QWidget *parent = nullptr);
 
+    void load_classify();
+
+    ~AdminBookManagement();
+
     void getBookList(QString classification, QString key);
 
     void paintEvent(QPaintEvent *);
 
     bool loadQss(const QString &StyleSheetFile);
 
-    ~AdminBookManagement();
+
 
     void setShadow();
 
