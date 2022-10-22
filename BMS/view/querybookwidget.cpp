@@ -133,13 +133,10 @@ void QueryBookWidget::loadPages(){
 
 int flag=0;//1书名，2作者，3isbn
 int ctrl = 0x000;
-void QueryBookWidget::on_btn_bookname_clicked(){
-
-    if((ctrl>>8) % 2 == 1){
-        ui->btn_bookname->setDown(false);
-        ctrl &= 0x011;
-        //qDebug() << "clear bookname " << ctrl ;
-
+void QueryBookWidget::on_btn_bookname_clicked()
+{
+    if(flag == 1){
+        flag=0;
         ui->btn_bookname->setStyleSheet("color:rgb(0,0,0);\
                                         font-family:KaiTi;\
                                         font-size:18px;\
@@ -148,24 +145,26 @@ void QueryBookWidget::on_btn_bookname_clicked(){
     }
     else {
 
-        ui->btn_bookname->setDown(true);
-        ctrl |= 0x100;
-        //qDebug() << "add bookname " << ctrl ;
         flag=1;
         ui->btn_bookname->setStyleSheet("color:rgb(255,255,255);\
                                         background-color:rgb(121,109,111);");
-    };
-
-
-
+        ui->btn_author->setStyleSheet("color:rgb(0,0,0);\
+                                        font-family:KaiTi;\
+                                        font-size:18px;\
+                                        font-weight:normal;\
+                                        padding:4px;");
+        ui->btn_ISBN->setStyleSheet("color:rgb(0,0,0);\
+                                        font-family:KaiTi;\
+                                        font-size:18px;\
+                                        font-weight:normal;\
+                                        padding:4px;");
+    }
 }
 
-void QueryBookWidget::on_btn_author_clicked(){
-    if((ctrl>>4) % 2 == 1){
-        ui->btn_author->setDown(false);
-        ctrl &= 0x101;
-        //qDebug() << "clear author name " << ctrl ;
-
+void QueryBookWidget::on_btn_author_clicked()
+{
+    if(flag == 2){
+        flag=0;
         ui->btn_author->setStyleSheet("color:rgb(0,0,0);\
                                         font-family:KaiTi;\
                                         font-size:18px;\
@@ -173,23 +172,15 @@ void QueryBookWidget::on_btn_author_clicked(){
                                         padding:4px;");
     }
     else {
-        ui->btn_author->setDown(true);
-        ctrl |= 0x010;
-        //qDebug() << "add author name " << ctrl ;
+
         flag=2;
         ui->btn_author->setStyleSheet("color:rgb(255,255,255);\
                                         background-color:rgb(121,109,111);");
-    };
-
-
-}
-
-void QueryBookWidget::on_btn_ISBN_clicked(){
-    if((ctrl) % 2 == 1){
-        ui->btn_ISBN->setDown(false);
-        ctrl &= 0x110;
-        //qDebug() << "clear ISBNname " << ctrl ;
-
+        ui->btn_bookname->setStyleSheet("color:rgb(0,0,0);\
+                                        font-family:KaiTi;\
+                                        font-size:18px;\
+                                        font-weight:normal;\
+                                        padding:4px;");
         ui->btn_ISBN->setStyleSheet("color:rgb(0,0,0);\
                                         font-family:KaiTi;\
                                         font-size:18px;\
@@ -197,17 +188,35 @@ void QueryBookWidget::on_btn_ISBN_clicked(){
                                         padding:4px;");
     }
 
+}
+
+void QueryBookWidget::on_btn_ISBN_clicked()
+{
+    if(flag == 3){
+        flag=0;
+        ui->btn_ISBN->setStyleSheet("color:rgb(0,0,0);\
+                                        font-family:KaiTi;\
+                                        font-size:18px;\
+                                        font-weight:normal;\
+                                        padding:4px;");
+    }
     else {
-        ui->btn_ISBN->setDown(true);
-        ctrl |= 0x001;
-        //qDebug() << "add ISBNname " << ctrl ;
         flag=3;
         ui->btn_ISBN->setStyleSheet("color:rgb(255,255,255);\
                                         background-color:rgb(121,109,111);");
-    };
-
-
+        ui->btn_bookname->setStyleSheet("color:rgb(0,0,0);\
+                                        font-family:KaiTi;\
+                                        font-size:18px;\
+                                        font-weight:normal;\
+                                        padding:4px;");
+        ui->btn_author->setStyleSheet("color:rgb(0,0,0);\
+                                        font-family:KaiTi;\
+                                        font-size:18px;\
+                                        font-weight:normal;\
+                                        padding:4px;");
+    }
 }
+
 
 void QueryBookWidget::on_cbox_classify_currentIndexChanged(int){
     flag=0;

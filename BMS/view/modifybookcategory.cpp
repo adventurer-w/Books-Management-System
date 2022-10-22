@@ -165,7 +165,7 @@ void ModifyBookCategory::tableModifyClicked()
 
     QString new_name = le->property("new_classify_name").toString();
     //bool ok;
-    qDebug()<< "new name:"<<new_name;
+    //qDebug()<< "new name:"<<new_name;
     //QString text = QInputDialog::getText(this, tr("类别修改"),tr("请输入新的类别名称"), QLineEdit::Password,0, &ok);
     if (!classify_name.isEmpty() && new_name!="")
     {

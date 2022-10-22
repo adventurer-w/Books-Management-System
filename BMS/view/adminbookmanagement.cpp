@@ -162,6 +162,7 @@ void AdminBookManagement::on_btn_addbook_clicked()
     AdminModifyBookDetail *admin_modify_book_detail = new AdminModifyBookDetail();
     connect(admin_modify_book_detail,SIGNAL(backSignal()),this,SLOT(backToThis()));//绑定返回按钮
     admin_modify_book_detail->resize(1300, 730);
+    admin_modify_book_detail->move(this->x(),this->y());
     psw->insertWidget(3,admin_modify_book_detail);
     emit changePageSignal(3);//发出切换到3号页面的信号
 }

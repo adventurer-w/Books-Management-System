@@ -95,7 +95,7 @@ void UserManagement::on_btn_search_clicked()
 {
     //点击搜索按钮
     QString val=ui->line_search->text();
-    qDebug()<< val << "yes";
+    //qDebug()<< val << "yes";
     vector<Record> record;
     if(val == "")
     {
