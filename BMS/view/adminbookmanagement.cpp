@@ -232,9 +232,7 @@ void AdminBookManagement::on_btn_addbook_batch_clicked()
             QMessageBox::information(this,"录入失败","分类有误");
             return;
         }
-        // qDebug() << now_book_class[0].getClassNo();
         now_book.setClassNo(now_book_class[0].getClassNo());
-        // qDebug() << "match add book you can set ClassByName";
         now_book.setPublishDate(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 7)->dynamicCall("Value").toString().toStdString().c_str()));
         now_book.setAllNum(range->querySubObject("Cells(int,int)", i, 8)->dynamicCall("Value").toString().toInt());
         now_book.setLeft(range->querySubObject("Cells(int,int)", i, 8)->dynamicCall("Value").toString().toInt());
@@ -362,7 +360,6 @@ void AdminBookManagement::getBookList(QString classification, QString key)
     qDebug() << classification << "  " << flag_admin;
     if (flag_admin == 0)
     {
-//        now_utils.GetBooksByClassification(const_cast<char *>(classification.toStdString().c_str()), re);
         vector<BookClass> now_book_class;
         now_utils.GetClassByName(const_cast<char*>(classification.toStdString().c_str()),now_book_class);
         now_utils.GetBooksByClassNo(now_book_class[0].getClassNo(),re);
@@ -381,11 +378,8 @@ void AdminBookManagement::getBookList(QString classification, QString key)
         re.push_back(now_book);
     }
 
-    // qDebug() << "come here";
     if (re.size() != 0)
         qDebug() << "书名" << re[0].getBookName();
-
-
 }
 
 void AdminBookManagement::on_btn_search_clicked()
@@ -433,6 +427,11 @@ void AdminBookManagement::loadInitialBooks()
 
      for (int i = curNum; i < curRecord; i++)
      {
+//         model->setData(model->index(i,0),re[i].getBookName());
+//         model->setData(model->index(i,1),re[i].getAuthor());
+//         model->setData(model->index(i,2),re[i].getPublisher());
+//         model->setData(model->index(i,3),re[i].getIsbn());
+//         model->setData(model->index(i,4),QString::number(re[i].getLeft()));
          model->setItem(i, 0, new QStandardItem(re[i].getBookName()));
          model->setItem(i, 1, new QStandardItem(re[i].getAuthor()));
          model->setItem(i, 2, new QStandardItem(re[i].getPublisher()));
@@ -452,7 +451,6 @@ void AdminBookManagement::loadInitialBooks()
          button_remove->setProperty("tb_ISBN", model->index(i, 3, QModelIndex()).data().toString()); //设置按钮的自定义属性
          connect(button_remove, &QPushButton::clicked, this, &AdminBookManagement::on_remove_clicked);
          ui->tb->setIndexWidget(model->index(i, 6), button_remove); //将按钮加入表格中
-
      }
       update();
 }
