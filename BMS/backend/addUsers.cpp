@@ -109,7 +109,8 @@ void insert()
 
     //欠款数
     u.debet=rand()%50;
-
+    //所属类别，老师，本科，硕士，博士
+    u.setDepartmentNo(rand()%4);
     now_utils.Register(u);
     User u2;
     now_utils.GetUserByAccount(u.account,u2);
