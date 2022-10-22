@@ -394,7 +394,7 @@ void AdminBookManagement::on_btn_search_clicked()
     ui->btn_author->setDown(false);
     ui->btn_ISBN->setDown(false);
     re.clear();
-    
+
     QString classification = ui->cbox_classify->currentText();
     QString val = ui->line_search->text();
 
@@ -441,57 +441,18 @@ void AdminBookManagement::loadInitialBooks()
 
          ui->tb->setRowHeight(i, 75);
 
-         ////
          //载入修改按钮，一开始是准备写成函数的，但是发现就两个按钮，函数还要不停的传参，就算了
          QPushButton *button = new QPushButton("修改");
-         string t1(re[i].getImgPath());
-         string t2(re[i].getIsbn());
-         string pic;
-         if (t2.size() == 13)
-             pic = pictureDbPath + t1 + "/" + t2 + ".jpg";
-         else
-             pic = pictureDbPath + string("moren") + ".jpg";
-         QPixmap pixmap(pic.c_str());
-         QPixmap fitpixmap;
-         if (pixmap.isNull())
-         {
-             QPixmap pixmap2((pictureDbPath + "moren.jpg").c_str());
-             fitpixmap = pixmap2.scaled(120, 75, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-         }
-         else
-         {
-             fitpixmap = pixmap.scaled(120, 75, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-         }
          button->setProperty("tb_ISBN", model->index(i, 3, QModelIndex()).data().toString()); //设置按钮的自定义属性
          connect(button, &QPushButton::clicked, this, &AdminBookManagement::on_TableModifyBtn_clicked);
          ui->tb->setIndexWidget(model->index(i, 5), button); //将按钮加入表格中
-         ////
-         ////
+
          //载入删除按钮
          QPushButton *button_remove = new QPushButton("删除");
-         string t1_2(re[i].getImgPath());
-         string t2_2(re[i].getIsbn());
-         string pic_2;
-         if (t2.size() == 13)
-             pic_2 = pictureDbPath + t1_2 + "/" + t2_2 + ".jpg";
-         else
-             pic_2 = pictureDbPath + string("moren") + ".jpg";
-         QPixmap pixmap_2(pic_2.c_str());
-         QPixmap fitpixmap_2;
-         if (pixmap_2.isNull())
-         {
-             QPixmap pixmap2_2((pictureDbPath + "moren.jpg").c_str());
-             fitpixmap_2 = pixmap2_2.scaled(120, 75, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-         }
-         else
-         {
-             fitpixmap_2 = pixmap_2.scaled(120, 75, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-         }
          button_remove->setProperty("tb_ISBN", model->index(i, 3, QModelIndex()).data().toString()); //设置按钮的自定义属性
-
          connect(button_remove, &QPushButton::clicked, this, &AdminBookManagement::on_remove_clicked);
          ui->tb->setIndexWidget(model->index(i, 6), button_remove); //将按钮加入表格中
-         ////
+
      }
       update();
 }
