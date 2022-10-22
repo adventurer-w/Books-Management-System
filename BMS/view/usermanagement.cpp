@@ -33,7 +33,7 @@ UserManagement::UserManagement(QWidget *parent) :
     ui->tb->setColumnWidth(4,230);
     ui->tb->setColumnWidth(5,140);
     ui->tb->setColumnWidth(6,140);
-
+    ui->tb->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);//所有列都扩展自适应宽度，填充充满整个屏幕宽度
 
     /*后续这里根据数量来动态设置列表框的高*/
     ui->tb->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -63,7 +63,7 @@ UserManagement::~UserManagement()
 void UserManagement::printRecords(QString account,vector<Record> &record){
 
 
-    for(int i=curRecordIndex ;i<curRecordIndex+record.size();i++){
+    for(int i=0 ;i<record.size();i++){
 
         //基本信息计算
         QString str=record[i].getDate();
@@ -73,17 +73,17 @@ void UserManagement::printRecords(QString account,vector<Record> &record){
 
         //插入各种表项
 
-        model->setItem(i, 0, new QStandardItem(account));
-        model->setItem(i, 1, new QStandardItem(record[i].getBookName()));
-        model->setItem(i, 2, new QStandardItem(record[i].getAuthor()));
-        model->setItem(i, 3, new QStandardItem(record[i].getDate()));
-        model->setItem(i, 4, new QStandardItem(record[i].getIsbn()));
+        model->setItem(i+curRecordIndex, 0, new QStandardItem(account));
+        model->setItem(i+curRecordIndex, 1, new QStandardItem(record[i].getBookName()));
+        model->setItem(i+curRecordIndex, 2, new QStandardItem(record[i].getAuthor()));
+        model->setItem(i+curRecordIndex, 3, new QStandardItem(record[i].getDate()));
+        model->setItem(i+curRecordIndex, 4, new QStandardItem(record[i].getIsbn()));
         if(time>=60*24*60*60)
-            model->setItem(i, 5, new QStandardItem("是"));
+            model->setItem(i+curRecordIndex, 5, new QStandardItem("是"));
         else
-            model->setItem(i, 5, new QStandardItem("否"));
+            model->setItem(i+curRecordIndex, 5, new QStandardItem("否"));
 
-        ui->tb->setRowHeight(i,50);
+        ui->tb->setRowHeight(i+curRecordIndex,50);
         //往表格中添加按钮控件
         QPushButton *button = new QPushButton("删除");
         button->setStyleSheet("color:#000000;\
@@ -93,9 +93,10 @@ void UserManagement::printRecords(QString account,vector<Record> &record){
         button->setProperty("account",const_cast<char*>(account.toStdString().c_str()));
         button->setProperty("isbn",record[i].getIsbn());
 
-        ui->tb->setIndexWidget(model->index(i,6),button);
+        ui->tb->setIndexWidget(model->index(i+curRecordIndex,6),button);
         connect(button, &QPushButton::clicked, this, &UserManagement::on_btn_delete_clicked);
     }
+    curRecordIndex+=record.size();
 }
 void UserManagement::on_btn_delete_clicked(){
     //删除记录
@@ -147,7 +148,7 @@ void UserManagement::on_btn_search_clicked()
         for(int i = 0; i< result.size(); i++)
         {
             now_utils.GetUserBorrowList(result[i].getAccount(),record);
-            printRecords(QString(QLatin1String(result[i].getAccount())),record);
+            if(record.size() > 0)printRecords(QString(QLatin1String(result[i].getAccount())),record);
             record.clear();
         }
 

@@ -41,7 +41,7 @@ string emailcode;
 void Register::on_btn_emailcode_clicked(){
     emailcode.clear();
     QString email=ui->line_email->text();
-    string email_emailcode=email.toStdString();
+    email_emailcode=email.toStdString();
     if(now_utils.CheckUserExistByEmail(const_cast<char*>(email.toStdString().c_str()))>0){
         QMessageBox::information(this,"提示信息","该邮箱已被注册！");
     }else{
