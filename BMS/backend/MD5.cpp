@@ -44,7 +44,7 @@ void output(int a,string &res)//小端规则
 
 
 
-const char * MD5::read(string str)
+string MD5::read(string str)
 {
     unsigned int big_temp[1000] = {0};
     unsigned int sub_index = 0;
@@ -136,7 +136,7 @@ void MD5::HMD5(int q)
 
 
 
-const char *MD5::Encryption()
+string MD5::Encryption()
 {
 
     string result;
@@ -156,5 +156,5 @@ const char *MD5::Encryption()
     output(C,result);
     output(D,result);
 
-    return result.c_str();
+    return result;
 }

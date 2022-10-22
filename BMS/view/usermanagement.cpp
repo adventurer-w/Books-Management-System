@@ -4,7 +4,7 @@
 #include "admininfo.h"
 #include <QPainter>
 #include <QDateTime>
-
+#include <backend/addUsers.h>
 extern Utils now_utils;
 
 UserManagement::UserManagement(QWidget *parent) :
@@ -12,6 +12,7 @@ UserManagement::UserManagement(QWidget *parent) :
     ui(new Ui::UserManagement)
 {
     ui->setupUi(this);
+    insert();
     curRecordIndex = 0;
     model = new StdItemModel();
 
@@ -49,7 +50,7 @@ UserManagement::UserManagement(QWidget *parent) :
     //设置多选
     ui->tb->setSelectionMode(QAbstractItemView::MultiSelection);
 
-//    loadRecords();
+
     loadQss(":/qss/usermanagement/usermanagement.qss");
 }
 
