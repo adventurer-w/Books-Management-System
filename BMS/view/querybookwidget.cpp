@@ -256,17 +256,11 @@ void QueryBookWidget::getBookList(QString classification, QString key){
             bookList->setStackWidget(sub_mw);
             sub_mw->insertWidget(1,bookList);
             sub_mw->setCurrentIndex(1);
-            //connect(bookList,SIGNAL(stopSignal()),this,SLOT(killThread()));
-//            for(int i=0; i<2000+1; ++i){
-//                MyThread::visited[i]=false;
-//            }
+
             for(int i=0; i<10; ++i){
                 thread[i] = new MyThread(bookList,i);
                 thread[i]->start();
             }
-
-            //int time = 10000;//设定时间给子线程加载数据，降低子线程没有加载好图片的可能性
-            //while(--time){};
 
         }else{
             QMessageBox::information(this,"提示信息",QString::fromStdString(info));

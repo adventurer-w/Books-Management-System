@@ -51,14 +51,6 @@ BookList::BookList(QWidget *parent) :
     model->setHeaderData(5,Qt::Horizontal,"有无库存");
     model->setHeaderData(6,Qt::Horizontal,"详情");
 
-    tbv->setModel(model);
-    /*后续这里根据数量来动态设置列表框的高*/
-    tbv->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    //tbvv_borrow->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
-    //tbv->horizontalHeader()->setDefaultAlignment(Qt::AlignCenter);
-    //横向填满，下面设置列宽没用了
-    //tbv->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);//布局排版是全部伸展开的效果
-
     //设置列宽
     tbv->setColumnWidth(0,120);			//参数：列号，宽度
     tbv->setColumnWidth(1,180);
@@ -67,6 +59,15 @@ BookList::BookList(QWidget *parent) :
     tbv->setColumnWidth(4,220);
     tbv->setColumnWidth(5,180);
     tbv->setColumnWidth(6,180);
+    tbv->setModel(model);
+    /*后续这里根据数量来动态设置列表框的高*/
+    tbv->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    //tbvv_borrow->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
+    //tbv->horizontalHeader()->setDefaultAlignment(Qt::AlignCenter);
+    //横向填满，下面设置列宽没用了
+    tbv->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);//布局排版是全部伸展开的效果
+
+
     //设置行高
   //  tbv->verticalHeader()->setDefaultSectionSize(250);
 
