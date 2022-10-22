@@ -12,7 +12,7 @@ UserManagement::UserManagement(QWidget *parent) :
     ui(new Ui::UserManagement)
 {
     ui->setupUi(this);
-    insert();
+
     curRecordIndex = 0;
     model = new StdItemModel();
 
