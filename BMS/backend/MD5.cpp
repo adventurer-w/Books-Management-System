@@ -16,7 +16,6 @@ unsigned int T[64] = { 0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,0xf57c0faf
                        0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1,0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391 };
 
 
-
 MD5::MD5()
 {
     A = 0x67452301;
@@ -44,7 +43,7 @@ void output(int a,string &res)//小端规则
 
 
 
-const char * MD5::read(string str)
+string MD5::read(string str)
 {
     unsigned int big_temp[1000] = {0};
     unsigned int sub_index = 0;
@@ -136,7 +135,7 @@ void MD5::HMD5(int q)
 
 
 
-const char *MD5::Encryption()
+string MD5::Encryption()
 {
 
     string result;
@@ -156,5 +155,5 @@ const char *MD5::Encryption()
     output(C,result);
     output(D,result);
 
-    return result.c_str();
+    return result;
 }

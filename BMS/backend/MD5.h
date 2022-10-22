@@ -15,12 +15,13 @@ class MD5 {
 public:
     MD5();
     ~MD5();
-    const char * read(string a);
+    string read(string a);
     void HMD5(int q);
-    const char *Encryption();
+    string Encryption();
 private:
     vector<unsigned int *> MessageFlow;
     unsigned int A,B,C,D;
 };
 
 #endif //MD5_H
+
