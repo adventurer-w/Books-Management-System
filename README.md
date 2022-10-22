@@ -6,7 +6,9 @@
 
 （注意要在view文件夹下的GlobalSetting.h配置路径）
 
-图书封面的相关细节请搭配cover文件夹食用。（需要在cover里面再建一个zother文件夹，用来存放用户新添加的封面）
+图书封面的相关细节请搭配cover文件夹食用。（需要在cover里面再建一个zother文件夹，用来存放用户新添加的封面，也需要放入一张moren.jpg作为图片缺失的默认图片）
+
+![image-20221022131737941](C:\Users\Hao\AppData\Roaming\Typora\typora-user-images\image-20221022131737941.png)
 
 ### 测试用账号
 
