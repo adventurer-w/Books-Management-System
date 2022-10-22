@@ -43,7 +43,6 @@ private slots:
 
     void on_btn_search_clicked();
 
-    void on_remove_clicked();
 
 private:
     Ui::UserManagement *ui;

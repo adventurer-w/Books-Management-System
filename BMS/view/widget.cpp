@@ -73,8 +73,9 @@ void Widget::on_btn_login_clicked()
 
     QString account=ui->lineE_user_name->text();
     QString pwd=ui->lineE_pwd->text();
-//    account = "000001";
-//    pwd = "123456aA";
+    //account = "000001";
+    account = "20040032002";
+    pwd = "123456aA";
     string info;
     if(account.size()>ACCOUNT_SIZE-1)
         info+="账号过长，请重新输入！\n";

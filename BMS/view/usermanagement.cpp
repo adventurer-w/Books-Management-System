@@ -62,6 +62,21 @@ void UserManagement::loadRecords(){
 }
 void UserManagement::on_btn_delete_clicked(){
     //删除记录
+    QPushButton *button = (QPushButton *)sender();
+
+    //提取按钮的自定义属性
+    QString account = button->property("account").toString(); //根据用户账号删借阅信息
+    QString isbn = button->property("isbn").toString(); //根据ISBN删借阅信息
+
+    //获取响应的借阅记录
+    Record re0;
+    now_utils.GetRecord(const_cast<char *>(account.toStdString().c_str()),const_cast<char *>(isbn.toStdString().c_str()),re0);
+
+    //删除记录
+    if(now_utils.DeleteRecord(re0)){
+        int row = ui->tb->currentIndex().row();
+        model->removeRow(row);
+    }
 }
 
 void UserManagement::on_btn_borrowInstruction_clicked()
@@ -80,7 +95,7 @@ void UserManagement::on_btn_search_clicked()
 {
     //点击搜索按钮
     QString val=ui->line_search->text();
-
+    qDebug()<< val << "yes";
     vector<Record> record;
     if(val == "")
     {
@@ -134,29 +149,12 @@ void UserManagement::on_btn_search_clicked()
                               font-weight:normal;");
         button->setProperty("account",const_cast<char*>(val.toStdString().c_str()));
         button->setProperty("isbn",record[i].getIsbn());
-        connect(button, SIGNAL(clicked(bool)), this, SLOT(on_remove_clicked()));
+
         ui->tb->setIndexWidget(model->index(i,6),button);
+        connect(button, &QPushButton::clicked, this, &UserManagement::on_btn_delete_clicked);
     }
 }
 
-void UserManagement::on_remove_clicked()
-{
-    QPushButton *button = (QPushButton *)sender();
-
-    //提取按钮的自定义属性
-    QString account = button->property("account").toString(); //根据用户账号删借阅信息
-    QString isbn = button->property("isbn").toString(); //根据ISBN删借阅信息
-
-    //获取响应的借阅记录
-    Record re0;
-    now_utils.GetRecord(const_cast<char *>(account.toStdString().c_str()),const_cast<char *>(isbn.toStdString().c_str()),re0);
-
-    //删除记录
-    if(now_utils.DeleteRecord(re0)){
-        int row = ui->tb->currentIndex().row();
-        model->removeRow(row);
-    }
-}
 
 void UserManagement::paintEvent(QPaintEvent *)
 {

@@ -107,7 +107,7 @@ void BookList::loadInitialBooks(){
     imgLabelMap.clear();
     int curNum = curRecord;
     int maxLoadNum = 20;
-    model->setRowCount(re.size()-1);
+    model->setRowCount(re.size());
     tbv->horizontalHeader()->setDefaultSectionSize(150);
     curRecord = re.size() <= curNum+maxLoadNum ? re.size():curNum+maxLoadNum;
 
@@ -311,6 +311,7 @@ void BookList::on_TableBtn_clicked()
     now_utils.GetBookByIsbn(const_cast<char*>(ISBN.toStdString().c_str()),now_book);
     BookDetails *bookDetails= new BookDetails();
     bookDetails->resize(1300,730);
+    bookDetails->move(this->x(),this->y()+170);
     bookDetails->setStackWidget(psw);
     psw->insertWidget(2,bookDetails);
     psw->setCurrentIndex(2);
