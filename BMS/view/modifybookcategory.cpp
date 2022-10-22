@@ -17,7 +17,7 @@
 #include <QDebug>
 #include "GlobalSetting.h"
 #include "QLineEdit"
-#include<QInputDialog>
+
 #include "adminmodifybookdetail.h"
 
 extern Utils now_utils;
@@ -29,10 +29,9 @@ ModifyBookCategory::ModifyBookCategory(QWidget *parent) : QWidget(parent),
     ui->setupUi(this);
     model = new StdItemModel();
 
-    model->setColumnCount(3);                        //设置有3列
+    model->setColumnCount(2);                        //设置有2列
     model->setHeaderData(0, Qt::Horizontal, "类别"); //设置第一列的表头为类型
     model->setHeaderData(1, Qt::Horizontal, "删除"); //设置第一列的表头为名称
-    model->setHeaderData(2, Qt::Horizontal, "修改");
 
     ui->tb->setModel(model);
     /*后续这里根据数量来动态设置列表框的高*/
@@ -54,24 +53,18 @@ void ModifyBookCategory::loadclassify()
     for (int i = 0; i < n; i++)
     {
         model->setItem(i, 0, new QStandardItem(now_book_class[i].getName()));
-
         QPushButton *btn_delete = new QPushButton("删除");
         ui->tb->setIndexWidget(model->index(i, 1), btn_delete); //显示
+
         btn_delete->setProperty("tb_classify_name", now_book_class[i].getName());
         btn_delete->setProperty("tb_classify_no", i);
+
         //绑定按钮与对应的行数，用来后面区分删除按钮
         connect(btn_delete, &QPushButton::clicked, this, &ModifyBookCategory::on_btn_delete_clicked);
-
-        QPushButton *btn_update = new QPushButton("修改");
-        ui->tb->setIndexWidget(model->index(i, 2), btn_update); //显示
-        btn_update->setProperty("tb_classify_name", now_book_class[i].getName());
-        btn_update->setProperty("tb_classify_no", i);
-        connect(btn_update, &QPushButton::clicked, this, &ModifyBookCategory::on_btn_update_clicked);
     }
     //绑定addclassify按钮与addclassify功能
     connect(ui->btn_addclassify, &QPushButton::clicked, this, &ModifyBookCategory::on_btn_addclassify_clicked);
 }
-
 void ModifyBookCategory::on_linePressed()
 {
     QLineEdit *line = (QLineEdit *)sender();
@@ -138,32 +131,4 @@ void ModifyBookCategory::on_btn_delete_clicked()
         int row = ui->tb->currentIndex().row();
         model->removeRow(row);
     }
-}
-
-void ModifyBookCategory::on_btn_update_clicked()
-{
-    //获取对应的行
-    QPushButton *button = (QPushButton *)sender();
-    QString classify_name = button->property("tb_classify_name").toString();
-    QString classify_no = button->property("tb_classify_no").toString();
-
-    bool ok;
-    QString text = QInputDialog::getText(this, tr("类别修改"),tr("请输入新的类别名称"), QLineEdit::Password,0, &ok);
-    if (ok && !text.isEmpty())
-    {
-        BookClass book_class;
-        book_class.setName(const_cast<char *>(classify_name.toStdString().c_str()));
-        book_class.setClassNo(classify_no.toInt());
-        now_utils.DeleteClass(book_class);
-        //先删后改
-        book_class.setName(const_cast<char *>(text.toStdString().c_str()));
-        book_class.setClassNo(classify_no.toInt());
-        now_utils.InsertClass(book_class);
-        QMessageBox::information(this, "添加类别", "修改成功");
-    }else{
-        QMessageBox::information(this, "添加类别", "修改失败");
-    }
-
-
-    loadclassify();
 }
