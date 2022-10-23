@@ -5,7 +5,8 @@
 #include "booklist.h"
 #include <QMetaType>
 #include <QMutex>
-
+#include<QRunnable>
+#include<QObject>
 
 class MyThread : public QThread
 {
@@ -21,7 +22,7 @@ public:
     static bool visited[3000+1];
     int id;
 signals:
-    void exitSignal();
+    void exitSignal(int mode);
     void updateBooksSignal();
 
 

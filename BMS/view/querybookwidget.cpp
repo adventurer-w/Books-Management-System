@@ -28,12 +28,13 @@
 #include "bookranking.h"
 #include <QListView>
 #include "backend/Utils.h"
-#include "mythread.h"
+//#include "mythread.h"
+#include "threadpool.h"
 #include <stdio.h>
 extern Utils now_utils;
 extern vector<Book> re;
 extern Book now_book;
-
+static ThreadPool *Pool;
 QueryBookWidget::QueryBookWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::QueryBookWidget),
@@ -281,11 +282,13 @@ void QueryBookWidget::getBookList(QString classification, QString key){
             sub_mw->insertWidget(1,bookList);
             sub_mw->setCurrentIndex(1);
 
-            for(int i=0; i<10; ++i){
-                thread[i] = new MyThread(bookList,i);
-                thread[i]->start();
-            }
-
+//            for(int i=0; i<10; ++i){
+//                thread[i] = new MyThread(bookList,i);
+//                thread[i]->start();
+//            }
+            Pool = new ThreadPool(10,bookList);
+            //Pool->ThreadPool::~ThreadPool();
+            Pool->startAll();
         }else{
             QMessageBox::information(this,"提示信息",QString::fromStdString(info));
         }

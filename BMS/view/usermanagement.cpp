@@ -123,7 +123,7 @@ void UserManagement::loadUsers(){
     usersmodel->setColumnCount(3); //设置有3列
     usersmodel->setHeaderData(0,Qt::Horizontal,"账号");  //设置第一列的表头为类型
     usersmodel->setHeaderData(1,Qt::Horizontal,"姓名");  //设置第一列的表头为名称
-    usersmodel->setHeaderData(2,Qt::Horizontal,"操作");  //删除/冻结用户
+    usersmodel->setHeaderData(2,Qt::Horizontal,"操作");  //删除用户或者做封号操作
 
     ui->tb_user->setModel(usersmodel);
 

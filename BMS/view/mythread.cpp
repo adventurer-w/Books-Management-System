@@ -31,6 +31,7 @@ bool MyThread::visited[3000+1];
 void MyThread::run(){
 
     //qDebug()<< "your thread is running : "<< re.size();
+    if(bookList == NULL){emit exitSignal(0);return ;}
     for(int i = 20; i<re.size();++i)
     {
         if(visited[i]==true)continue;
@@ -61,11 +62,13 @@ void MyThread::run(){
        }
 
        emit bookList->loadImgSignal(fitpixmap,i);
+
+
        //say(i);
 
     }
-
-    //qDebug()<< "exit :";
+    emit exitSignal(0);
+    //qDebug()<< "exit thread "<< id ;
 
 }
 void MyThread::say( int index){

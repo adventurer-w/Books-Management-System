@@ -49,6 +49,7 @@ SOURCES += \
         view/searchlineedit.cpp \
         view/smtp.cpp \
         view/stditemmodel.cpp \
+    view/threadpool.cpp \
     view/usermanagement.cpp \
         view/widget.cpp \
 
@@ -88,6 +89,7 @@ HEADERS += \
         view/searchlineedit.h \
         view/smtp.h \
         view/stditemmodel.h \
+    view/threadpool.h \
     view/usermanagement.h \
         view/widget.h \
 
