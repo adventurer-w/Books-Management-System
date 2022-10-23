@@ -50,7 +50,6 @@ public:
 
     void on_remove_clicked();
 
-    void on_btn_updateRank_clicked();
 
     bool openExcel(const QString &filename);
 
@@ -95,6 +94,8 @@ private slots:
     void on_btn_addbook_clicked();
 
     void on_btn_addclassify_clicked();
+
+    void on_btn_updaterank_clicked();
 
     void backToThis();
 

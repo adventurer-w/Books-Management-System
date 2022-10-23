@@ -50,6 +50,10 @@ using namespace std;
 extern Utils now_utils;
 extern vector<Book> re;
 extern Book now_book;
+extern vector<Book> result;
+extern vector<Book> result_boy;
+extern vector<Book> result_girl;
+extern vector<Book> result_point;
 extern int now_i;
 int add_or_mod;
 int select_row=0;//用于直接修改某一条的记录
@@ -732,7 +736,13 @@ void AdminBookManagement::on_line_search_returnPressed()
     pages = QString::number(page, 10) + '/' + QString::number(maxPgs, 10);
     ui->line->setText(pages);
 }
-
+void AdminBookManagement::on_btn_updaterank_clicked(){
+    now_utils.GetBookRank(result);
+    now_utils.GetBoyRank(result_boy);
+    now_utils.GetGirlRank(result_girl);
+    now_utils.GetPointRank(result_point);
+    qDebug() << "update success!";
+}
 bool AdminBookManagement::loadQss(const QString &StyleSheetFile)
 {
     /*QSS文件所在的路径*/
