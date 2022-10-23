@@ -22,7 +22,7 @@ UserManagement::UserManagement(QWidget *parent) :
     model->setHeaderData(2,Qt::Horizontal,"作者");
     model->setHeaderData(3,Qt::Horizontal,"借书日期");
     model->setHeaderData(4,Qt::Horizontal,"ISBN");
-    model->setHeaderData(5,Qt::Horizontal,"逾期");
+    model->setHeaderData(5,Qt::Horizontal,"状态");
     model->setHeaderData(6,Qt::Horizontal,"删除");
 
     ui->tb->setModel(model);
@@ -69,6 +69,7 @@ UserManagement::~UserManagement()
 {
     delete ui;
 }
+
 /*
  * @author yuan
  * 根据用户账户输出 每个用户所有 record信息*/
@@ -90,10 +91,20 @@ void UserManagement::printRecords(QString account,vector<Record> &record){
         model->setItem(i+curRecordIndex, 2, new QStandardItem(record[i].getAuthor()));
         model->setItem(i+curRecordIndex, 3, new QStandardItem(record[i].getDate()));
         model->setItem(i+curRecordIndex, 4, new QStandardItem(record[i].getIsbn()));
-        if(time>=60*24*60*60)
-            model->setItem(i+curRecordIndex, 5, new QStandardItem("是"));
+
+        vector<Record> re_history;
+        now_utils.GetUserBorrowHistory(const_cast<char*>(account.toStdString().c_str()),re_history);
+        bool is_revert = false;
+        for(int i = 0; i < re_history.size(); i++)
+            if(re_history[i].getIsbn() == record[i].getIsbn())is_revert = true;
+        
+        if(is_revert)
+            model->setItem(i+curRecordIndex, 5, new QStandardItem("已归还"));
         else
-            model->setItem(i+curRecordIndex, 5, new QStandardItem("否"));
+            if(time>=60*24*60*60)
+                model->setItem(i+curRecordIndex, 5, new QStandardItem("逾期"));
+            else
+                model->setItem(i+curRecordIndex, 5, new QStandardItem("借阅"));
 
         ui->tb->setRowHeight(i+curRecordIndex,50);
         //往表格中添加按钮控件
@@ -182,14 +193,22 @@ void UserManagement::on_btn_delete_clicked(){
     QString account = button->property("account").toString(); //根据用户账号删借阅信息
     QString isbn = button->property("isbn").toString(); //根据ISBN删借阅信息
 
-    //获取响应的借阅记录
+    //获取相应的借阅记录
     Record re0;
     now_utils.GetRecord(const_cast<char *>(account.toStdString().c_str()),const_cast<char *>(isbn.toStdString().c_str()),re0);
+
+    vector<Record> re_history;
+    now_utils.GetUserBorrowHistory(const_cast<char *>(account.toStdString().c_str()),re_history);
+    bool is_revert = false;
+    for(int i = 0; i < re_history.size(); i++)
+        if(re_history[i].getIsbn() == const_cast<char *>(isbn.toStdString().c_str()))is_revert = true;
 
     //删除记录
     if(now_utils.DeleteRecord(re0)){
         int row = ui->tb->currentIndex().row();
         model->removeRow(row);
+        if(!is_revert)
+            now_utils.Return(const_cast<char *>(account.toStdString().c_str()),const_cast<char *>(isbn.toStdString().c_str()));
     }
 }
 
@@ -235,37 +254,7 @@ void UserManagement::on_btn_search_clicked()
 
 
 
-    for(int i=0 ;i<record.size();i++){
-
-        //基本信息计算
-        QString str=record[i].getDate();
-        QDateTime borrow_time = QDateTime::fromString(str, "yyyy-MM-dd hh:mm:ss");
-        QDateTime now_time = QDateTime::currentDateTime();
-        qint64 time=borrow_time.secsTo(now_time);
-
-        //插入各种表项
-        model->setItem(i, 0, new QStandardItem(record[i].getAccount()));
-        model->setItem(i, 1, new QStandardItem(record[i].getBookName()));
-        model->setItem(i, 2, new QStandardItem(record[i].getAuthor()));
-        model->setItem(i, 3, new QStandardItem(record[i].getDate()));
-        model->setItem(i, 4, new QStandardItem(record[i].getIsbn()));
-        if(time>=60*24*60*60)
-            model->setItem(i, 5, new QStandardItem("是"));
-        else
-            model->setItem(i, 5, new QStandardItem("否"));
-
-        ui->tb->setRowHeight(i,50);
-        //往表格中添加按钮控件
-        QPushButton *button = new QPushButton("删除");
-        button->setStyleSheet("color:#000000;\
-                              font-size:18px;\
-                              font-family:KaiTi;\
-                              font-weight:normal;");
-        button->setProperty("account",const_cast<char*>(val.toStdString().c_str()));
-        button->setProperty("isbn",record[i].getIsbn());
-        connect(button, SIGNAL(clicked(bool)), this, SLOT(on_remove_clicked()));
-        ui->tb->setIndexWidget(model->index(i,6),button);
-    }
+    
 }
 
 
