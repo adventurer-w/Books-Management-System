@@ -90,12 +90,14 @@ void ModifyBookCategory::loadclassify()
     }
     //绑定addclassify按钮与addclassify功能
     connect(ui->btn_addclassify, &QPushButton::clicked, this, &ModifyBookCategory::on_btn_addclassify_clicked);
+
 }
 
 void ModifyBookCategory::on_linePressed()
 {
     QLineEdit *line = (QLineEdit *)sender();
     QString classify = line->text();
+//    AdminBookManagement::load_classify();
 }
 
 void ModifyBookCategory::on_btn_addclassify_clicked()

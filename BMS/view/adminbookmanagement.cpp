@@ -61,7 +61,6 @@ AdminBookManagement::AdminBookManagement(QWidget *parent) : QWidget(parent),
     //基于querybookwidget
     ui->setupUi(this);
 
-
     load_classify();
     setShadow();
 
@@ -639,7 +638,7 @@ void AdminBookManagement::updateBookRecord(Book book)
 void AdminBookManagement::on_btn_addclassify_clicked()
 {
     //添加新类别
-    ModifyBookCategory *modifyBookCategory = new ModifyBookCategory;
+    ModifyBookCategory *modifyBookCategory = new ModifyBookCategory();
     modifyBookCategory->setWindowTitle("类别操作");
     modifyBookCategory->resize(270,450);
     modifyBookCategory->show();

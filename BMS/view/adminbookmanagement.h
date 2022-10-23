@@ -69,6 +69,7 @@ public:
     MainWidget *sub_mw;
 signals:
     void changePageSignal(int Index);
+
 private slots:
     void on_btn_search_clicked();
 

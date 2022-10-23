@@ -27,6 +27,9 @@ public:
 
 private:
     Ui::ModifyBookCategory *ui;
+
+signals:
+	void AmySignal();
 };
 
 #endif // MODIFYBOOKCATEGORY_H
