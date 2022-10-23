@@ -95,8 +95,8 @@ void UserManagement::printRecords(QString account,vector<Record> &record){
         vector<Record> re_history;
         now_utils.GetUserBorrowHistory(const_cast<char*>(account.toStdString().c_str()),re_history);
         bool is_revert = false;
-        for(int i = 0; i < re_history.size(); i++)
-            if(re_history[i].getIsbn() == record[i].getIsbn())is_revert = true;
+        for(int j = 0; j < re_history.size(); j++)
+            if(re_history[j].getIsbn() == record[i].getIsbn())is_revert = true;
         
         if(is_revert)
             model->setItem(i+curRecordIndex, 5, new QStandardItem("已归还"));
