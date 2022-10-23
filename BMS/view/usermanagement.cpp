@@ -75,7 +75,6 @@ UserManagement::~UserManagement()
  * 根据用户账户输出 每个用户所有 record信息*/
 void UserManagement::printRecords(QString account,vector<Record> &record){
 
-
     for(int i=0 ;i<record.size();i++){
 
         //基本信息计算
@@ -92,15 +91,15 @@ void UserManagement::printRecords(QString account,vector<Record> &record){
         model->setItem(i+curRecordIndex, 3, new QStandardItem(record[i].getDate()));
         model->setItem(i+curRecordIndex, 4, new QStandardItem(record[i].getIsbn()));
 
-        vector<Record> re_history;
-        now_utils.GetUserBorrowHistory(const_cast<char*>(account.toStdString().c_str()),re_history);
-        bool is_revert = false;
-        for(int j = 0; j < re_history.size(); j++)
-            if(re_history[j].getIsbn() == record[i].getIsbn())is_revert = true;
+//        vector<Record> re_history;
+//        now_utils.GetUserBorrowHistory(const_cast<char*>(account.toStdString().c_str()),re_history);
+//        bool is_revert = false;
+//        for(int j = 0; j < re_history.size(); j++)
+//            if(re_history[j].getIsbn() == record[i].getIsbn())is_revert = true;
         
-        if(is_revert)
-            model->setItem(i+curRecordIndex, 5, new QStandardItem("已归还"));
-        else
+//        if(is_revert)
+//            model->setItem(i+curRecordIndex, 5, new QStandardItem("已归还"));
+//        else
             if(time>=60*24*60*60)
                 model->setItem(i+curRecordIndex, 5, new QStandardItem("逾期"));
             else
@@ -197,18 +196,17 @@ void UserManagement::on_btn_delete_clicked(){
     Record re0;
     now_utils.GetRecord(const_cast<char *>(account.toStdString().c_str()),const_cast<char *>(isbn.toStdString().c_str()),re0);
 
-    vector<Record> re_history;
-    now_utils.GetUserBorrowHistory(const_cast<char *>(account.toStdString().c_str()),re_history);
-    bool is_revert = false;
-    for(int i = 0; i < re_history.size(); i++)
-        if(re_history[i].getIsbn() == const_cast<char *>(isbn.toStdString().c_str()))is_revert = true;
-
     //删除记录
     if(now_utils.DeleteRecord(re0)){
         int row = ui->tb->currentIndex().row();
         model->removeRow(row);
-        if(!is_revert)
-            now_utils.Return(const_cast<char *>(account.toStdString().c_str()),const_cast<char *>(isbn.toStdString().c_str()));
+        now_utils.Return(const_cast<char *>(account.toStdString().c_str()),const_cast<char *>(isbn.toStdString().c_str()));
+        User ut;
+        now_utils.GetUserByAccount(const_cast<char *>(account.toStdString().c_str()),ut);
+//        qDebug() << ut.getAccount() << ut.getNumBorrowed();
+        ut.setNumBorrowed(ut.getNumBorrowed() - 1);
+        now_utils.UpdateUser(ut,ut);
+        QMessageBox::information(this,"删除信息","删除成功");
     }
 }
 
