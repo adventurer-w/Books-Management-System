@@ -234,14 +234,13 @@ void AdminBookManagement::on_btn_addbook_batch_clicked()
         now_book.setIsbn(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 5)->dynamicCall("Value").toString().toStdString().c_str()));
         //添加新的classify对应的No
         string classify_name = const_cast<char *>(range->querySubObject("Cells(int,int)", i, 6)->dynamicCall("Value").toString().toStdString().c_str());
-        // qDebug() << classify_name.c_str();
         vector<BookClass> now_book_class;
         //表格中有错误的分类就报错
         if(now_utils.GetClassByName(const_cast<char*>(classify_name.c_str()),now_book_class) == 0)
         {
-            qDebug() << QString::fromStdString(classify_name);
-            QMessageBox::information(this,"录入失败","分类有误");
-            return;
+            string aa = "不存在分类："+classify_name;
+            QMessageBox::information(this,"录入异常",QString::fromStdString(aa));
+            break;
         }
         // qDebug() << now_book_class[0].getClassNo();
         now_book.setClassNo(now_book_class[0].getClassNo());
