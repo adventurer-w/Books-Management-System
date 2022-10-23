@@ -286,7 +286,7 @@ void QueryBookWidget::getBookList(QString classification, QString key){
 //                thread[i] = new MyThread(bookList,i);
 //                thread[i]->start();
 //            }
-            Pool = new ThreadPool(10,bookList);
+            Pool = new ThreadPool(12,bookList);
             //Pool->ThreadPool::~ThreadPool();
             Pool->startAll();
         }else{

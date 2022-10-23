@@ -188,8 +188,8 @@
   <widget class="QPushButton" name="btn_borrowinstruction">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>300</y>
+     <x>780</x>
+     <y>40</y>
      <width>101</width>
      <height>31</height>
     </rect>

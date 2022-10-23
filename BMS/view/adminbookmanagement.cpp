@@ -640,7 +640,8 @@ void AdminBookManagement::on_btn_addclassify_clicked()
 {
     //添加新类别
     ModifyBookCategory *modifyBookCategory = new ModifyBookCategory;
-    modifyBookCategory->resize(230,450);
+    modifyBookCategory->setWindowTitle("类别操作");
+    modifyBookCategory->resize(270,450);
     modifyBookCategory->show();
 }
 

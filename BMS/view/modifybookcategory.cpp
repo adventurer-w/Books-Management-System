@@ -44,10 +44,12 @@ ModifyBookCategory::ModifyBookCategory(QWidget *parent) : QWidget(parent),
     ui->tb->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);//所有列都扩展自适应宽度，填充充满整个屏幕宽度
 
     ui->tb->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);//对第0列单独设置固定宽度
+    ui->tb->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);//对第0列单独设置固定宽度
 
 
     //设置列宽
-    ui->tb->setColumnWidth(0,60);			//参数：列号，宽度
+    ui->tb->setColumnWidth(0,60);
+    ui->tb->setColumnWidth(1,100);//参数：列号，宽度
     loadclassify();
 }
 
