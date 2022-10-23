@@ -50,6 +50,9 @@ UserManagement::UserManagement(QWidget *parent) :
     //设置多选
     ui->tb->setSelectionMode(QAbstractItemView::MultiSelection);
 
+    ui->tb->setShowGrid(false);
+    ui->tb->resizeRowsToContents();
+
     //隐藏行头
     ui->tb_user->verticalHeader()->hide();
     //设置表格选中时为整行选中
@@ -60,6 +63,9 @@ UserManagement::UserManagement(QWidget *parent) :
     ui->tb_user->setSelectionMode(QAbstractItemView::SingleSelection);
     //设置多选
     ui->tb_user->setSelectionMode(QAbstractItemView::MultiSelection);
+
+    ui->tb_user->setShowGrid(false);
+    ui->tb_user->resizeRowsToContents();
 
     loadUsers();
     loadQss(":/qss/usermanagement/usermanagement.qss");

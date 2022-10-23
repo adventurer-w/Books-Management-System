@@ -70,7 +70,7 @@ void insert()
     }
 //    qDebug()<<QString::fromStdString(t);
     MD5 md5 ;
-    qDebug()<<"pws2 with no cast"<<QString::fromStdString(t)<<"\n";
+    //qDebug()<<"pws2 with no cast"<<QString::fromStdString(t)<<"\n";
     string tt=md5.read(t);
     char* pwd2=(char*)tt.data();
    // qDebug()<<"pws2 with cast"<<QString::fromStdString(tt)<<"\n";

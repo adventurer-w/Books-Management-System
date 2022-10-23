@@ -26,7 +26,7 @@ public:
 public slots:
     void onTableBtnClicked();
     void reserveBtnClicked();
-    void on_pushButton_clicked();
+    void on_btn_borrowinstruction_clicked();
     void searchBooks(QString key);
 public:
     MainWidget *pmw;
