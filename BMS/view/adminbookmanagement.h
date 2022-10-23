@@ -67,8 +67,9 @@ public:
 public:
     MainWidget *sub_mw;
 signals:
-    void changePageSignal(int Index);
+    void changePageSignal(int index);
 private slots:
+
     void on_btn_search_clicked();
 
     void on_btn_author_clicked();

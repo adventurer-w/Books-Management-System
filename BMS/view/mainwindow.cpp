@@ -148,7 +148,9 @@ void MainWindow::loadPages(int mode){
             adminBookManagement->resize(1300,900);
             adminBookManagement->setStackWidget(mw);
             //connect(adminBookManagement,SIGNAL(modifySignal()),this,SLOT(loadAdminInfo()));
+
             connect(adminBookManagement,SIGNAL(changePageSignal(int)),this,SLOT(changePage(int)));
+
             mw->insertWidget(1,adminBookManagement);
         }
         if(mode == 0||mode ==2 || mode==3){

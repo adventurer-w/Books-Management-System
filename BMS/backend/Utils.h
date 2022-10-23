@@ -17,8 +17,6 @@ public:
     bool CheckEmail(char *email);
 
 
-    string getGuidelines();
-    bool setGuidelines(string guidelines);
 
     int Login(char* account, char* password); //参数1:账号，参数2:密码。   返回值：0:账户不存在； 2:登陆成功；1:密码错误
 
@@ -31,7 +29,7 @@ public:
     //由名字筛选用户
     bool GetUserByName(char* name, vector<User>&result);
 
-    //由名字筛选用户
+    //由账号筛选用户
     bool GetUserByAccount(char* account,User& user0);
 
     //由id筛选用户,速度最快建议首选
@@ -60,6 +58,7 @@ public:
 
     //用院系名获取Department对象（只有一个,对象中有departmentNo）
     bool GetDepartmentByName(char *name,vector<Department> &result);
+
 
 
     //获取所有系
@@ -149,6 +148,17 @@ public:
     //获取所有分类
     bool GetAllClass(vector<BookClass> &result);
 
+    //修改分类名。before中只需要有classNo。after中是新的name
+    bool ChangeClassByNo(BookClass before, BookClass after);
+
+    //按书名找书（基于子串的模糊搜索）
+    bool GetBooksByBookNameLike(char* name, vector<Book>&result); //参数1为图书名(模糊)，参数2为存结果列表，返回操作是否成功
+
+    //按作者找书（基于子串的模糊搜索）
+    bool GetBooksByAuthorLike(char* author, vector<Book>&result); //参数1为作者名(模糊)，参数2为存结果列表，返回操作是否成功
+
+    //由名字筛选用户（模糊）
+    bool GetUserByNameLike(char* name, vector<User>&result);
 
 
 

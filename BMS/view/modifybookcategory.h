@@ -23,7 +23,8 @@ public:
     void tableModifyClicked();
     void on_btn_delete_clicked();
     void leModifyText(const QString text);
-
+signals:
+    void updateCategorySignal();
 
 private:
     Ui::ModifyBookCategory *ui;

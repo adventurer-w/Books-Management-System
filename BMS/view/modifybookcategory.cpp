@@ -117,8 +117,9 @@ void ModifyBookCategory::on_btn_addclassify_clicked()
     if (now_utils.InsertClass(book_class))
     {
         QMessageBox::information(this, "添加类别", "添加类别成功啦！");
+
         //动态添加新的行
-        vector<BookClass> now_book_class;
+        //vector<BookClass> now_book_class;
         now_utils.GetAllClass(now_book_class);
         int n = now_book_class.size();
         model->setItem(n - 1, 0, new QStandardItem(now_book_class[n - 1].getName()));
@@ -129,6 +130,7 @@ void ModifyBookCategory::on_btn_addclassify_clicked()
 
         //绑定按钮与对应的行数，用来后面区分删除按钮
         connect(btn_delete, &QPushButton::clicked, this, &ModifyBookCategory::on_btn_delete_clicked);
+        emit updateCategorySignal();
     }
     else
     {
@@ -157,6 +159,7 @@ void ModifyBookCategory::on_btn_delete_clicked()
     {
         int row = ui->tb->currentIndex().row();
         model->removeRow(row);
+        emit updateCategorySignal();
     }
 }
 
@@ -173,23 +176,28 @@ void ModifyBookCategory::tableModifyClicked()
     QString classify_no = le->property("tb_classify_no").toString();
 
     QString new_name = le->property("new_classify_name").toString();
-    //bool ok;
-    //qDebug()<< "new name:"<<new_name;
-    //QString text = QInputDialog::getText(this, tr("类别修改"),tr("请输入新的类别名称"), QLineEdit::Password,0, &ok);
+
     if (!classify_name.isEmpty() && new_name!="")
 
     {
-        BookClass book_class;
-        book_class.setName(const_cast<char *>(classify_name.toStdString().c_str()));
-        book_class.setClassNo(classify_no.toInt());
-        now_utils.DeleteClass(book_class);
-        //先删后改
 
-        book_class.setName(const_cast<char *>(new_name.toStdString().c_str()));
+        BookClass old_book_class;
+        old_book_class.setName(const_cast<char *>(classify_name.toStdString().c_str()));
+        old_book_class.setClassNo(classify_no.toInt());
 
-        book_class.setClassNo(classify_no.toInt());
-        now_utils.InsertClass(book_class);
-        QMessageBox::information(this, "添加类别", "修改成功");
+        BookClass new_book_class;
+        new_book_class.setName(const_cast<char *>(new_name.toStdString().c_str()));
+        new_book_class.setClassNo(classify_no.toInt());
+        qDebug()<< "old:"<< classify_name << "new : "<< new_name;
+        if(now_utils.ChangeClassByNo(old_book_class,new_book_class) == true){
+            QMessageBox::information(this, "添加类别", "修改成功");
+            emit updateCategorySignal();
+        }
+        else{
+            QMessageBox::information(this, "添加类别", "修改失败");
+        }
+
+
     }else{
         QMessageBox::information(this, "添加类别", "修改失败");
     }

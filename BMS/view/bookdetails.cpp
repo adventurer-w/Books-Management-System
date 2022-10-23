@@ -162,7 +162,7 @@ void BookDetails::on_btn_reserve_clicked(){//预约
     vector<Record> record;
     now_utils.GetUserBorrowList(now_user.getAccount(),record);
     for(int i=0;i<record.size();i++){
-        if(record[i].getIsbn()==now_book.getIsbn()){
+        if(strcmp(record[i].getIsbn(),now_book.getIsbn())==0){
             flag=true;
             break;
         }

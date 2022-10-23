@@ -8,23 +8,25 @@
 #include<QRunnable>
 #include<QObject>
 
+#define MAX_RESOURCE_NUM 3001
 class MyThread : public QThread
 {
     Q_OBJECT
 public:
     MyThread();
     MyThread(BookList *bookList,int id);
-    void say(int index);
-    void run() override;
-    BookList *bookList;
+    void say(int index);//输出相关线程信息
+    void run() override;//重写run方法，通过thread->start()将就绪线程转为运行时线程
 
-    static QMutex mutex;
-    static bool visited[3000+1];
-    int id;
+    static QMutex mutex;//互斥锁
+    static bool visited[MAX_RESOURCE_NUM];//资源变量
+
 signals:
-    void exitSignal(int mode);
-    void updateBooksSignal();
+    void exitSignal(int mode);//用于主线程和子线程通信
 
+private:
+    BookList *bookList;
+    int id;
 
 };
 

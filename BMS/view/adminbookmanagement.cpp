@@ -245,7 +245,7 @@ void AdminBookManagement::on_btn_addbook_batch_clicked()
         {
             qDebug() << QString::fromStdString(classify_name);
             QMessageBox::information(this,"录入失败","分类有误");
-            return;
+            break;
         }
         // qDebug() << now_book_class[0].getClassNo();
         now_book.setClassNo(now_book_class[0].getClassNo());
@@ -618,7 +618,7 @@ void AdminBookManagement::on_remove_clicked()
 
 }
 
-void AdminBookManagement::on_btn_updateRank_clicked()
+void AdminBookManagement::on_btn_updaterank_clicked()
 {
     if(now_utils.UpdateBookRank())
         qDebug()<<"总借阅榜单update成功！";
@@ -647,6 +647,7 @@ void AdminBookManagement::on_btn_addclassify_clicked()
     ModifyBookCategory *modifyBookCategory = new ModifyBookCategory;
     modifyBookCategory->setWindowTitle("类别操作");
     modifyBookCategory->resize(270,450);
+    connect(modifyBookCategory,&ModifyBookCategory::updateCategorySignal,this,&AdminBookManagement::load_classify);
     modifyBookCategory->show();
 }
 
@@ -737,13 +738,7 @@ void AdminBookManagement::on_line_search_returnPressed()
     pages = QString::number(page, 10) + '/' + QString::number(maxPgs, 10);
     ui->line->setText(pages);
 }
-void AdminBookManagement::on_btn_updaterank_clicked(){
-    now_utils.GetBookRank(result);
-    now_utils.GetBoyRank(result_boy);
-    now_utils.GetGirlRank(result_girl);
-    now_utils.GetPointRank(result_point);
-    qDebug() << "update success!";
-}
+
 bool AdminBookManagement::loadQss(const QString &StyleSheetFile)
 {
     /*QSS文件所在的路径*/
