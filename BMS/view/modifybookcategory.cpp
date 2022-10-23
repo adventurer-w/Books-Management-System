@@ -59,6 +59,7 @@ ModifyBookCategory::~ModifyBookCategory()
 }
 void ModifyBookCategory::loadclassify()
 {
+    model->removeRows(0, model->rowCount()); // 删除所有行
 
     vector<BookClass> now_book_class;
     now_utils.GetAllClass(now_book_class);
@@ -67,8 +68,6 @@ void ModifyBookCategory::loadclassify()
 
     for (int i = 0; i < n; i++)
     {
-
-
         //model->setItem(i, 0, new QStandardItem(now_book_class[i].getName()));
         QLineEdit *le = new QLineEdit;
         le->setText(now_book_class[i].getName());
@@ -78,7 +77,6 @@ void ModifyBookCategory::loadclassify()
         le->setProperty("new_classify_name","");
         connect(le,&QLineEdit::returnPressed,this,&ModifyBookCategory::tableModifyClicked);
         connect(le,&QLineEdit::textChanged,this,&ModifyBookCategory::leModifyText);
-
 
         QPushButton *btn_delete = new QPushButton("删除");
         ui->tb->setIndexWidget(model->index(i, 1), btn_delete); //显示
@@ -121,7 +119,7 @@ void ModifyBookCategory::on_btn_addclassify_clicked()
         QMessageBox::information(this, "添加类别", "添加类别成功啦！");
 
         //动态添加新的行
-        //vector<BookClass> now_book_class;
+        vector<BookClass> now_book_class;
         now_utils.GetAllClass(now_book_class);
         int n = now_book_class.size();
         model->setItem(n - 1, 0, new QStandardItem(now_book_class[n - 1].getName()));
@@ -182,7 +180,6 @@ void ModifyBookCategory::tableModifyClicked()
     if (!classify_name.isEmpty() && new_name!="")
 
     {
-
         BookClass old_book_class;
         old_book_class.setName(const_cast<char *>(classify_name.toStdString().c_str()));
         old_book_class.setClassNo(classify_no.toInt());

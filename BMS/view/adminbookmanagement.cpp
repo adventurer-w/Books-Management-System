@@ -116,7 +116,7 @@ void AdminBookManagement::load_classify()
     {
         classify_list << now_book_class[i].getName();
     }
-
+    ui->cbox_classify->clear();
     ui->cbox_classify->addItems(classify_list);
     ui->cbox_classify->setCurrentIndex(0); //设置默认选项
 }
