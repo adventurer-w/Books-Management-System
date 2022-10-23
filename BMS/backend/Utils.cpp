@@ -1019,7 +1019,7 @@ bool Utils::ChangeClassByNo(BookClass before, BookClass after){
         vec.push_back("not-all");
         vec.push_back("classNo");
 
-        if (db.update("record", before, after, vec) != -1)
+        if (db.update("bookClass", before, after, vec) != -1)
             return true;
         else
             return false;
