@@ -429,6 +429,6 @@ bool UserProfileWidget::loadQss(const QString &StyleSheetFile){
 }
 
 void UserProfileWidget::on_btn_borrowinstruction_clicked(){
-    string s=now_utils.getGuidelines();
-    QMessageBox::information(this,"借阅须知",QString::fromStdString(s));
+    //string s=now_utils.getGuidelines();
+    //QMessageBox::information(this,"借阅须知",QString::fromStdString(s));
 }

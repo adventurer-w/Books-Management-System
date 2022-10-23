@@ -10,21 +10,11 @@ using namespace std;
 // 前端在传输数据之前需要使用MD5加密！
 
 
-
-
-string Utils::getGuidelines(){
-    return db.getGuidelines();
-}
-
-bool Utils::setGuidelines(string guidelines){
-    return db.setGuidelines(guidelines);
-}
-
 int Utils::Login(char *account, char *password) { //密码需传入md5加密后的
 
-//    if(account[0]=='0'&&account[1]=='0'){
-//        return AdminLogin(account,password)+3;
-//    }else{
+    if(account[0]=='0'&&account[1]=='0'){
+        return AdminLogin(account,password)+3;
+    }else{
         User user = User();
         GetUserByAccount(account,user);
 
@@ -37,12 +27,14 @@ int Utils::Login(char *account, char *password) { //密码需传入md5加密后�
         }else{
             return 0;
         }
-//    }
+    }
 }
 
 int Utils::Register(User user) {
-//    if(user.getAccount()[0]=='0'&&user.getAccount()[1]=='0') return -2;
-//    if(!CheckUserExistByEmail(user.getEmail())) return -4;
+    if(!CheckAccount(user.getAccount())) return -2;
+    if(user.getAccount()[0]=='0'&&user.getAccount()[1]=='0') return -2;
+    if(!CheckEmail(user.getEmail())) return -4;
+    if(!CheckUserExistByEmail(user.getEmail())) return -4;
     if (CheckUserExist(user))
         return 0;
     else{
@@ -54,7 +46,7 @@ int Utils::Register(User user) {
 }
 
 bool Utils::InsertUser(User user) {
-//    if(!CheckUserExistByEmail(user.getEmail())) return false;
+    if(!CheckUserExistByEmail(user.getEmail())) return false;
     if (!CheckUserExist(user)){
         vector<User> vec;
         vec.push_back(user);
@@ -451,6 +443,13 @@ bool Utils::GetBooksByBookName(char* name, vector<Book>&result){
         return false;
 }
 
+bool Utils::GetBooksByBookNameLike(char* name, vector<Book>&result){
+    if (db.selectLike("book", "name", name, result) != -1)
+        return true;
+    else
+        return false;
+}
+
 bool Utils::GetBooksByAuthor(char* author, vector<Book>&result){
     vector<string> value;
     value.push_back("not-all");
@@ -462,6 +461,22 @@ bool Utils::GetBooksByAuthor(char* author, vector<Book>&result){
     else
         return false;
 }
+
+bool Utils::GetBooksByAuthorLike(char* author, vector<Book>&result){
+    if (db.selectLike("book", "author", author, result) != -1)
+        return true;
+    else
+        return false;
+}
+
+
+bool Utils::GetUserByNameLike(char* name, vector<User>&result){
+    if (db.selectLike("user", "name", name, result) != -1)
+        return true;
+    else
+        return false;
+}
+
 
 bool Utils::GetBooksByClassNo(int classNo, vector<Book>&result){
     vector<string> value;
@@ -690,11 +705,11 @@ bool Utils::InsertReserve(Reserve reserve){
     if(!result.empty()) return false;
 
     //书籍剩余为0才能预约
-//    Book book = Book();
-//    GetBookByIsbn(reserve.getIsbn(),book);
-//    if(book.getLeft()!=0) return false;
+    Book book = Book();
+    GetBookByIsbn(reserve.getIsbn(),book);
+    if(book.getLeft()!=0) return false;
 
-//    if (!CheckReserveExist(reserve)){
+    if (!CheckReserveExist(reserve)){
         vector<Reserve> vec;
         vec.push_back(reserve);
         if (db.insert("reserve", vec) != -1){
@@ -711,10 +726,9 @@ bool Utils::InsertReserve(Reserve reserve){
         }
         else
             return false;
-//    }
-//       else{
-//        return false;
-//    }
+    }else{
+        return false;
+    }
 }
 
 
@@ -996,6 +1010,22 @@ bool Utils::CheckClassExistByName(char *name){
     if (db.select("bookClass", bookClass, value, result) == -1)
         return false;
     return true;
+}
+
+
+bool Utils::ChangeClassByNo(BookClass before, BookClass after){
+    if (CheckClassExistByNo(before.classNo)){
+        vector<string> vec;
+        vec.push_back("not-all");
+        vec.push_back("classNo");
+
+        if (db.update("record", before, after, vec) != -1)
+            return true;
+        else
+            return false;
+    }else{
+        return false;
+    }
 }
 
 

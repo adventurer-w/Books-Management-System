@@ -50,7 +50,6 @@ public:
 
     void on_remove_clicked();
 
-    void on_btn_updateRank_clicked();
 
     bool openExcel(const QString &filename);
 
@@ -71,6 +70,7 @@ signals:
     void changePageSignal(int Index);
 
 private slots:
+
     void on_btn_search_clicked();
 
     void on_btn_author_clicked();
@@ -96,6 +96,8 @@ private slots:
     void on_btn_addbook_clicked();
 
     void on_btn_addclassify_clicked();
+
+    void on_btn_updaterank_clicked();
 
     void backToThis();
 

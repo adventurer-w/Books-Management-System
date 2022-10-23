@@ -276,7 +276,7 @@
     <string>批量添加图书</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="btn_updaterank">
    <property name="geometry">
     <rect>
      <x>450</x>

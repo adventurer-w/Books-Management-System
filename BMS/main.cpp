@@ -50,9 +50,7 @@ int main(int argc, char *argv[])
     //qDebug()<< result_boy.size();
     Widget w;
     w.show();
-  //  QApplication a(argc, argv);
-    //MainWindow ww;
-    //ww.show();
+
     return app.exec();
 
 }

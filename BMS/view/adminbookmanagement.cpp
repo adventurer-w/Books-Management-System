@@ -50,6 +50,10 @@ using namespace std;
 extern Utils now_utils;
 extern vector<Book> re;
 extern Book now_book;
+extern vector<Book> result;
+extern vector<Book> result_boy;
+extern vector<Book> result_girl;
+extern vector<Book> result_point;
 extern int now_i;
 int add_or_mod;
 int select_row=0;//用于直接修改某一条的记录
@@ -612,7 +616,7 @@ void AdminBookManagement::on_remove_clicked()
 
 }
 
-void AdminBookManagement::on_btn_updateRank_clicked()
+void AdminBookManagement::on_btn_updaterank_clicked()
 {
     if(now_utils.UpdateBookRank())
         qDebug()<<"总借阅榜单update成功！";
@@ -641,6 +645,7 @@ void AdminBookManagement::on_btn_addclassify_clicked()
     ModifyBookCategory *modifyBookCategory = new ModifyBookCategory();
     modifyBookCategory->setWindowTitle("类别操作");
     modifyBookCategory->resize(270,450);
+    connect(modifyBookCategory,&ModifyBookCategory::updateCategorySignal,this,&AdminBookManagement::load_classify);
     modifyBookCategory->show();
 }
 

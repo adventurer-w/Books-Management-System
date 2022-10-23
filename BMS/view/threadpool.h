@@ -17,10 +17,10 @@ public:
 private slots:
     void runningThreadListener(int mode);
 private:
-    MyThread **threads;
-    int maxThreadsNum;
-    int runnableThreadsNum;
-    int runningThreadsNum;
+    MyThread **threads;      //线程指针
+    int maxThreadsNum;      //最大线程数量
+    int runnableThreadsNum;//就绪线程数量
+    int runningThreadsNum;//运行线程数量
 };
 
 #endif // THREADPOOL_H
