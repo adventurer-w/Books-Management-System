@@ -243,6 +243,7 @@ void AdminBookManagement::on_btn_addbook_batch_clicked()
         //表格中有错误的分类就报错
         if(now_utils.GetClassByName(const_cast<char*>(classify_name.c_str()),now_book_class) == 0)
         {
+            qDebug() << QString::fromStdString(classify_name);
             QMessageBox::information(this,"录入失败","分类有误");
             return;
         }
