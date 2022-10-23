@@ -60,9 +60,7 @@ AdminBookManagement::AdminBookManagement(QWidget *parent) : QWidget(parent),
     //顶部栏设置
     //基于querybookwidget
     ui->setupUi(this);
-    ui->btn_bookname->setAutoExclusive(false);
-    ui->btn_ISBN->setAutoExclusive(false);
-    ui->btn_author->setAutoExclusive(false);
+
 
     load_classify();
     setShadow();
@@ -98,8 +96,9 @@ AdminBookManagement::AdminBookManagement(QWidget *parent) : QWidget(parent),
     ui->tb->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->tb->setShowGrid(false);
     ui->tb->resizeRowsToContents();
-
+    connect(ui->tb->verticalScrollBar(), &QScrollBar::valueChanged, this, &AdminBookManagement::loadBooks);
     loadQss(":/qss/adminbookmanagement/bookmanagement.qss");
+
 }
 
 void AdminBookManagement::load_classify()
@@ -163,6 +162,7 @@ void AdminBookManagement::on_btn_addbook_clicked()
     AdminModifyBookDetail *admin_modify_book_detail = new AdminModifyBookDetail();
     connect(admin_modify_book_detail,SIGNAL(backSignal()),this,SLOT(backToThis()));//绑定返回按钮
     admin_modify_book_detail->resize(1300, 730);
+    admin_modify_book_detail->move(this->x(),this->y());
     psw->insertWidget(3,admin_modify_book_detail);
     emit changePageSignal(3);//发出切换到3号页面的信号
 }
@@ -191,7 +191,7 @@ void AdminBookManagement::on_btn_addbook_batch_clicked()
     }
     //重构地址，用于c的文件读写
     fileName.replace(QString("/"), QString("\\"));
-    qDebug() << fileName;
+    //qDebug() << fileName;
     fileName = QDir::toNativeSeparators(fileName);
 
     //打开Excel进程、获取工作簿、工作表、单元格
@@ -271,7 +271,7 @@ void AdminBookManagement::on_btn_addbook_batch_clicked()
 
 // 以下方法都是用来在管理员界面查找书籍的
 int flag_admin = 0; // 1书名，2作者，3isbn
-int ctrl_admin = 0x000;
+
 void AdminBookManagement::on_btn_bookname_clicked()
 {
     if(flag_admin == 1){
@@ -359,6 +359,22 @@ void AdminBookManagement::on_btn_ISBN_clicked()
 void AdminBookManagement::on_cbox_classify_currentIndexChanged(int)
 {
     flag_admin = 0;
+
+    ui->btn_ISBN->setStyleSheet("color:rgb(0,0,0);\
+                                font-family:KaiTi;\
+                                font-size:18px;\
+                                font-weight:normal;\
+                                padding:4px;");
+    ui->btn_bookname->setStyleSheet("color:rgb(0,0,0);\
+                                    font-family:KaiTi;\
+                                    font-size:18px;\
+                                    font-weight:normal;\
+                                    padding:4px;");
+    ui->btn_author->setStyleSheet("color:rgb(0,0,0);\
+                                    font-family:KaiTi;\
+                                    font-size:18px;\
+                                    font-weight:normal;\
+                                    padding:4px;");
 }
 
 /*
@@ -366,10 +382,10 @@ void AdminBookManagement::on_cbox_classify_currentIndexChanged(int)
 */
 void AdminBookManagement::getBookList(QString classification, QString key)
 {
-    if (classification == "全部" && ctrl_admin == 0)
+    if (classification == "全部" && flag_admin == 0)
         flag_admin = 1;
 
-    qDebug() << classification << "  " << flag_admin;
+    //qDebug() << classification << "  " << flag_admin;
     if (flag_admin == 0)
     {
 //        now_utils.GetBooksByClassification(const_cast<char *>(classification.toStdString().c_str()), re);
@@ -390,8 +406,8 @@ void AdminBookManagement::getBookList(QString classification, QString key)
         now_utils.GetBookByIsbn(const_cast<char *>(key.toStdString().c_str()), now_book);
         re.push_back(now_book);
     }
+    model->setRowCount(re.size());
 
-    // qDebug() << "come here";
     if (re.size() != 0)
         qDebug() << "书名" << re[0].getBookName();
 
@@ -404,11 +420,14 @@ void AdminBookManagement::on_btn_search_clicked()
     ui->btn_author->setDown(false);
     ui->btn_ISBN->setDown(false);
     re.clear();
-    
+
+    ui->tb->verticalScrollBar()->setValue(0);
+
     QString classification = ui->cbox_classify->currentText();
     QString val = ui->line_search->text();
 
     getBookList(classification, val);
+    curRecord=0;
     loadInitialBooks();
     flag_admin = 0;
 }
@@ -420,12 +439,9 @@ void AdminBookManagement::loadInitialBooks()
     int n = re.size(); //有
     //setIcons();
     maxPgs = n % maxPgNum == 0 ? n / maxPgNum : n / maxPgNum + 1;
-    qDebug()<< "maxpgs:" << maxPgs;
+    //qDebug()<< "maxpgs:" << maxPgs;
     pages = "1/" + QString::number(maxPgs, 10);
     ui->line->setText(pages);
-
-
-    connect(ui->tb->verticalScrollBar(), &QScrollBar::valueChanged, this, &AdminBookManagement::loadBooks);
 
      nCurScroller = ui->tb->verticalScrollBar()->value();
      int curPg = nCurScroller % maxPgNum == 0 ? nCurScroller / maxPgNum + 1 : nCurScroller / maxPgNum + 2; //当前所在页数
@@ -433,21 +449,23 @@ void AdminBookManagement::loadInitialBooks()
 
      pages = QString::number(curPg, 10) + "/" + QString::number(maxPgs, 10);
      ui->line->setText(pages);
-     if (curRecord == re.size() || curPg < curSumPg / 2)
-         return;
 
-     int maxLoadNum = 20;
+
+     int maxLoadNum = 100;
      int curNum = curRecord;
      int sum = re.size();
      curRecord = sum <= (unsigned int)curNum + maxLoadNum ? sum : curNum + maxLoadNum;
 
      for (int i = curNum; i < curRecord; i++)
      {
-         model->setItem(i, 0, new QStandardItem(re[i].getBookName()));
-         model->setItem(i, 1, new QStandardItem(re[i].getAuthor()));
-         model->setItem(i, 2, new QStandardItem(re[i].getPublisher()));
-         model->setItem(i, 3, new QStandardItem(re[i].getIsbn()));
-         model->setItem(i, 4, new QStandardItem(QString::number(re[i].getLeft())));
+
+         model->setData(model->index(i,0),re[i].getBookName());
+         model->setData(model->index(i,1),re[i].getAuthor());
+         model->setData(model->index(i,2),re[i].getPublisher());
+         model->setData(model->index(i,3),re[i].getIsbn());
+         model->setData(model->index(i,4),QString::number(re[i].getLeft()));
+
+
 
          ui->tb->setRowHeight(i, 75);
 
@@ -517,69 +535,32 @@ void AdminBookManagement::loadBooks()
     if (curRecord == re.size() || curPg < curSumPg / 2)
         return;
 
-    int maxLoadNum = 20;
+    int maxLoadNum = 100;
     int curNum = curRecord;
     int sum = re.size();
     curRecord = sum <= (unsigned int)curNum + maxLoadNum ? sum : curNum + maxLoadNum;
 
     for (int i = curNum; i < curRecord; i++)
     {
-        model->setItem(i, 0, new QStandardItem(re[i].getBookName()));
-        model->setItem(i, 1, new QStandardItem(re[i].getAuthor()));
-        model->setItem(i, 2, new QStandardItem(re[i].getPublisher()));
-        model->setItem(i, 3, new QStandardItem(re[i].getIsbn()));
-        model->setItem(i, 4, new QStandardItem(QString::number(re[i].getLeft())));
-
+        model->setData(model->index(i,0),re[i].getBookName());
+        model->setData(model->index(i,1),re[i].getAuthor());
+        model->setData(model->index(i,2),re[i].getPublisher());
+        model->setData(model->index(i,3),re[i].getIsbn());
+        model->setData(model->index(i,4),QString::number(re[i].getLeft()));
         ui->tb->setRowHeight(i, 75);
 
-        ////
         QPushButton *button = new QPushButton("修改");
-        string t1(re[i].getImgPath());
-        string t2(re[i].getIsbn());
-        string pic;
-        if (t2.size() == 13)
-            pic = pictureDbPath + t1 + "/" + t2 + ".jpg";
-        else
-            pic = pictureDbPath + string("moren") + ".jpg";
-        QPixmap pixmap(pic.c_str());
-        QPixmap fitpixmap;
-        if (pixmap.isNull())
-        {
-            QPixmap pixmap2((pictureDbPath + "moren.jpg").c_str());
-            fitpixmap = pixmap2.scaled(120, 75, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-        }
-        else
-        {
-            fitpixmap = pixmap.scaled(120, 75, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-        }
+
         button->setProperty("tb_ISBN", model->index(i, 3, QModelIndex()).data().toString()); //设置按钮的自定义属性
         connect(button, &QPushButton::clicked, this, &AdminBookManagement::on_TableModifyBtn_clicked);
         ui->tb->setIndexWidget(model->index(i, 5), button); //将按钮加入表格中
-        ////
-        ////
+
         QPushButton *button_remove = new QPushButton("删除");
-        string t1_2(re[i].getImgPath());
-        string t2_2(re[i].getIsbn());
-        string pic_2;
-        if (t2.size() == 13)
-            pic_2 = pictureDbPath + t1_2 + "/" + t2_2 + ".jpg";
-        else
-            pic_2 = pictureDbPath + string("moren") + ".jpg";
-        QPixmap pixmap_2(pic_2.c_str());
-        QPixmap fitpixmap_2;
-        if (pixmap_2.isNull())
-        {
-            QPixmap pixmap2_2((pictureDbPath + "moren.jpg").c_str());
-            fitpixmap_2 = pixmap2_2.scaled(120, 75, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-        }
-        else
-        {
-            fitpixmap_2 = pixmap_2.scaled(120, 75, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-        }
+
         button_remove->setProperty("tb_ISBN", model->index(i, 3, QModelIndex()).data().toString()); //设置按钮的自定义属性
         connect(button_remove, &QPushButton::clicked, this, &AdminBookManagement::on_remove_clicked);
         ui->tb->setIndexWidget(model->index(i, 6), button_remove); //将按钮加入表格中
-        ////
+
     }
     update();
 }
@@ -604,7 +585,7 @@ void AdminBookManagement::on_TableModifyBtn_clicked()
     QString ISBN = button->property("tb_ISBN").toString(); //根据ISBN删借阅信息
 
     now_utils.GetBookByIsbn(const_cast<char *>(ISBN.toStdString().c_str()), now_book);
-    qDebug() << now_book.getAuthor();
+    //qDebug() << now_book.getAuthor();
 
     AdminModifyBookDetail *admin_modify_book_detail = new AdminModifyBookDetail();
     connect(admin_modify_book_detail,SIGNAL(backSignal()),this,SLOT(backToThis()));
@@ -652,6 +633,7 @@ void AdminBookManagement::updateBookRecord(Book book)
     model->setItem(select_row, 2, new QStandardItem(book.getPublisher()));
     model->setItem(select_row, 3, new QStandardItem(book.getIsbn()));
     model->setItem(select_row, 4, new QStandardItem(QString::number(book.getLeft())));
+    ui->tb->setRowHeight(select_row,75);
 }
 
 void AdminBookManagement::on_btn_addclassify_clicked()
@@ -698,6 +680,7 @@ void AdminBookManagement::on_btn_last_clicked()
     while (curSumPg < maxPgs)
     {
         loadInitialBooks();
+        //qDebug()<< "curPg:"<< curSumPg << "sumPg: "<< maxPgs;
         curSumPg = curRecord % maxPgNum == 0 ? curRecord / maxPgNum : curRecord / maxPgNum + 1; //滚动条总的页数
     }
 

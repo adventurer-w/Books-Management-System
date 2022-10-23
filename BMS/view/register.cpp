@@ -15,11 +15,11 @@ Register::Register(QWidget *parent) :
     ui->setupUi(this);
     ui->box_sex->addItems(QStringList()<<" "<<"男"<<"女");
 
-    ui->comboBox->addItems(QStringList()<<" ");
+    ui->box_department->addItems(QStringList()<<" ");
     vector<Department> departments;
     now_utils.GetAllDepartment(departments);
     for(int i=0;i<departments.size();i++){
-        ui->comboBox->addItem(QString::fromStdString(departments[i].getName()));
+        ui->box_department->addItem(QString::fromStdString(departments[i].getName()));
     }
     this->setWindowTitle("注册");
 //    getinfo();
@@ -41,7 +41,7 @@ string emailcode;
 void Register::on_btn_emailcode_clicked(){
     emailcode.clear();
     QString email=ui->line_email->text();
-    string email_emailcode=email.toStdString();
+    email_emailcode=email.toStdString();
     if(now_utils.CheckUserExistByEmail(const_cast<char*>(email.toStdString().c_str()))>0){
         QMessageBox::information(this,"提示信息","该邮箱已被注册！");
     }else{
@@ -96,7 +96,7 @@ void Register::on_btn_register_clicked()
     QString pwd=ui->line_password->text();//密码
     QString confirmPwd=ui->line_confirmPasswod->text();//确认密码
     QString name=ui->line_name->text();//姓名
-    QString major=ui->comboBox->currentText();//专业
+    QString major=ui->box_department->currentText();//专业
     QString email=ui->line_email->text();//邮箱
     QString user_emailcode=ui->line_emailcode->text();//邮箱验证码
     QString sex=ui->box_sex->currentText();//性别

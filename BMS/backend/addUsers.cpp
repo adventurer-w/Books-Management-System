@@ -33,6 +33,7 @@ void insert()
     //id
 
     //name
+    t.clear();
     t=x[rand()%14];
     j=rand()%2+1;
     for (i=0;i<j;i++)
@@ -55,6 +56,8 @@ void insert()
 
     //密码
     j=rand()%8+8;
+
+
     for(i=0;i<j;i++){
         k=rand()%3;
         if(k==0){
@@ -66,10 +69,12 @@ void insert()
         }
     }
 //    qDebug()<<QString::fromStdString(t);
-    MD5 md5;
-    const char* tt=md5.read(t);
-    char* pwd2=const_cast<char*>(tt);
-//    qDebug()<<QString::fromStdString(tt)<<"\n";
+    MD5 md5 ;
+    qDebug()<<"pws2 with no cast"<<QString::fromStdString(t)<<"\n";
+    string tt=md5.read(t);
+    char* pwd2=(char*)tt.data();
+   // qDebug()<<"pws2 with cast"<<QString::fromStdString(tt)<<"\n";
+    //cout << "pws2 cast again"<<pwd2 <<endl;
     u.setPassword(pwd2);
     t.clear();
 
@@ -104,14 +109,15 @@ void insert()
 
     //欠款数
     u.debet=rand()%50;
-
+    //所属类别，老师，本科，硕士，博士
+    u.setDepartmentNo(rand()%4);
     now_utils.Register(u);
     User u2;
     now_utils.GetUserByAccount(u.account,u2);
-    qDebug()<<QString::fromStdString(u2.getName());
-    qDebug()<<QString::fromStdString(u2.getAccount());
-    qDebug()<<QString::fromStdString(u2.getPassword());
-    qDebug()<<QString::fromStdString(u2.getSecurityQuestion());
+    //qDebug()<<"u2name: "<<QString::fromStdString(u2.getName());
+    //qDebug()<<"u2account: "<<QString::fromStdString(u2.getAccount());
+    //qDebug()<<"u2pwd: "<<QString::fromStdString(u2.getPassword());
+    //qDebug()<<"u2sq: "<<QString::fromStdString(u2.getSecurityQuestion());
 
 }
 

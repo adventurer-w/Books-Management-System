@@ -20,9 +20,10 @@ public:
     StdItemModel *model;
     void on_linePressed();
     void on_btn_addclassify_clicked();
-    void on_btn_modify_clicked();
+    void tableModifyClicked();
     void on_btn_delete_clicked();
-    void on_btn_update_clicked();
+    void leModifyText(const QString text);
+
 
 private:
     Ui::ModifyBookCategory *ui;
