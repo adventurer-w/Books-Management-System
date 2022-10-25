@@ -58,8 +58,14 @@ void ModifyInfoWidget::on_btn_modifyInfo_clicked(){
         now_user.setSex(2);
 
     string info;
-    if(name.size()>USER_NAME_SIZE)
+    if(name.size()==0){
+        QMessageBox::information(this,"修改信息","请输入名字！");
+    }
+    else if(name.size()>USER_NAME_SIZE)
         QMessageBox::information(this,"修改信息","姓名输入过长，请请重新输入！");
+    else if(!now_utils.isName(name.toStdString())){
+        QMessageBox::information(this,"修改信息","名字内不能含有数字\n");;
+    }
     else{
         if(now_utils.UpdateUser(usert,now_user)){
             emit modifySignal();
@@ -102,6 +108,8 @@ void ModifyInfoWidget::on_btn_modifyPassword_clicked(){
                 //qDebug()<<"修改失败";
                 QMessageBox::information(this,"修改信息","修改密码出了点问题！");
             }
+        }else{
+            QMessageBox::information(this,"修改信息","确认密码与密码不一致");
         }
     }
 }

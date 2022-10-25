@@ -133,7 +133,7 @@ void QueryBookWidget::loadPages(){
 }
 
 int flag=0;//1书名，2作者，3isbn
-int ctrl = 0x000;
+
 void QueryBookWidget::on_btn_bookname_clicked()
 {
     if(flag == 1){
@@ -246,49 +246,68 @@ void QueryBookWidget::getBookList(QString classification, QString key){
         QMessageBox::information(this,"提示信息","输入字符过长");
     else{
         re.clear();
-        if (classification=="全部" && ctrl == 0)flag=1;
-        //qDebug() << classification << "  "<< flag;
         string info;
-        info.clear();
         if(flag==0){
-            vector<BookClass> result;
-
-            now_utils.GetClassByName(const_cast<char*>(classification.toStdString().c_str()),result);
-
-            now_utils.GetBooksByClassNo(result[0].getClassNo(),re);
+            ui->lineEdit->clear();
+            if(classification=="全部"){
+                if(key!="")
+                    now_utils.GetBooksByBookNameLike(const_cast<char*>(key.toStdString().c_str()),re);
+            }else{
+                vector<BookClass> result;
+                now_utils.GetClassByName(const_cast<char*>(classification.toStdString().c_str()),result);
+                now_utils.GetBooksByClassNo(result[0].getClassNo(),re);
+            }
         }else if(flag==1){
             if(key.size()==0)
-                info+="请输入书名！";
-            now_utils.GetBooksByBookName(const_cast<char*>(key.toStdString().c_str()),re);
+                info="请输入书名！";
+            else
+                now_utils.GetBooksByBookNameLike(const_cast<char*>(key.toStdString().c_str()),re);
+//                now_utils.GetBooksByBookName(const_cast<char*>(key.toStdString().c_str()),re);
+
         }else if(flag==2){
+            qDebug()<<key;
             if(key.size()==0)
-                info+="请输入作者名！";
-            now_utils.GetBooksByAuthor(const_cast<char*>(key.toStdString().c_str()),re);
-        }else{
+                info="请输入作者名！";
+            else
+                now_utils.GetBooksByAuthorLike(const_cast<char*>(key.toStdString().c_str()),re);
+//                now_utils.GetBooksByAuthor(const_cast<char*>(key.toStdString().c_str()),re);
+        }else if(flag==3){
             if(key.size()==0)
-                info+="请输入ISBN号！";
+                info="请输入ISBN号！";
             else if(key.size()!=13)
-                info+="ISBN号输入错误，请输入13位数字（无-隔开）";
-            now_utils.GetBookByIsbn(const_cast<char*>(key.toStdString().c_str()),now_book);
-            re.push_back(now_book);
+                info="ISBN号输入错误，请输入13位数字（无-隔开）";
+            else{
+                re.clear();
+                Book bt;
+                    if(now_utils.GetBookByIsbn(const_cast<char*>(key.toStdString().c_str()),bt))
+                        re.push_back(bt);
+            }
+
+        }else{
+            QMessageBox::information(this,"提示信息","查询错误，请重试！");
         }
         if(info.size()==0){
+            if(re.size()==0)
+            {
+                QMessageBox::information(this,"提示信息","馆中暂时没有该书！");
+            }
+            else{
+                BookList *bookList =new BookList();
+                bookList->resize(1300,730);
+                bookList->move(this->x(),this->y()+170);
 
-            BookList *bookList =new BookList();
-            bookList->resize(1300,730);
-            bookList->move(this->x(),this->y()+170);
+                bookList->setStackWidget(sub_mw);
+                sub_mw->insertWidget(1,bookList);
+                sub_mw->setCurrentIndex(1);
 
-            bookList->setStackWidget(sub_mw);
-            sub_mw->insertWidget(1,bookList);
-            sub_mw->setCurrentIndex(1);
-
-//            for(int i=0; i<10; ++i){
-//                thread[i] = new MyThread(bookList,i);
-//                thread[i]->start();
-//            }
-            Pool = new ThreadPool(12,bookList);
-            //Pool->ThreadPool::~ThreadPool();
-            Pool->startAll();
+                //            for(int i=0; i<10; ++i){
+                //                thread[i] = new MyThread(bookList,i);
+                //                thread[i]->start();
+                //            }
+                Pool = new ThreadPool(12,bookList);
+                //Pool->ThreadPool::~ThreadPool();
+                Pool->startAll();
+            }
         }else{
             QMessageBox::information(this,"提示信息",QString::fromStdString(info));
         }
@@ -302,18 +321,9 @@ void QueryBookWidget::killThread(){
 }
 void QueryBookWidget::on_btn_search_clicked()
 {
-    /*write code here*/
-
-
-    /*add BookList new constructor function or other functions to Pass Parameters*/
 
     QString classification=ui->cbox_classify->currentText();
     QString val=ui->lineEdit->text();
-
-    //qDebug()<<"分类"<<classification;
-    //qDebug()<<"搜索值"<<val;
-
-
     getBookList(classification,val);
 
 }

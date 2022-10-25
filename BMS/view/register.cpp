@@ -18,8 +18,17 @@ Register::Register(QWidget *parent) :
     ui->box_department->addItems(QStringList()<<" ");
     vector<Department> departments;
     now_utils.GetAllDepartment(departments);
+    if(departments.size()==0){
+        ui->box_department->addItem("未知");
+        Department d;
+        d.setDepartmentNo(-1);
+        d.setName("未知");
+        d.setMaxBook(0);
+        now_utils.InsertDepartment(d);
+    }
     for(int i=0;i<departments.size();i++){
-        ui->box_department->addItem(QString::fromStdString(departments[i].getName()));
+        if(departments[i].getName()!="未知")
+            ui->box_department->addItem(QString::fromStdString(departments[i].getName()));
     }
     this->setWindowTitle("注册");
 //    getinfo();
@@ -41,7 +50,7 @@ string emailcode;
 void Register::on_btn_emailcode_clicked(){
     emailcode.clear();
     QString email=ui->line_email->text();
-//    email_emailcode=email.toStdString();
+    email_emailcode=email.toStdString();
     if(now_utils.CheckUserExistByEmail(const_cast<char*>(email.toStdString().c_str()))>0){
         QMessageBox::information(this,"提示信息","该邮箱已被注册！");
     }else{
@@ -73,17 +82,24 @@ void Register::on_btn_emailcode_clicked(){
                         emailcode     /*邮件正文*/
                         );
 
-            int err;
-            if ((err = smtp.SendEmail_Ex()) != 0)
+            int err = smtp.SendEmail_Ex();
+            if (err != 0)
             {
                 if (err == 1)
-                    qDebug() << "错误1: 由于网络不畅通，发送失败!" << endl;
-                if (err == 2)
-                    qDebug() << "错误2: 用户名错误,请核对!" << endl;
-                if (err == 3)
-                    qDebug() << "错误3: 用户密码错误，请核对!" << endl;
-                if (err == 4)
-                    qDebug() << "错误4: 请检查附件目录是否正确，以及文件是否存在!" << endl;
+                    QMessageBox::information(this,"提示信息","由于网络不畅通，发送失败!");
+                else if (err == 2){
+                    qDebug() << "错误2: 用户名错误,请核对!" ;
+                    QMessageBox::information(this,"提示信息","发送错误，请稍候！");
+                }
+                else if (err == 3){
+                    qDebug() << "错误3: 用户密码错误，请核对!" ;
+                    QMessageBox::information(this,"提示信息","发送错误，请稍候！");
+                }else if (err == 4){
+                    qDebug() << "错误4: 请检查附件目录是否正确，以及文件是否存在!" ;
+                    QMessageBox::information(this,"提示信息","发送错误，请稍候！");
+                }
+            }else{
+                QMessageBox::information(this,"提示信息","验证码已发送！");
             }
         }
     }
@@ -92,6 +108,7 @@ void Register::on_btn_emailcode_clicked(){
 void Register::on_btn_register_clicked()
 {
 
+    User now_user;
     QString account=ui->line_bumber->text();//学号
     QString pwd=ui->line_password->text();//密码
     QString confirmPwd=ui->line_confirmPasswod->text();//确认密码
@@ -101,95 +118,143 @@ void Register::on_btn_register_clicked()
     QString user_emailcode=ui->line_emailcode->text();//邮箱验证码
     QString sex=ui->box_sex->currentText();//性别
 
-    MD5 md5;
-    string b= md5.read(pwd.toStdString());//加密
-
-    now_user.setAccount(const_cast<char*>(account.toStdString().c_str()));
-    now_user.setName(const_cast<char*>(name.toStdString().c_str()));
-    vector<Department> major_result;
-    now_utils.GetDepartmentByName(const_cast<char*>(major.toStdString().c_str()),major_result);
-    now_user.setDepartmentNo(major_result[0].getDepartmentNo());
-    now_user.setEmail(const_cast<char*>(email.toStdString().c_str()));
-    if(sex=="男")
-        now_user.setSex(1);
-    else
-        now_user.setSex(2);
-    now_user.setNumBorrowed(0);//借书数目
-    now_user.setNumAppointed(0);//预约数
-    now_user.setDebet(0);//欠款数
 
     string s;
-    if(account.size()<6)
-        s+="账号应大于等于6个字符\n";
-    else if(account.size()>11)
-        s+="账号应小于等于11个字符\n";
-    else if(!now_utils.CheckAccount(const_cast<char*>(account.toStdString().c_str())))
-        s+="账号不能包含除数字以外的字符\n";
-    else if(now_user.getAccount()[0]=='0' && now_user.getAccount()[1]=='0')
-        s+="账号前两位不能为0";
 
-    if(pwd.size()<6)
-        s+="密码应大于等于6个字符\n";
-    else if(pwd.size()>=30)
-        s+="密码应小于等于30个字符\n";
-    else if(!now_utils.CheckPassword(const_cast<char*>(pwd.toStdString().c_str()))){
-        s+="密码不合法（应至少1个大写字母，1个小写字母和1个数字）\n";
+    if(account==""){
+         s+="请输入账号\n";
     }
 
-    string t;
-    if(name.size()<=0)
-        s+="请输入昵称\n";
-    else if(name.size()>USER_NAME_SIZE-1){
-        t=USER_NAME_SIZE-1;
-        s+="昵称应小于等于"+t+"个字符\n";
+    if(name==""){
+        s=+"请输入姓名\n";
     }
 
-    if(major.size()<=0)
-        s+="请选择学历层次\n";
+    if(sex==" "){
+        s+="请选择性别\n";
+    }
 
-    if(email.size()<=0)
+    if(major==" "){
+        s+="请选择身份\n";
+    }
+
+    if(email==""){
         s+="请输入邮箱\n";
-    else if(email.size()>EMAIL_SIZE-1){
-        t=EMAIL_SIZE;
-        s+="邮箱应小于等于"+t+"个字符\n";
-    }else if(!now_utils.CheckEmail(const_cast<char*>(email.toStdString().c_str()))){
-        s+="邮箱格式为:名称@域名，且只允许字母、数字、下划线、英文句号、以及中划线组成\n";
-    }else if(email.toStdString()!=email_emailcode){
-        s+="邮箱与发送验证码邮箱不一致！";
     }
 
-    //邮箱验证码 emailcode
-    if(user_emailcode.toStdString()!=emailcode){
+    if(user_emailcode==""){
+        s+="请输入验证码\n";
+    }
+
+    if(pwd==""){
+        s+="请输入密码\n";
+    }
+
+
+    if(confirmPwd==""){
+        s+="请填写确认密码\n";
+    }
+    MD5 md5;
+    string b= md5.read(pwd.toStdString());//加密
+    if(s.size()==0){
+        now_user.setAccount(const_cast<char*>(account.toStdString().c_str()));
+        now_user.setName(const_cast<char*>(name.toStdString().c_str()));
+        vector<Department> major_result;
+        if(major!=" "){
+            now_utils.GetDepartmentByName(const_cast<char*>(major.toStdString().c_str()),major_result);
+            now_user.setDepartmentNo(major_result[0].getDepartmentNo());
+        }
+        now_user.setEmail(const_cast<char*>(email.toStdString().c_str()));
+        if(sex==" "){
+            s+="请选择性别\n";
+        }else if(sex=="男")
+            now_user.setSex(1);
+        else if(sex=="女")
+            now_user.setSex(2);
+        now_user.setNumBorrowed(0);//借书数目
+        now_user.setNumAppointed(0);//预约数
+        now_user.setDebet(0);//欠款数
+
+        extern bool addAdminFlag;
+        if(account.size()<6)
+            s+="账号应大于等于6个字符\n";
+        else if(account.size()>11)
+            s+="账号应小于等于11个字符\n";
+        else if(!now_utils.CheckAccount(const_cast<char*>(account.toStdString().c_str())))
+            s+="账号不能包含除数字以外的字符\n";
+        else {
+            if(!addAdminFlag)
+                if(now_user.getAccount()[0]=='0' && now_user.getAccount()[1]=='0')
+                    s+="账号前两位不能为0";
+        }
+
+        if(pwd.size()<6)
+            s+="密码应大于等于6个字符\n";
+        else if(pwd.size()>=30)
+            s+="密码应小于等于30个字符\n";
+        else if(!now_utils.CheckPassword(const_cast<char*>(pwd.toStdString().c_str()))){
+            s+="密码不合法（应至少1个大写字母，1个小写字母和1个数字）\n";
+        }else if(!now_utils.CheckPassword2(const_cast<char*>(pwd.toStdString().c_str()))){
+            s+="密码只有字母、数字和下划线且不能以下划线开头和结尾\n";
+        }
+
+        string t;
+        if(name.size()<=0)
+            s+="请输入昵称\n";
+        else if(name.size()>USER_NAME_SIZE-1){
+            t=USER_NAME_SIZE-1;
+            s+="昵称应小于等于"+t+"个字符\n";
+        }
+
+        if(major.size()<=0)
+            s+="请选择学历层次\n";
+
+        if(email.size()<=0)
+            s+="请输入邮箱\n";
+        else if(email.size()>EMAIL_SIZE-1){
+            t=EMAIL_SIZE;
+            s+="邮箱应小于等于"+t+"个字符\n";
+        }else if(!now_utils.CheckEmail(const_cast<char*>(email.toStdString().c_str()))){
+            s+="邮箱格式为:名称@域名，且只允许字母、数字、下划线、英文句号、以及中划线组成\n";
+        }else if(email.toStdString()!=email_emailcode){
+            s+="邮箱与发送验证码邮箱不一致！";
+        }
+
+        //邮箱验证码 emailcode
+        if(user_emailcode.toStdString()!=emailcode){
             s+="验证码错误\n";
-    }
+        }
 
-    if(s.size()>0)
-        QMessageBox::information(this,"提示信息",QString::fromStdString(s));
-    else{
+        if(!now_utils.isName(name.toStdString())){
+            s+="名字内不能含有数字\n";
+        }
 
-        if(pwd==confirmPwd){
-            now_user.setPassword(const_cast<char*>(b.c_str()));
-            int flag=now_utils.Register(now_user);
-            if(flag==0){
-                //账户已存在
-                ui->label->setText("账户已存在");
-            }else if(flag==-1){
-                //注册失败
-                ui->label->setText("注册错误");
-            }else if(flag==1){
-                //注册成功
-                ui->label->setText("注册成功");
-            }else if(flag==-2){
-                ui->label->setText("用户名不合法，前两位不能为00");
-            }else if(flag==-4){
-                ui->label->setText("该邮箱已被注册！");
+        if(s.size()>0)
+            QMessageBox::information(this,"提示信息",QString::fromStdString(s));
+        else{
+
+            if(pwd==confirmPwd){
+                now_user.setPassword(const_cast<char*>(b.c_str()));
+                int flag=now_utils.Register(now_user);
+                if(flag==-2){
+                    //账户已存在
+                    ui->label->setText("账户已存在");
+                }else if(flag==-1){
+                    //注册失败
+                    ui->label->setText("注册错误");
+                }else if(flag==1){
+                    //注册成功
+                    ui->label->setText("注册成功");
+                }
+
+            }else{
+                ui->label->setText("确认密码与密码不一致");
             }
 
-        }else{
-            ui->label->setText("确认密码与密码不一致");
         }
-   }
-   s.clear();
+        s.clear();
+    }else{
+        QMessageBox::information(this,"提示信息",QString::fromStdString(s));
+    }
 
 
 }

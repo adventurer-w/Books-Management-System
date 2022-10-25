@@ -65,6 +65,7 @@ AdminBookManagement::AdminBookManagement(QWidget *parent) : QWidget(parent),
     //基于querybookwidget
     ui->setupUi(this);
 
+
     load_classify();
     setShadow();
 
@@ -237,12 +238,13 @@ void AdminBookManagement::on_btn_addbook_batch_clicked()
         now_book.setIsbn(const_cast<char *>(range->querySubObject("Cells(int,int)", i, 5)->dynamicCall("Value").toString().toStdString().c_str()));
         //添加新的classify对应的No
         string classify_name = const_cast<char *>(range->querySubObject("Cells(int,int)", i, 6)->dynamicCall("Value").toString().toStdString().c_str());
+        // qDebug() << classify_name.c_str();
         vector<BookClass> now_book_class;
         //表格中有错误的分类就报错
         if(now_utils.GetClassByName(const_cast<char*>(classify_name.c_str()),now_book_class) == 0)
         {
-            string aa = "不存在分类："+classify_name;
-            QMessageBox::information(this,"录入异常",QString::fromStdString(aa));
+            qDebug() << QString::fromStdString(classify_name);
+            QMessageBox::information(this,"录入失败","分类有误");
             break;
         }
         // qDebug() << now_book_class[0].getClassNo();
@@ -383,13 +385,18 @@ void AdminBookManagement::on_cbox_classify_currentIndexChanged(int)
 /*
 通过类别和key来得到符合条件的书本数据
 */
+
 void AdminBookManagement::getBookList(QString classification, QString key)
 {
-    if (classification == "全部" && flag_admin == 0)
-        flag_admin = 1;
+    re.clear();
+    string s;
+    s.clear();
+    if (classification == "全部" && flag_admin == 0){
 
+        now_utils.GetAllBooks(re);
+    }
     //qDebug() << classification << "  " << flag_admin;
-    if (flag_admin == 0)
+    else if (flag_admin == 0)
     {
 //        now_utils.GetBooksByClassification(const_cast<char *>(classification.toStdString().c_str()), re);
         vector<BookClass> now_book_class;
@@ -398,18 +405,43 @@ void AdminBookManagement::getBookList(QString classification, QString key)
     }
     else if (flag_admin == 1)
     {
-        now_utils.GetBooksByBookName(const_cast<char *>(key.toStdString().c_str()), re);
+        if(key.size()==0){
+            s="请输入书名";
+        }else{
+            now_utils.GetBooksByBookNameLike(const_cast<char *>(key.toStdString().c_str()), re);
+        }
     }
     else if (flag_admin == 2)
     {
-        now_utils.GetBooksByAuthor(const_cast<char *>(key.toStdString().c_str()), re);
+        if(key.size()==0){
+            s="请输入作者名";
+        }else{
+            now_utils.GetBooksByAuthorLike(const_cast<char *>(key.toStdString().c_str()), re);
+        }
     }
-    else
+    else if (flag_admin == 3)
     {
-        now_utils.GetBookByIsbn(const_cast<char *>(key.toStdString().c_str()), now_book);
-        re.push_back(now_book);
+        if(key.size()==0){
+            s="请输入isbn";
+        }else if(key.size()!=13){
+            s="请输入正确的13位isbn，无-隔开";
+        }else{
+            re.clear();
+            Book bt;
+                if(now_utils.GetBookByIsbn(const_cast<char *>(key.toStdString().c_str()), bt))
+                    re.push_back(bt);
+        }
+    }
+
+
+    if(s.size()!=0){
+        QMessageBox::information(this,"提示信息",QString::fromStdString(s));
+    }
+    else if(re.size()==0){
+        QMessageBox::information(this,"提示信息","馆中没有该书");
     }
     model->setRowCount(re.size());
+
 
     if (re.size() != 0)
         qDebug() << "书名" << re[0].getBookName();
@@ -432,7 +464,7 @@ void AdminBookManagement::on_btn_search_clicked()
     getBookList(classification, val);
     curRecord=0;
     loadInitialBooks();
-    flag_admin = 0;
+//    flag_admin = 0;
 }
 
 
@@ -610,22 +642,42 @@ void AdminBookManagement::on_remove_clicked()
 
     now_utils.GetBookByIsbn(const_cast<char *>(ISBN.toStdString().c_str()), now_book);
     if(now_utils.DeleteBook(now_book)){
+
+        QMessageBox::information(this,"提示信息","删除成功");
+
         int row = ui->tb->currentIndex().row();
         model->removeRow(row);
+    }else{
+        QMessageBox::information(this,"提示信息","删除失败");
     }
 
 }
 
 void AdminBookManagement::on_btn_updaterank_clicked()
 {
+    string s;
+    s.clear();
     if(now_utils.UpdateBookRank())
-        qDebug()<<"总借阅榜单update成功！";
+        s+="总借阅榜单update成功！\n";
+    else
+        s+="总借阅榜单update成功！\n";
+
     if(now_utils.UpdateGirlRank())
-        qDebug()<<"女生借阅排行榜update成功！";
+        s+="女生借阅排行榜update成功！\n";
+    else
+        s+="女生借阅榜单update成功！\n";
+
     if(now_utils.UpdateBoyRank())
-        qDebug()<<"男生借阅排行榜update成功！";
+        s+="男生借阅排行榜update成功！\n";
+    else
+        s+="男生借阅榜单update成功！\n";
+
     if(now_utils.UpdatePointRank())
-        qDebug()<<"高分借阅排行榜update成功！";
+        s+="高分借阅排行榜update成功！\n";
+    else
+        s+="高分借阅榜单update成功！\n";
+
+    QMessageBox::information(this,"提示信息",QString::fromStdString(s));
 }
 
 void AdminBookManagement::updateBookRecord(Book book)
@@ -642,7 +694,7 @@ void AdminBookManagement::updateBookRecord(Book book)
 void AdminBookManagement::on_btn_addclassify_clicked()
 {
     //添加新类别
-    ModifyBookCategory *modifyBookCategory = new ModifyBookCategory();
+    ModifyBookCategory *modifyBookCategory = new ModifyBookCategory;
     modifyBookCategory->setWindowTitle("类别操作");
     modifyBookCategory->resize(270,450);
     connect(modifyBookCategory,&ModifyBookCategory::updateCategorySignal,this,&AdminBookManagement::load_classify);

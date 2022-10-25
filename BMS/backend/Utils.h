@@ -14,9 +14,12 @@ public:
     //用正则表达式判断是否合法
     bool CheckAccount(char *account);
     bool CheckPassword(char *password);
+    bool CheckPassword2(char *password);
+
     bool CheckEmail(char *email);
-
-
+    string getGuidelines();
+    bool isName(string name);
+    bool setGuidelines(string guidelines);
 
     int Login(char* account, char* password); //参数1:账号，参数2:密码。   返回值：0:账户不存在； 2:登陆成功；1:密码错误
 

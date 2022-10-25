@@ -92,7 +92,6 @@ BookList::BookList(QWidget *parent) :
     //设置多选
     tbv->setSelectionMode(QAbstractItemView::MultiSelection);
 
-    //qDebug()<<re.size();
     loadInitialBooks();
     int n = re.size();//有
     setIcons();
@@ -321,6 +320,7 @@ void BookList::on_TableBtn_clicked()
     now_utils.GetBookByIsbn(const_cast<char*>(ISBN.toStdString().c_str()),now_book);
     BookDetails *bookDetails= new BookDetails();
     bookDetails->resize(1300,730);
+    bookDetails->setPreIndex(1);
     bookDetails->move(this->x(),this->y()+170);
     bookDetails->setStackWidget(psw);
     psw->insertWidget(2,bookDetails);

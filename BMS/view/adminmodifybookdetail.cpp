@@ -173,6 +173,11 @@ void AdminModifyBookDetail::on_pushButton_clicked()
     QString remain = ui->line_remain->text();           //库存
     QString introduction = ui->lineEdit->toPlainText();
 
+    if(bookname.size()==0 || author.size()==0 || publish.size()==0 || publishtime.size()==0 || introduction.size()==0){
+        QMessageBox::information(this, "录入失败", "请输入信息");
+        return;
+    }
+
     //存储图片到对应目录下，我这里是在cover下新建了一个zother文件夹
     string pic = "zother/" + ISBN.toStdString() + ".jpg";
     now_book.setImgPath(const_cast<char *>(pic.c_str()));

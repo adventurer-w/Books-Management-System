@@ -71,19 +71,6 @@
     <string>简介</string>
    </property>
   </widget>
-  <widget class="QLabel" name="lb_intro_txt">
-   <property name="geometry">
-    <rect>
-     <x>60</x>
-     <y>540</y>
-     <width>2200</width>
-     <height>150</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
   <widget class="QLabel" name="lb_bookname2">
    <property name="geometry">
     <rect>
@@ -357,24 +344,11 @@
     <string>TextLabel</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="btn_star">
-   <property name="geometry">
-    <rect>
-     <x>990</x>
-     <y>200</y>
-     <width>100</width>
-     <height>40</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>收藏+</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="btn_borrow">
    <property name="geometry">
     <rect>
      <x>990</x>
-     <y>290</y>
+     <y>240</y>
      <width>100</width>
      <height>40</height>
     </rect>
@@ -387,7 +361,7 @@
    <property name="geometry">
     <rect>
      <x>990</x>
-     <y>380</y>
+     <y>330</y>
      <width>100</width>
      <height>40</height>
     </rect>
@@ -407,6 +381,16 @@
    </property>
    <property name="text">
     <string/>
+   </property>
+  </widget>
+  <widget class="QTextBrowser" name="lb_intro_txt">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>540</y>
+     <width>1200</width>
+     <height>150</height>
+    </rect>
    </property>
   </widget>
  </widget>

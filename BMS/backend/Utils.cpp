@@ -9,12 +9,30 @@ using namespace std;
 //！！！！密码用MD5储存！！！！
 // 前端在传输数据之前需要使用MD5加密！
 
+bool Utils::isName(string name){
+    for(int i=0;i<name.size();i++){
+        if(name[i]>='0'&&name[i]<='9'){
+            return false;
+        }
+    }
+    return true;
+}
+
+string Utils::getGuidelines(){
+    return db.getGuidelines();
+}
+
+bool Utils::setGuidelines(string guidelines){
+    return db.setGuidelines(guidelines);
+}
+
 
 int Utils::Login(char *account, char *password) { //密码需传入md5加密后的
 
-    if(account[0]=='0'&&account[1]=='0'){
-        return AdminLogin(account,password)+3;
-    }else{
+//    if(account[0]=='0'&&account[1]=='0'){
+//        return AdminLogin(account,password)+3;
+//    }
+//    else{
         User user = User();
         GetUserByAccount(account,user);
 
@@ -27,14 +45,14 @@ int Utils::Login(char *account, char *password) { //密码需传入md5加密后�
         }else{
             return 0;
         }
-    }
+//    }
 }
 
 int Utils::Register(User user) {
     if(!CheckAccount(user.getAccount())) return -2;
-    if(user.getAccount()[0]=='0'&&user.getAccount()[1]=='0') return -2;
-    if(!CheckEmail(user.getEmail())) return -4;
-    if(!CheckUserExistByEmail(user.getEmail())) return -4;
+//    if(user.getAccount()[0]=='0'&&user.getAccount()[1]=='0') return -2;
+//    if(!CheckEmail(user.getEmail())) return -4;
+//    if(!CheckUserExistByEmail(user.getEmail())) return -4;
     if (CheckUserExist(user))
         return 0;
     else{
@@ -46,7 +64,7 @@ int Utils::Register(User user) {
 }
 
 bool Utils::InsertUser(User user) {
-    if(!CheckUserExistByEmail(user.getEmail())) return false;
+//    if(!CheckUserExistByEmail(user.getEmail())) return false;
     if (!CheckUserExist(user)){
         vector<User> vec;
         vec.push_back(user);
@@ -444,7 +462,7 @@ bool Utils::GetBooksByBookName(char* name, vector<Book>&result){
 }
 
 bool Utils::GetBooksByBookNameLike(char* name, vector<Book>&result){
-    if (db.selectLike("book", "name", name, result) != -1)
+    if (db.selectLike("book", "bookName", name, result) != -1)
         return true;
     else
         return false;
@@ -1215,6 +1233,12 @@ bool Utils::CheckAccount(char *account){
 }
 bool Utils::CheckPassword(char *password){
     regex reg("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[^]{6,30}$");
+//    regex reg(^(?!_)(?!.*?_$)[a-zA-Z0-9_]+$
+//    regex reg("[0-9]+|[a-z]+|[A-Z]+{6,30}$");
+    return regex_match(password, reg);
+}
+bool Utils::CheckPassword2(char *password){
+    regex reg("^(?!_)(?!.*?_$)[a-zA-Z0-9_]+$");
     return regex_match(password, reg);
 }
 bool Utils::CheckEmail(char *email){

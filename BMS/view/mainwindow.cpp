@@ -36,10 +36,6 @@ MainWindow::MainWindow(QWidget *parent)
         userType = 0;
     else
         userType = 1;
-//    userType = 1;
-
-    qDebug()<<userType;
-    qDebug()<<now_user.getAccount();
 
     loadUserInfo();
     loadMenuBar();

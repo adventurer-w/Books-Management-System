@@ -125,19 +125,43 @@ int myFileDB::select(string DB_NAME, T &entity, vector<string> &VALUES, vector<T
     }
 }
 
+//template<typename T>
+//int myFileDB::selectLike(string DB_NAME, string valueName, char *value, vector<T> &resultSet) {
+//    ifstream readFile;
+//    try {
+//        T temp;
+//        int TSize = sizeof(temp);
+//        readFile.open(rootPath + DB_NAME + ".dat", ios::in | ios::out | ios::binary);
+//        if (!readFile) {
+//            ios_base::failure fail("ERROR");
+//            throw fail;
+//        }
+//        while (readFile.read(reinterpret_cast<char *>(&temp), TSize)) {
+//            if (!temp.dirty != -1 && strstr(temp.getCharElemByName(valueName), value)) {
+//                resultSet.push_back(temp);
+//            }
+//        }
+//        return resultSet.size();
+//    }
+//    catch (ios_base::failure &fail) {
+//        cout << fail.what() << endl;
+//        return -1;
+//    }
+//}
+
 template<typename T>
-int myFileDB::selectLike(string DB_NAME, string valueName, char *value, vector<T> &resultSet) {
-    ifstream readFile;
+int myFileDB::selectLike(string FILE_NAME, string nameOfValue, char *value, vector<T> &resultSet) {
+    ifstream fileName;
     try {
         T temp;
         int TSize = sizeof(temp);
-        readFile.open(rootPath + DB_NAME + ".dat", ios::in | ios::out | ios::binary);
-        if (!readFile) {
+        fileName.open(rootPath + FILE_NAME + ".dat", ios::in | ios::out | ios::binary);
+        if (!fileName) {
             ios_base::failure fail("ERROR");
             throw fail;
         }
-        while (readFile.read(reinterpret_cast<char *>(&temp), TSize)) {
-            if (!temp.dirty != -1 && strstr(temp.getCharElemByName(valueName), value)) {
+        while (fileName.read(reinterpret_cast<char *>(&temp), TSize)) {
+            if (temp.dirty != 1 && (strstr(temp.getCharElemByName(nameOfValue), value)!=NULL)) {
                 resultSet.push_back(temp);
             }
         }

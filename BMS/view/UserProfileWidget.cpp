@@ -354,6 +354,23 @@ void UserProfileWidget::onTableBtnClicked()//还书
             record.setBookName(bt.getBookName());
             record.setPublisher(bt.getPublisher());
 
+
+            Book bt1;
+            now_utils.GetBookByIsbn(const_cast<char*>(reserve_isbn.c_str()),bt1);
+            bt1.setHistoryNum(bt1.getHistoryNum()+1);
+            User u;
+            now_utils.GetUserByAccount(reserve.getAccount(),u);
+            if(u.getSex()==1){
+                bt1.setBoyHistoryNum(bt1.getBoyHistoryNum()+1);
+            }else if(u.getSex()==2){
+                bt1.setGirlHistoryNum(bt1.getGirlHistoryNum()+1);
+            }
+
+            Book bt2;
+            bt2.setIsbn(bt1.getIsbn());
+            now_utils.UpdateBook(bt2,bt1);
+
+
             now_utils.DeleteReserve(reserve);
             now_utils.InsertRecord(record);
             User ut;
@@ -373,18 +390,25 @@ void UserProfileWidget::onTableBtnClicked()//还书
                     article      /*邮件正文*/
                     );
 
-                int err;
-                if ((err = smtp.SendEmail_Ex()) != 0)
-                {
-                    if (err == 1)
-                        qDebug() << "错误1: 由于网络不畅通，发送失败!" << endl;
-                    if (err == 2)
-                        qDebug() << "错误2: 用户名错误,请核对!" << endl;
-                    if (err == 3)
-                        qDebug() << "错误3: 用户密码错误，请核对!" << endl;
-                    if (err == 4)
-                        qDebug() << "错误4: 请检查附件目录是否正确，以及文件是否存在!" << endl;
+            int err = smtp.SendEmail_Ex();
+            if (err != 0)
+            {
+                if (err == 1)
+                    QMessageBox::information(this,"提示信息","由于网络不畅通，发送失败!");
+                else if (err == 2){
+                    qDebug() << "错误2: 用户名错误,请核对!" ;
+                    QMessageBox::information(this,"提示信息","发送错误，请稍候！");
                 }
+                else if (err == 3){
+                    qDebug() << "错误3: 用户密码错误，请核对!" ;
+                    QMessageBox::information(this,"提示信息","发送错误，请稍候！");
+                }else if (err == 4){
+                    qDebug() << "错误4: 请检查附件目录是否正确，以及文件是否存在!" ;
+                    QMessageBox::information(this,"提示信息","发送错误，请稍候！");
+                }
+            }else{
+                QMessageBox::information(this,"提示信息","邮件已发送！");
+            }
 
         }else{
             Book bt1;
@@ -429,6 +453,6 @@ bool UserProfileWidget::loadQss(const QString &StyleSheetFile){
 }
 
 void UserProfileWidget::on_btn_borrowinstruction_clicked(){
-    //string s=now_utils.getGuidelines();
-    //QMessageBox::information(this,"借阅须知",QString::fromStdString(s));
+    string s=now_utils.getGuidelines();
+    QMessageBox::information(this,"借阅须知",QString::fromStdString(s));
 }

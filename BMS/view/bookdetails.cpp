@@ -48,7 +48,7 @@ void BookDetails::loadBookDetail(){
     ui->lb_bookposition_txt->setText("未知");//后期判断是否需要增加图书位置
 
     ui->lb_historyborrow_txt->setText(QString::number(now_book.getHistoryNum()));
-//    ui->lb_intro_txt->setText(now_book.getIntroduction());
+    ui->lb_intro_txt->setText(now_book.getIntroduction());
 
     QLabel *l1 = new QLabel();     //创建lable
 
@@ -141,9 +141,26 @@ void BookDetails::on_btn_borrow_clicked(){//借阅
         record.setBookName(now_book.getBookName());
         record.setPublisher(now_book.getPublisher());
 
+
+        Book bt1;
+        now_utils.GetBookByIsbn(now_book.getIsbn(),bt1);
+        qDebug()<<bt1.getHistoryNum();
+        bt1.setHistoryNum(bt1.getHistoryNum()+1);
+        User u;
+        now_utils.GetUserByAccount(now_user.getAccount(),u);
+
         if(now_utils.InsertRecord(record)){
             QMessageBox::information(this,"借阅书籍","小伙好手速，借书成功！");
             now_book.setLeft(now_book.getLeft()-1);
+
+            if(u.getSex()==1){
+                now_book.setBoyHistoryNum(now_book.getBoyHistoryNum()+1);
+            }else if(u.getSex()==2){
+                now_book.setGirlHistoryNum(now_book.getGirlHistoryNum()+1);
+            }
+            now_book.setHistoryNum(now_book.getHistoryNum()+1);
+
+
             Book bookt;
             bookt.setIsbn(now_book.getIsbn());
             now_utils.UpdateBook(bookt,now_book);

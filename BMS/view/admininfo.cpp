@@ -69,7 +69,19 @@ void AdminInfo::on_btn_modifyInfo_clicked(){
     // now_utils.GetDepartmentByName(const_cast<char*>(major.toStdString().c_str()),major_result);
     // now_user.setDepartmentNo(major_result[0].getDepartmentNo());
     // now_user.setEmail(email.toStdString().c_str());
-    if(sex=="男")
+
+    if(name.size()==0){
+        QMessageBox::information(this,"修改信息","请输入姓名\n");
+        return;
+    }
+
+    if(!now_utils.isName(name.toStdString())){
+        QMessageBox::information(this,"修改信息","名字内不能含有数字\n");
+    }
+
+    if(sex==""){
+        QMessageBox::information(this,"修改信息","请选择性别");
+    }else if(sex=="男")
         now_user.setSex(1);
     else
         now_user.setSex(2);
@@ -78,16 +90,17 @@ void AdminInfo::on_btn_modifyInfo_clicked(){
     // now_user.setDebet(now_user.getDebet());//欠款数
 
 
-
     //增加弹窗
-    if(now_utils.UpdateUser(usert,now_user)){
-        // emit modifySignal();
-        //qDebug()<<"修改成功";
-        QMessageBox::information(this,"修改信息","修改个人信息成功啦！");
-//        QWidget.update();
-    }else{
-        //qDebug()<<"修改失败";
-        QMessageBox::information(this,"修改信息","真可惜，修改个人信息失败了!");
+    if(sex!="" && now_utils.isName(name.toStdString())){
+        if(now_utils.UpdateUser(usert,now_user)){
+            // emit modifySignal();
+            //qDebug()<<"修改成功";
+            QMessageBox::information(this,"修改信息","修改个人信息成功啦！");
+    //        QWidget.update();
+        }else{
+            //qDebug()<<"修改失败";
+            QMessageBox::information(this,"修改信息","真可惜，修改个人信息失败了!");
+        }
     }
 
 }
@@ -103,18 +116,30 @@ void AdminInfo::on_btn_modifyPassword_clicked(){
     MD5 md5;
     string b= md5.read(pwd.toStdString());//加密
 
+    if(pwd.size()==0 || confirmPwd.size()==0){
+        QMessageBox::information(this,"修改信息","请输入信息！");
+        return;
+    }
     //增加弹窗
 
     //增加提示信息label
     if(pwd==confirmPwd){
-        now_user.setPassword(const_cast<char*>(b.c_str()));
-        if(now_utils.UpdateUser(usert,now_user)){
-            //qDebug()<<"修改成功";
-            QMessageBox::information(this,"修改信息","修改密码成功啦！");
+
+        if(!now_utils.CheckPassword(const_cast<char*>(pwd.toStdString().c_str()))){
+            QMessageBox::information(this,"修改信息","密码不符合要求！");
         }else{
-            //qDebug()<<"修改失败";
-            QMessageBox::information(this,"修改信息","修改密码出了点问题！");
+            now_user.setPassword(const_cast<char*>(b.c_str()));
+            if(now_utils.UpdateUser(usert,now_user)){
+                //qDebug()<<"修改成功";
+                QMessageBox::information(this,"修改信息","修改密码成功啦！");
+            }else{
+                //qDebug()<<"修改失败";
+                QMessageBox::information(this,"修改信息","修改密码出了点问题！");
+            }
         }
+    }else{
+        QMessageBox::information(this,"修改信息","确认密码与密码不一样！");
+
     }
 }
 

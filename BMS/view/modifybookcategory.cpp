@@ -73,7 +73,7 @@ void ModifyBookCategory::loadclassify()
         le->setText(now_book_class[i].getName());
         ui->tb->setIndexWidget(model->index(i,0),le);
         le->setProperty("tb_classify_name", now_book_class[i].getName());
-        le->setProperty("tb_classify_no", i);
+        le->setProperty("tb_classify_no", now_book_class[i].getClassNo());
         le->setProperty("new_classify_name","");
         connect(le,&QLineEdit::returnPressed,this,&ModifyBookCategory::tableModifyClicked);
         connect(le,&QLineEdit::textChanged,this,&ModifyBookCategory::leModifyText);
@@ -81,7 +81,7 @@ void ModifyBookCategory::loadclassify()
         QPushButton *btn_delete = new QPushButton("删除");
         ui->tb->setIndexWidget(model->index(i, 1), btn_delete); //显示
         btn_delete->setProperty("tb_classify_name", now_book_class[i].getName());
-        btn_delete->setProperty("tb_classify_no", i);
+        btn_delete->setProperty("tb_classify_no", now_book_class[i].getClassNo());
         //绑定按钮与对应的行数，用来后面区分删除按钮
         connect(btn_delete, &QPushButton::clicked, this, &ModifyBookCategory::on_btn_delete_clicked);
 
@@ -103,14 +103,24 @@ void ModifyBookCategory::on_btn_addclassify_clicked()
     //    qDebug() << "on btn_addclassify clicked";
     //获取文本框内容
     QString classify_name = ui->line_addclassify->text();
+
+    if(classify_name.size()==0){
+        QMessageBox::information(this, "添加类别", "请输入类名");
+        return;
+    }
+
     //读取已有的类别，以此来找到未使用的新一位编号
     vector<BookClass> now_book_class;
     now_utils.GetAllClass(now_book_class);
     int n = now_book_class.size();
-
+    int nextNo = 0;
+    for(int i= 0; i< n; ++i){
+        if(nextNo<now_book_class[i].classNo)nextNo=now_book_class[i].classNo;
+    }
+    nextNo++;
     //新建一个BookClass，存入对应属性
     BookClass book_class;
-    book_class.setId(n);
+    book_class.setClassNo(nextNo);
     book_class.setName(const_cast<char *>(classify_name.toStdString().c_str()));
 
     //添加类别，并反馈
@@ -121,12 +131,22 @@ void ModifyBookCategory::on_btn_addclassify_clicked()
         //动态添加新的行
         vector<BookClass> now_book_class;
         now_utils.GetAllClass(now_book_class);
-        int n = now_book_class.size();
-        model->setItem(n - 1, 0, new QStandardItem(now_book_class[n - 1].getName()));
+        n = now_book_class.size();
+        //model->setItem(n - 1, 0, new QStandardItem(now_book_class[n - 1].getName()));
+        model->setRowCount(n);
+        QLineEdit *le = new QLineEdit;
+        le->setText(now_book_class[n-1].getName());
+        ui->tb->setIndexWidget(model->index(n-1,0),le);
+        le->setProperty("tb_classify_name", now_book_class[n-1].getName());
+        le->setProperty("tb_classify_no", now_book_class[n-1].getClassNo());
+        connect(le,&QLineEdit::returnPressed,this,&ModifyBookCategory::tableModifyClicked);
+        connect(le,&QLineEdit::textChanged,this,&ModifyBookCategory::leModifyText);
+
+
         QPushButton *btn_delete = new QPushButton("删除");
         ui->tb->setIndexWidget(model->index(n - 1, 1), btn_delete); //显示
         btn_delete->setProperty("tb_classify_name", now_book_class[n - 1].getName());
-        btn_delete->setProperty("tb_classify_no", n - 1);
+        btn_delete->setProperty("tb_classify_no", now_book_class[n-1].getClassNo());
 
         //绑定按钮与对应的行数，用来后面区分删除按钮
         connect(btn_delete, &QPushButton::clicked, this, &ModifyBookCategory::on_btn_delete_clicked);
@@ -140,27 +160,49 @@ void ModifyBookCategory::on_btn_addclassify_clicked()
 
 void ModifyBookCategory::on_btn_delete_clicked()
 {
-    //    qDebug() << "on_btn_delete_clicked";
-    //获取对应的行
     QPushButton *button = (QPushButton *)sender();
-    QString classify_name = button->property("tb_classify_name").toString();
-    QString classify_no = button->property("tb_classify_no").toString(); //根据classify_no删类别
-                                                                         //    qDebug() << "classify_no = " << classify_no;
+        QString classify_name = button->property("tb_classify_name").toString();
+        QString classify_no = button->property("tb_classify_no").toString(); //根据classify_no删类别
+                                                                             //    qDebug() << "classify_no = " << classify_no;
 
-    //获取对应名称，并赋予临时创建的book_class
-    //    vector<BookClass> now_book_class;
-    //    now_utils.GetClassByNo(classify_no.toInt() - 1,now_book_class);
-    BookClass book_class;
-    book_class.setName(const_cast<char *>(classify_name.toStdString().c_str()));
-    book_class.setClassNo(classify_no.toInt());
+        //获取对应名称，并赋予临时创建的book_class
+        //    vector<BookClass> now_book_class;
+        //    now_utils.GetClassByNo(classify_no.toInt() - 1,now_book_class);
+        BookClass book_class;
+        book_class.setName(const_cast<char *>(classify_name.toStdString().c_str()));
+        book_class.setClassNo(classify_no.toInt());
 
-    //删除对应的行
-    if (now_utils.DeleteClass(book_class))
-    {
-        int row = ui->tb->currentIndex().row();
-        model->removeRow(row);
-        emit updateCategorySignal();
-    }
+        vector<Book> bt;
+        now_utils.GetBooksByClassNo(stoi(classify_no.toStdString().c_str()),bt);
+        if(bt.size()>0){
+            QMessageBox::StandardButton result=QMessageBox::question(this,"提示信息","该分类仍有图书，删除后该图书分类将为未知，是否确认删除",QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+            if(result==QMessageBox::Yes){
+                QMessageBox::information(this, "提示信息", "该功能需要较长时间，请稍候！");
+                //将该分类的书置为未知分类
+                for(int i=0;i<bt.size();i++){
+                    Book bt2;
+                    bt2.setIsbn(bt[i].getIsbn());
+                    bt[i].setClassNo(100);
+                    now_utils.UpdateBook(bt2,bt[i]);
+                }
+                //删除该分类
+                if (now_utils.DeleteClass(book_class))
+                {
+                    int row = ui->tb->currentIndex().row();
+                    model->removeRow(row);
+                    emit updateCategorySignal();
+                    QMessageBox::information(this, "提示信息", "删除成功！");
+                }
+            }
+        }
+        //删除对应的行
+        else if (now_utils.DeleteClass(book_class))
+        {
+            int row = ui->tb->currentIndex().row();
+            model->removeRow(row);
+            emit updateCategorySignal();
+            QMessageBox::information(this, "提示信息", "删除成功！");
+        }
 }
 
 void ModifyBookCategory::leModifyText(const QString text){
@@ -172,6 +214,11 @@ void ModifyBookCategory::tableModifyClicked()
     //获取对应的行
     QLineEdit *le = (QLineEdit *)sender();
     QString classify_name = le->property("tb_classify_name").toString();
+
+    if(classify_name.size()==0){
+        QMessageBox::information(this, "添加类别", "请输入类别名称");
+        return;
+    }
 
     QString classify_no = le->property("tb_classify_no").toString();
 
@@ -187,7 +234,9 @@ void ModifyBookCategory::tableModifyClicked()
         BookClass new_book_class;
         new_book_class.setName(const_cast<char *>(new_name.toStdString().c_str()));
         new_book_class.setClassNo(classify_no.toInt());
-        qDebug()<< "old:"<< classify_name << "new : "<< new_name;
+        //qDebug()<< "old:"<< classify_name << "new : "<< new_name;
+
+
         if(now_utils.ChangeClassByNo(old_book_class,new_book_class) == true){
             QMessageBox::information(this, "添加类别", "修改成功");
             emit updateCategorySignal();

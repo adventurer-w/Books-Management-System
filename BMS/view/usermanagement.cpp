@@ -5,6 +5,8 @@
 #include <QPainter>
 #include <QDateTime>
 #include <backend/addUsers.h>
+#include "register.h"
+#include"smtp.h"
 extern Utils now_utils;
 
 UserManagement::UserManagement(QWidget *parent) :
@@ -23,7 +25,7 @@ UserManagement::UserManagement(QWidget *parent) :
     model->setHeaderData(3,Qt::Horizontal,"借书日期");
     model->setHeaderData(4,Qt::Horizontal,"ISBN");
     model->setHeaderData(5,Qt::Horizontal,"状态");
-    model->setHeaderData(6,Qt::Horizontal,"删除");
+    model->setHeaderData(6,Qt::Horizontal,"邮件提醒");
 
     ui->tb->setModel(model);
     //设置列宽
@@ -81,6 +83,10 @@ UserManagement::~UserManagement()
  * 根据用户账户输出 每个用户所有 record信息*/
 void UserManagement::printRecords(QString account,vector<Record> &record){
 
+    if(record.size()==0){
+        QMessageBox::information(this,"查询信息","该用户没有借阅记录");
+    }
+
     for(int i=0 ;i<record.size();i++){
 
         //基本信息计算
@@ -113,7 +119,7 @@ void UserManagement::printRecords(QString account,vector<Record> &record){
 
         ui->tb->setRowHeight(i+curRecordIndex,50);
         //往表格中添加按钮控件
-        QPushButton *button = new QPushButton("删除");
+        QPushButton *button = new QPushButton("邮件提醒");
         button->setStyleSheet("color:#000000;\
                               font-size:18px;\
                               font-family:KaiTi;\
@@ -181,15 +187,26 @@ void UserManagement::deleteUser(){
     User u;
     now_utils.GetUserByAccount((char *)account.toStdString().c_str(),u);
 
-    if(now_utils.DeleteUser(u)){
-        int row = ui->tb_user->currentIndex().row();
-        usersmodel->removeRow(row);
+    if(u.getNumBorrowed()==0){
+        if(now_utils.DeleteUser(u)){
+            int row = ui->tb_user->currentIndex().row();
+            usersmodel->removeRow(row);
+            QMessageBox::information(this,"提示信息","删除成功！");
+        }
+    }else{
+        QMessageBox::information(this,"提示信息","该读者仍有未归还的书，无法删除该用户！");
     }
 }
+
 void UserManagement::on_btn_adduser_clicked(){
-    insert();
+    QMessageBox::information(this,"新增用户","管理员账号前两位需为00");
+    extern bool addAdminFlag;
+    addAdminFlag=true;
+    Register *re = new Register();
+    re->show();
     loadUsers();
 }
+
 void UserManagement::on_btn_delete_clicked(){
     //删除记录
     QPushButton *button = (QPushButton *)sender();
@@ -201,19 +218,57 @@ void UserManagement::on_btn_delete_clicked(){
     //获取相应的借阅记录
     Record re0;
     now_utils.GetRecord(const_cast<char *>(account.toStdString().c_str()),const_cast<char *>(isbn.toStdString().c_str()),re0);
+    User u;
+    now_utils.GetUserByAccount(const_cast<char*>(account.toStdString().c_str()),u);
+    //邮件提醒
+    string email=u.getEmail();
+    string article="Your reservation has arrived at the library, please pick it up at the library as soon as possible!";
+    CSmtp smtp(
+            25,                             /*smtp端口*/
+            "smtp.163.com",                 /*smtp服务器地址*/
+            "chenhaopeng0327@163.com",         /*你的邮箱地址*/
+            "CAVELDHPXYDOOGDK",                   /*邮箱授权码*/
+            email,  /*目的邮箱地址,这一部分用空格分割可添加多个收信人*/
+            "图书馆预约提醒",                           /*主题*/
+            article      /*邮件正文*/
+            );
 
-    //删除记录
-    if(now_utils.DeleteRecord(re0)){
-        int row = ui->tb->currentIndex().row();
-        model->removeRow(row);
-        now_utils.Return(const_cast<char *>(account.toStdString().c_str()),const_cast<char *>(isbn.toStdString().c_str()));
-        User ut;
-        now_utils.GetUserByAccount(const_cast<char *>(account.toStdString().c_str()),ut);
-//        qDebug() << ut.getAccount() << ut.getNumBorrowed();
-        ut.setNumBorrowed(ut.getNumBorrowed() - 1);
-        now_utils.UpdateUser(ut,ut);
-        QMessageBox::information(this,"删除信息","删除成功");
+    int err = smtp.SendEmail_Ex();
+    if (err != 0)
+    {
+        if (err == 1)
+            QMessageBox::information(this,"提示信息","由于网络不畅通，发送失败!");
+        else if (err == 2){
+            qDebug() << "错误2: 用户名错误,请核对!" ;
+            QMessageBox::information(this,"提示信息","发送错误，请稍候！");
+        }
+        else if (err == 3){
+            qDebug() << "错误3: 用户密码错误，请核对!" ;
+            QMessageBox::information(this,"提示信息","发送错误，请稍候！");
+        }else if (err == 4){
+            qDebug() << "错误4: 请检查附件目录是否正确，以及文件是否存在!" ;
+            QMessageBox::information(this,"提示信息","发送错误，请稍候！");
+        }
+    }else{
+        QMessageBox::information(this,"提示信息","邮件已发送！");
     }
+
+
+
+//    //删除记录
+//    if(now_utils.DeleteRecord(re0)){
+//        int row = ui->tb->currentIndex().row();
+//        model->removeRow(row);
+//        now_utils.Return(const_cast<char *>(account.toStdString().c_str()),const_cast<char *>(isbn.toStdString().c_str()));
+//        User ut;
+//        now_utils.GetUserByAccount(const_cast<char *>(account.toStdString().c_str()),ut);
+////        qDebug() << ut.getAccount() << ut.getNumBorrowed();
+//        ut.setNumBorrowed(ut.getNumBorrowed() - 1);
+//        now_utils.UpdateUser(ut,ut);
+
+////        now_utils.
+//        QMessageBox::information(this,"删除信息","删除成功");
+//    }
 }
 
 void UserManagement::on_btn_borrowInstruction_clicked()

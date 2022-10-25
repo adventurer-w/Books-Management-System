@@ -94,14 +94,21 @@ void Widget::on_btn_login_clicked()
 //    pwd2 = "123456aA";
 
     int flag=now_utils.Login(account2,pwd2);
-    if(flag==0){
+
+
+    if(account==""){
+        ui->label->setText("请输入账户");
+    }else if(pwd==""){
+        ui->label->setText("请输入密码");
+    }
+    else if(flag==0){
         //账户不存在
         ui->label->setText("账户不存在");
     }else if(flag==1){
         //密码错误
         ui->label->setText("密码错误");
         ui->lineE_pwd->setText("");
-    }else{
+    }else if(flag==2){
         //登陆成功
         ui->label->setText("登陆成功");
         this->hide();

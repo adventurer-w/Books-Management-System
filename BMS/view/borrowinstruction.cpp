@@ -11,7 +11,7 @@ BorrowInstruction::BorrowInstruction(QWidget *parent) :
     ui->setupUi(this);
     //loadQss();
 
-    //ui->textEdit->setText(QString::fromStdString(now_utils.getGuidelines()));
+    ui->textEdit->setText(QString::fromStdString(now_utils.getGuidelines()));
     vector<Department> result;
     for(int i = 0; i < 4; i++ )
         now_utils.GetDepartmentByNo(i,result);
@@ -31,7 +31,7 @@ void BorrowInstruction::on_btn_modifyConfirm_clicked(){
     //读入四个文本框
     QString guidelines=ui->textEdit->document()->toPlainText();
 //    qDebug()<<guidelines;
-    //now_utils.setGuidelines(guidelines.toStdString());
+    now_utils.setGuidelines(guidelines.toStdString());
 
     int limit_book[4];
     limit_book[3] = ui->line_teacher->text().toInt();
