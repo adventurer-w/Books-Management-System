@@ -34,4 +34,6 @@ private:
     Ui::Register *ui;
 };
 
+extern bool addAdminFlag;
+
 #endif // REGISTER_H
