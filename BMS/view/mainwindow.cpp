@@ -129,6 +129,7 @@ void MainWindow::loadPages(int mode){
         mw->move(this->x()+300,this->y());
         mw->setParent(this);
     }
+
     if(userType == 0){//表示管理员
         if(mode == 0 || mode==1){
             /*导入管理员个人信息界面  */
@@ -192,6 +193,7 @@ void MainWindow::loadPages(int mode){
 
 }
 void MainWindow::changePage(int index){
+    if(mw->currentIndex()<index+1)loadPages(index-1);
     mw->setCurrentIndex(index);
 }
 MainWindow::~MainWindow()
@@ -209,7 +211,7 @@ void MainWindow::menuBarBtnClicked(){
        this->hide();
         login->show();
     }
-    //qDebug() << "mode:"<<mode;
+
     loadPages(mode+1);
     mw->setCurrentIndex(mode);
 }

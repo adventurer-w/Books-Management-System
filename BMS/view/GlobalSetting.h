@@ -3,7 +3,7 @@
 
 #include <string>
 
-static std::string baseDbPath = "C:\\Users\\chp\\Desktop\\BMS\\BMS\\BMS1023\\Files3\\";
-static std::string pictureDbPath = "C:\\Users\\chp\\Desktop\\cover\\";
+static std::string baseDbPath = "C:\\Users\\yuan\\QtProjects\\BMS\\Files3\\";
+static std::string pictureDbPath = "F:\\cover\\";
 
 #endif // GLOBALSETTING_H

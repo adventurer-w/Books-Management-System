@@ -200,8 +200,8 @@ void UserManagement::deleteUser(){
 
 void UserManagement::on_btn_adduser_clicked(){
     QMessageBox::information(this,"新增用户","管理员账号前两位需为00");
-    extern bool addAdminFlag;
-    addAdminFlag=true;
+    //extern bool addAdminFlag;
+    //addAdminFlag=true;
     Register *re = new Register();
     re->show();
     loadUsers();

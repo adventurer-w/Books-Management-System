@@ -174,18 +174,18 @@ void Register::on_btn_register_clicked()
         now_user.setNumAppointed(0);//预约数
         now_user.setDebet(0);//欠款数
 
-        extern bool addAdminFlag;
-        if(account.size()<6)
-            s+="账号应大于等于6个字符\n";
-        else if(account.size()>11)
-            s+="账号应小于等于11个字符\n";
-        else if(!now_utils.CheckAccount(const_cast<char*>(account.toStdString().c_str())))
-            s+="账号不能包含除数字以外的字符\n";
-        else {
-            if(!addAdminFlag)
-                if(now_user.getAccount()[0]=='0' && now_user.getAccount()[1]=='0')
-                    s+="账号前两位不能为0";
-        }
+//        extern bool addAdminFlag;
+//        if(account.size()<6)
+//            s+="账号应大于等于6个字符\n";
+//        else if(account.size()>11)
+//            s+="账号应小于等于11个字符\n";
+//        else if(!now_utils.CheckAccount(const_cast<char*>(account.toStdString().c_str())))
+//            s+="账号不能包含除数字以外的字符\n";
+//        else {
+//            if(!addAdminFlag)
+//                if(now_user.getAccount()[0]=='0' && now_user.getAccount()[1]=='0')
+//                    s+="账号前两位不能为0";
+//        }
 
         if(pwd.size()<6)
             s+="密码应大于等于6个字符\n";
